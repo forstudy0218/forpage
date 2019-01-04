@@ -65,3 +65,6 @@ def convert():
         else:
             flash("Error from database.")
             return render_template("convert.html")
+
+if __name__ == '__main__':
+    app.run()
