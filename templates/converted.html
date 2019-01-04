@@ -1,0 +1,27 @@
+<!-- jinja2 -->
+{% extends "layout.html" %}
+
+{% block title %}
+    Result
+{% endblock %}
+
+{% block main %}
+    <div class="d-flex flex-column" align="center">
+        <div class="p-2 bg-primary">
+            <h3>{{ value }} {{ base }}</h3><br>
+            <h5><font color="gray">is about</font></h5>
+            <h1><font color="yellow">{{ amount }}</font> <font color="white">{{ another }}</font></h1>
+            <h2>at {{ date }}</h2>
+        </div>
+        <div class="p-2 bg-warning">
+            Powered by <a href="https://exchangeratesapi.io/">exchangeratesapi.io</a>
+        </div>
+    </div>
+    <div align="right">
+        <form action="/convert" method="get">
+            <button type="submit" class="btn btn-dark">
+                <font color="gold">Try again</font>
+            </button>
+        </form>
+    </div>
+{% endblock %}

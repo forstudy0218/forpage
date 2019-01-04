@@ -1,0 +1,36 @@
+<!-- jinja2 -->
+{% extends "layout.html" %}
+
+{% block title %}
+    Converter
+{% endblock %}
+
+{% block main %}
+    <div class="d-flex flex-column" align="center"><div class="p-2 bg-info">
+        <form action="/convert" method="post">
+            <div>
+                <input autocomplete="off" name="value" placeholder="Price" type="number" step="0.01">
+                <select name="base">
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="HKD">HKD</option>
+                    <option value="JPY">JPY</option>
+                    <option value="USD">USD</option>
+                </select>
+                <br>
+                <span>Convert to :</span>
+                <select name="another">
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="HKD">HKD</option>
+                    <option value="JPY">JPY</option>
+                    <option value="USD">USD</option>
+                </select>
+                <br>
+                <button class="btn btn-primary" type="submit">Convert</button>
+            </div>
+        </form>
+    </div><div class="p-2 bg-warning">
+        Powered by <a href="https://exchangeratesapi.io/">exchangeratesapi.io</a>
+    </div></div>
+{% endblock %}
