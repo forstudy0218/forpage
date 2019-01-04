@@ -41,8 +41,9 @@ try:
 except (RuntimeError, TypeError, ValueError, KeyError):
     print("Rate not exist")
 amount = value * rate
+date = obj['date']
 if obj["base"] == base:
-    print(f"{value} {base} is about {amount} {another}.")
+    print(f"{value} {base} is about {amount} {another} at {date}.")
 else:
     raise Exception("API request error")
 print("Powered by https://exchangeratesapi.io/")
