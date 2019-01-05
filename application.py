@@ -1,11 +1,72 @@
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta, date
 from pytz import timezone
 from flask import Flask, redirect, render_template, request, flash
+from flask_sqlalchemy import SQLAlchemy
+from xml.etree import ElementTree
+
+# Get current time data
+today = date.today()
+# https://stackoverflow.com/questions/1712116/formatting-yesterdays-date-in-python
+yesterday = date.today() - timedelta(1)
+# SQLAlchemy
+db = SQLAlchemy()
+class Converter(db.Model):
+    __tablename__ = "money"
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.String, nullable=False)
+    sym = db.Column(db.String)
+    rates = db.Column(db.Float)
+
+# Using method provided by exchangeratesapi
+# https://github.com/exchangeratesapi/exchangeratesapi/blob/master/exchangerates/app.py
+# only need GBP, HKD, JPY, USD
+def update():
+    # Get Data from European Central Bank
+    url = ("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml")
+    r = requests.get(url)
+    envelope = ElementTree.fromstring(r.content)
+    namespaces = {
+        "gesmes": "http://www.gesmes.org/xml/2002-08-01",
+        "eurofxref": "http://www.ecb.int/vocabulary/2002-08-01/eurofxref",
+    }
+    data = envelope.findall("./eurofxref:Cube/eurofxref:Cube[@time]", namespaces)
+    # I only need the latest
+    d = data[0]
+    time = datetime.strptime(d.attrib["time"], "%Y-%m-%d").date()
+    rates = {c.attrib["currency"]: (c.attrib["rate"]) for c in list(d)}
+    symlist = ["GBP", "HKD", "JPY", "USD"]
+    for symbol in symlist:
+        rate = float(rates[symbol])
+        # list of Converter
+        rows = Converter.query.filter_by(sym = symbol).all()
+        # first Converter
+        row = rows[0]
+        # use row.date, row.sym, row.rates to refer content
+        # No entry
+        if len(rows) == 0:
+            print("Inserted")
+            print(time, symbol, rate)
+            # add new data
+            new = Converter(date=time, sym=symbol, rates=rate)
+            db.session.add(new)
+        else:
+            # not updated
+            if time != row.date:
+                print("Updated")
+                print(time, symbol, rate)
+                row.date = time
+                row.rates = rate
+            else:
+                # no update
+                print(f"No update needed for {symbol}.")
+    db.session.commit()
 
 # Web app
 app = Flask(__name__)
-
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://oxpflarjignbjn:cc256232c414d63d44f7e2ef7f9421b7a71d0016be60577e5776580dd99f51ae@ec2-23-21-86-22.compute-1.amazonaws.com:5432/d8kcjf31p53vst"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
 
 @app.after_request
 def after_request(response):
@@ -14,8 +75,6 @@ def after_request(response):
     response.headers["Expires"] = 0
     response.headers["Pragma"] = "no-cache"
     return response
-
-app = Flask(__name__)
 
 @app.route("/")
 def index():
@@ -27,7 +86,22 @@ def index():
 def convert():
     # ask for thing
     if request.method == "GET":
-        return render_template("convert.html")
+        rows = Converter.query.all()
+        row = rows[0]
+        # check date
+        if row.date != yesterday and row.date != today:
+                update()
+                rows = Converter.query.all()
+        # 1:"GBP", 2:"HKD", 3:"JPY", 4:"USD"
+        slist = ["GBP", "HKD", "JPY", "USD"]
+        rlist = []
+        for i in rows:
+            j = i.rates
+            rlist.append(j)
+        if len(slist) != len(rlist):
+            flash("Error from database.")
+            return redirect("/")
+        return render_template("convert.html", rlist=rlist, slist=slist, date=row.date)
     if request.method == "POST":
         def isfloat(string):
             try:
@@ -42,29 +116,30 @@ def convert():
             flash('Input Error.')
             return render_template("convert.html")
         if base == another:
-            return render_template("converted.html", value=value, base=base, amount=value, another=another, date="'today'")
+            return render_template("converted.html", value=value, base=base, amount=value, another=another, date=today)
         value = float(value)
-        # API from exchangeratesapi.io
-        res = requests.get("https://api.exchangeratesapi.io/latest", params={"base": base, "symbols": another})
-        if res.status_code != 200:
-            print(res.status_code)
-            raise Exception("API request error")
-            flash("Error from converter.")
-            return render_template("convert.html")
-        obj = res.json()
-        try:
-            rate = obj['rates'][another]
-        except (RuntimeError, TypeError, ValueError, KeyError):
-            print("Rate not exist")
-            flash("Error from database.")
-            return render_template("convert.html")
-        amount = value * rate
-        date = obj['date']
-        if obj["base"] == base:
-            return render_template("converted.html", value=value, base=base, amount=amount, another=another, date=date)
+        # Get data from db
+        # If not EUR base; value not change if base is EUR
+        if base != "EUR":
+            bdata = Converter.query.filter_by(sym = base).first()
+            date = bdata.date
+            # Converter class
+            value = value // bdata.rates
+        # value is EUR now
+        # If EUR another
+        if another == "EUR":
+            amount = value
         else:
-            flash("Error from database.")
-            return render_template("convert.html")
+            # Get data from datebase
+            adata = Converter.query.filter_by(sym = another).first()
+            date = adata.date
+            rate = adata.rates
+            amount = value * rate
+            print(amount, value, rate)
+        # convert value back to origin if base is not EUR
+        if base != "EUR":
+            value = request.form.get("value")
+        return render_template("converted.html", value=value, base=base, amount=amount, another=another, date=date)
 
 if __name__ == '__main__':
     app.run()

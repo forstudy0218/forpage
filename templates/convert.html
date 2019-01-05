@@ -31,6 +31,25 @@
             </div>
         </form>
     </div><div class="p-2 bg-warning">
-        Powered by <a href="https://exchangeratesapi.io/">exchangeratesapi.io</a>
+        Data from <a href="https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html">European Central Bank</a>
     </div></div>
+    <table id="exchagetable" class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Currency</th>
+                <th scope="col">Exchange Rate(Base: EUR)</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- iterate lists -->
+            {% for i in range(rlist|length) %}
+                <tr>
+                    <td>{{ slist[i] }}</td>
+                    <td>{{ rlist[i] }}</td>
+                    <td>{{ date }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

@@ -3,7 +3,9 @@
     color: yellow;
     font-family: Fantasy, serif;
 }
-  /* control bottom clock  */
+  /* control bottom clock */
+/* https://stackoverflow.com/questions/13476267/
+hide-div-element-when-screen-size-is-smaller-than-a-specific-size */
 @media only screen and (max-width: 600px) {
     #localtime {
         display: none;
@@ -17,6 +19,36 @@
 #thanks {
   position: absolute;
   left: 0;
+}
+#exchagetable {
+  background-color: lightblue;
+  text-align: center;
+  font-family: "Agency FB", Arial;
+}
+#cresult {
+  font-family: "Comic Sans MS", Arial;
+  border: 5px solid;
+  background-color: Aquamarine;
+}
+#cbase{
+  font-size: 20px;
+}
+#cabout {
+  font-size: 15px;
+  font-style: italic;
+  color: gray;
+}
+#camount {
+  font-size: 30px;
+  color: yellow;
+}
+#canother {
+  font-size: 30px;
+  color: white;
+}
+#cdate {
+  font-size: 12px;
+  color: Violet;
 }
 /* from ps://v4-alpha.getbootstrap.com/examples/sticky-footer-navbar/sticky-footer-navbar.css*/
 /* Sticky footer styles

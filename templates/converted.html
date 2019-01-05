@@ -7,14 +7,11 @@
 
 {% block main %}
     <div class="d-flex flex-column" align="center">
-        <div class="p-2 bg-primary">
-            <h3>{{ value }} {{ base }}</h3><br>
-            <h5><font color="gray">is about</font></h5>
-            <h1><font color="yellow">{{ amount }}</font> <font color="white">{{ another }}</font></h1>
-            <h2>at {{ date }}</h2>
-        </div>
-        <div class="p-2 bg-warning">
-            Powered by <a href="https://exchangeratesapi.io/">exchangeratesapi.io</a>
+        <div class="p-2 bg-primary" id="cresult">
+            <p id="cbase">{{ value }} {{ base }}</p><br>
+            <p id="cabout">is about</p>
+            <p id="camount">{{ amount }} <span id="canother">{{ another }}</span></p>
+            <p id="cdate">at {{ date }}</p>
         </div>
     </div>
     <div align="right">
