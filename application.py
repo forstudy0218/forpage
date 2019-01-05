@@ -6,12 +6,18 @@ from flask import Flask, redirect, render_template, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from xml.etree import ElementTree
 
+# Web app
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://oxpflarjignbjn:cc256232c414d63d44f7e2ef7f9421b7a71d0016be60577e5776580dd99f51ae@ec2-23-21-86-22.compute-1.amazonaws.com:5432/d8kcjf31p53vst?sslmode=require"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 # Get current time data
 today = date.today()
 # https://stackoverflow.com/questions/1712116/formatting-yesterdays-date-in-python
 yesterday = date.today() - timedelta(1)
 # SQLAlchemy
 db = SQLAlchemy()
+db.init_app(app)
 class Converter(db.Model):
     __tablename__ = "money"
     id = db.Column(db.Integer, primary_key=True)
@@ -62,13 +68,6 @@ def update():
                 # no update
                 print(f"No update needed for {symbol}.")
     db.session.commit()
-
-# Web app
-app = Flask(__name__)
-#app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://oxpflarjignbjn:cc256232c414d63d44f7e2ef7f9421b7a71d0016be60577e5776580dd99f51ae@ec2-23-21-86-22.compute-1.amazonaws.com:5432/d8kcjf31p53vst?sslmode=require"
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(app)
 
 @app.after_request
 def after_request(response):
