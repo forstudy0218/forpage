@@ -42,7 +42,13 @@
         {% endif %}
         <main class="container p-5">{% block main %}{% endblock %}</main>
         <footer class="footer">
-            <div class="container"><p align="right" id="localtime"></p></div>
+            <div class="container">
+                <span id="thanks">
+                    Using <a href="https://getbootstrap.com/"><em>bootstrap 4.</em></a>
+                    Host by <a href="https://www.heroku.com/"><em>Heroku.</em></a>
+                </span>
+                <span id="localtime"></span>
+            </div>
         </footer>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

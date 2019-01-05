@@ -3,6 +3,21 @@
     color: yellow;
     font-family: Fantasy, serif;
 }
+  /* control bottom clock  */
+@media only screen and (max-width: 600px) {
+    #localtime {
+        display: none;
+    }
+}
+#localtime {
+  position: absolute;
+  right: 0;
+}
+  /* control bottom link */
+#thanks {
+  position: absolute;
+  left: 0;
+}
 /* from ps://v4-alpha.getbootstrap.com/examples/sticky-footer-navbar/sticky-footer-navbar.css*/
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -36,8 +51,4 @@ body > .container {
 .footer > .container {
   padding-right: 15px;
   padding-left: 15px;
-}
-
-code {
-  font-size: 80%;
 }
