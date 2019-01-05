@@ -1,3 +1,4 @@
+import os
 import requests
 from datetime import datetime, timedelta, date
 from pytz import timezone
@@ -64,7 +65,7 @@ def update():
 
 # Web app
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://oxpflarjignbjn:cc256232c414d63d44f7e2ef7f9421b7a71d0016be60577e5776580dd99f51ae@ec2-23-21-86-22.compute-1.amazonaws.com:5432/d8kcjf31p53vst"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["postgres://oxpflarjignbjn:cc256232c414d63d44f7e2ef7f9421b7a71d0016be60577e5776580dd99f51ae@ec2-23-21-86-22.compute-1.amazonaws.com:5432/d8kcjf31p53vst"]
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
