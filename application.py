@@ -144,16 +144,16 @@ def convert():
             value = request.form.get("value")
         return render_template("converted.html", value=value, base=base, amount=amount, another=another, date=date)
 
-""" work on test12,14
-@app.route("/datatest", methods=["GET", "POST"])
-def test():
-    try:"""
+#work on test12,14
+#@app.route("/datatest", methods=["GET", "POST"])
+#def test():
+    #try:
         #cur.execute("""SELECT * from money""")
-    """except:
-        print ("I can't SELECT from money")
-    rows = cur.fetchall()
-    print(rows)
-    return redirect("/")"""
+    #except:
+        #print ("I can't SELECT from money")
+    #rows = cur.fetchall()
+    #print(rows)
+    #return redirect("/")
 
 if __name__ == '__main__':
     app.run()
