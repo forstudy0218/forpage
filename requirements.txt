@@ -1,0 +1,9 @@
+psycopg2 == 2.7.3.2
+Flask
+Flask-SQLAlchemy
+gunicorn
+Jinja2
+Werkzeug
+requests
+pytz
+flask_sqlalchemy
