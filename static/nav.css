@@ -50,6 +50,12 @@ hide-div-element-when-screen-size-is-smaller-than-a-specific-size */
   font-size: 12px;
   color: Violet;
 }
+.cheader {
+  font-size: 300%;
+  font-family: "Brush Script MT", "Brush Script Std", cursive;
+  text-align: center;
+  color: Yellow;
+}
 /* from ps://v4-alpha.getbootstrap.com/examples/sticky-footer-navbar/sticky-footer-navbar.css*/
 /* Sticky footer styles
 -------------------------------------------------- */
