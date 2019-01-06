@@ -5,10 +5,8 @@ from pytz import timezone
 from flask import Flask, redirect, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from xml.etree import ElementTree
-"""import psycopg2
-DATABASE_URL = os.environ['DATABASE_URL']
-conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-cur = conn.cursor()"""
+# There was a bug in psycopg2 2.7.1. Causing KeyError. Fixed after update to 2.7.3.2
+# It took me 12+ hours to find the solution, haha!
 # Web app
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -127,7 +125,8 @@ def convert():
             bdata = Converter.query.filter_by(sym = base).first()
             date = bdata.date
             # Converter class
-            value = value // bdata.rates
+            # use / for returns a floating point number; // is for floor division.
+            value = value / bdata.rates
         # value is EUR now
         # If EUR another
         if another == "EUR":
@@ -138,22 +137,12 @@ def convert():
             date = adata.date
             rate = adata.rates
             amount = value * rate
-            print(amount, value, rate)
+        # Round
+        amount = round(amount, 2)
         # convert value back to origin if base is not EUR
         if base != "EUR":
             value = request.form.get("value")
         return render_template("converted.html", value=value, base=base, amount=amount, another=another, date=date)
-
-#work on test12,14
-#@app.route("/datatest", methods=["GET", "POST"])
-#def test():
-    #try:
-        #cur.execute("""SELECT * from money""")
-    #except:
-        #print ("I can't SELECT from money")
-    #rows = cur.fetchall()
-    #print(rows)
-    #return redirect("/")
 
 if __name__ == '__main__':
     app.run()
