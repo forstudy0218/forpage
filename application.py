@@ -2,22 +2,24 @@ import os
 import requests
 from datetime import datetime, timedelta, date
 from pytz import timezone
-from flask import Flask, redirect, render_template, request, flash
+from flask import Flask, redirect, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from xml.etree import ElementTree
-from flask_heroku import Heroku
+import psycopg2
+DATABASE_URL = os.environ['DATABASE_URL']
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+cur = conn.cursor()
 # Web app
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-heroku = Heroku(app)
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Get current time data
 today = date.today()
 # https://stackoverflow.com/questions/1712116/formatting-yesterdays-date-in-python
 yesterday = date.today() - timedelta(1)
 # check weekday
 daynum = today.weekday()
-# SQLAlchemy
+"""# SQLAlchemy
 db = SQLAlchemy()
 db.init_app(app)
 class Converter(db.Model):
@@ -25,7 +27,7 @@ class Converter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.String, nullable=False)
     sym = db.Column(db.String)
-    rates = db.Column(db.Float)
+    rates = db.Column(db.Float)"""
 
 # Using method provided by exchangeratesapi
 # https://github.com/exchangeratesapi/exchangeratesapi/blob/master/exchangerates/app.py
@@ -102,7 +104,6 @@ def convert():
             j = i.rates
             rlist.append(j)
         if len(slist) != len(rlist):
-            flash("Error from database.")
             return redirect("/")
         return render_template("convert.html", rlist=rlist, slist=slist, date=row.date)
     if request.method == "POST":
@@ -116,7 +117,6 @@ def convert():
         another = request.form.get("another")
         value = request.form.get("value")
         if len(another) != 3 or not another.isalpha() or len(base) != 3 or not base.isalpha() or not isfloat(value):
-            flash('Input Error.')
             return render_template("convert.html")
         if base == another:
             return render_template("converted.html", value=value, base=base, amount=value, another=another, date=today)
@@ -143,6 +143,16 @@ def convert():
         if base != "EUR":
             value = request.form.get("value")
         return render_template("converted.html", value=value, base=base, amount=amount, another=another, date=date)
+
+@app.route("/datatest", methods=["GET", "POST"])
+def test():
+    try:
+        cur.execute("""SELECT * from money""")
+    except:
+        print ("I can't SELECT from money")
+    rows = cur.fetchall()
+    print(rows)
+    return redirect("/")
 
 #if __name__ == '__main__':
     #app.run()
