@@ -5,10 +5,13 @@ from pytz import timezone
 from flask import Flask, redirect, render_template, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from xml.etree import ElementTree
-
+import psycopg2
+DATABASE_URL = os.environ['DATABASE_URL']
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+print(conn)
 # Web app
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Get current time data
@@ -18,7 +21,7 @@ yesterday = date.today() - timedelta(1)
 # check weekday
 daynum = today.weekday()
 # SQLAlchemy
-db = SQLAlchemy()
+db = SQLAlchemy(app)
 db.init_app(app)
 class Converter(db.Model):
     __tablename__ = "money"
