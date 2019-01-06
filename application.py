@@ -5,21 +5,21 @@ from pytz import timezone
 from flask import Flask, redirect, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from xml.etree import ElementTree
-import psycopg2
+"""import psycopg2
 DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-cur = conn.cursor()
+cur = conn.cursor()"""
 # Web app
 app = Flask(__name__)
-#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Get current time data
 today = date.today()
 # https://stackoverflow.com/questions/1712116/formatting-yesterdays-date-in-python
 yesterday = date.today() - timedelta(1)
 # check weekday
 daynum = today.weekday()
-"""# SQLAlchemy
+# SQLAlchemy
 db = SQLAlchemy()
 db.init_app(app)
 class Converter(db.Model):
@@ -27,7 +27,7 @@ class Converter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.String, nullable=False)
     sym = db.Column(db.String)
-    rates = db.Column(db.Float)"""
+    rates = db.Column(db.Float)
 
 # Using method provided by exchangeratesapi
 # https://github.com/exchangeratesapi/exchangeratesapi/blob/master/exchangerates/app.py
@@ -144,15 +144,16 @@ def convert():
             value = request.form.get("value")
         return render_template("converted.html", value=value, base=base, amount=amount, another=another, date=date)
 
+""" work on test12,14
 @app.route("/datatest", methods=["GET", "POST"])
 def test():
-    try:
-        cur.execute("""SELECT * from money""")
-    except:
+    try:"""
+        #cur.execute("""SELECT * from money""")
+    """except:
         print ("I can't SELECT from money")
     rows = cur.fetchall()
     print(rows)
-    return redirect("/")
+    return redirect("/")"""
 
-#if __name__ == '__main__':
-    #app.run()
+if __name__ == '__main__':
+    app.run()
