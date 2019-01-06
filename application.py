@@ -8,13 +8,15 @@ from xml.etree import ElementTree
 
 # Web app
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://oxpflarjignbjn:cc256232c414d63d44f7e2ef7f9421b7a71d0016be60577e5776580dd99f51ae@ec2-23-21-86-22.compute-1.amazonaws.com:5432/d8kcjf31p53vst?sslmode=require"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Get current time data
 today = date.today()
 # https://stackoverflow.com/questions/1712116/formatting-yesterdays-date-in-python
 yesterday = date.today() - timedelta(1)
+# check weekday
+daynum = today.weekday()
 # SQLAlchemy
 db = SQLAlchemy()
 db.init_app(app)
@@ -90,7 +92,7 @@ def convert():
         rows = Converter.query.all()
         row = rows[0]
         # check date
-        if row.date != yesterday and row.date != today:
+        if row.date != yesterday and row.date != today and daynum != 6 and daynum != 5:
                 update()
                 rows = Converter.query.all()
         # 1:"GBP", 2:"HKD", 3:"JPY", 4:"USD"
