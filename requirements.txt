@@ -1,4 +1,4 @@
-psycopg2==2.7.1
+psycopg2
 Flask
 Flask-SQLAlchemy
 gunicorn
@@ -7,4 +7,3 @@ Werkzeug
 requests
 pytz
 flask_sqlalchemy
-flask_heroku
