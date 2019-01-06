@@ -5,11 +5,12 @@ from pytz import timezone
 from flask import Flask, redirect, render_template, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from xml.etree import ElementTree
+from flask_heroku import Heroku
 # Web app
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+heroku = Heroku(app)
 # Get current time data
 today = date.today()
 # https://stackoverflow.com/questions/1712116/formatting-yesterdays-date-in-python
