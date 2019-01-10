@@ -6,6 +6,7 @@
 /* for button link */
 .bg-dark>a {
   color: Khaki;
+  margin-bottom: 4px;
 }
   /* control bottom clock */
 /* https://stackoverflow.com/questions/13476267/
@@ -87,10 +88,6 @@ hide-div-element-when-screen-size-is-smaller-than-a-specific-size */
   color: Snow;
   background-color: ForestGreen;
   font-style: italic;
-}
-.dnote {
-	font-family: "Andale Mono", monospace;
-  color: DeepPink;
 }
 #longdivi {
 	background-color: Aqua;

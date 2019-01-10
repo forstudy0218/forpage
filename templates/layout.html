@@ -24,14 +24,19 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <!-- add a search box. Code from: www.google.com -->
-            <form class="form-inline mx-auto" align="center" action="https://www.google.com/search" method="get" target="_blank">
-                <input placeholder="Google it!" maxlength="500" name="q" type="text" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" required>
+            <form id="navsearchbox" class="form-inline mx-auto" align="center" action="https://www.google.com/search" target="_blank" onsubmit="navsubmit()">
+                <input id="navquery" placeholder="Google it!" maxlength="500" name="q" type="text" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" required>
+                <select id="navselect">
+                    <option value="search">Default</option>
+                    <option value="map">Map</option>
+                    <option value="youtube">Youtube</option>
+                </select>
             </form>
             <a class="navbar-brand" href="/">FRANK</a>
         </nav>
         <div class="pos-f-b">
             <div class="collapse" id="navbarToggleExternalContent">
-                <div class="bg-dark">
+                <div class="bg-dark" style="padding-left: 4px;">
                     <a class="btn btn-primary" href="/">Home</a>
                     <a class="btn btn-primary" href="/convert">Currency Converter</a>
                     <a class="btn btn-primary" href="/decimal">Long Division(Decimal)</a>
