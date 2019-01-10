@@ -5,6 +5,7 @@ from pytz import timezone
 from flask import Flask, redirect, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from xml.etree import ElementTree
+from math import log10
 # There was a bug in psycopg2 2.7.1. Causing KeyError. Fixed after update to 2.7.3.2
 # It took me 12+ hours to find the solution, haha!
 # Web app
@@ -71,6 +72,51 @@ def update():
                 print(f"No update needed for {symbol}.")
     db.session.commit()
 
+# Check if string a float
+def isfloat(string):
+        try:
+            float(string)
+            return True
+        except ValueError:
+            return False
+
+# function for long division
+def isint(num): # don't use it with string
+    if float(num) == int(num):
+        return True
+    else:
+        return False
+# moving decimal point to right
+def movdec(numstr):
+    if isfloat(numstr):
+        # no XXXXX.0 or XXXXX.XXXX00000
+        num = float(numstr)
+        if float(num) == int(num):
+            # XXX.0 case
+            num = int(num)
+            numstr = str(num) # integer string with no decimal
+        else:
+            # XXXX.XXXXXX case
+            numstr = str(num)
+        if "." in numstr:
+            # if str have decimal point, split it
+            numstrlist = numstr.split(".")
+            if numstrlist[1][1:] != "":
+                numstr = numstrlist[0] + numstrlist[1][0] + "." + numstrlist[1][1:]
+                num = float(numstr)
+            else:
+                # num become integer now
+                numstr = numstrlist[0] + numstrlist[1][0]
+                num = int(numstr)
+            numstr = str(num)
+        else:
+            # numstr is integer
+            numstr = str((int(numstr)) * 10)
+        return numstr
+    else:
+        raise ValueError
+        return numstr
+
 @app.after_request
 def after_request(response):
     """Disable caching"""
@@ -105,12 +151,6 @@ def convert():
             return redirect("/")
         return render_template("convert.html", rlist=rlist, slist=slist, date=row.date)
     if request.method == "POST":
-        def isfloat(string):
-            try:
-                float(string)
-                return True
-            except ValueError:
-                return False
         base = request.form.get("base")
         another = request.form.get("another")
         value = request.form.get("value")
@@ -143,6 +183,451 @@ def convert():
         if base != "EUR":
             value = request.form.get("value")
         return render_template("converted.html", value=value, base=base, amount=amount, another=another, date=date)
+
+@app.route("/decimal", methods=["GET", "POST"])
+def decimal():
+    if request.method == "GET":
+        return render_template("dform.html")
+    if request.method == "POST":
+        # Two strings arrive
+        dividend_in = dividend_out = request.form.get("dividend")
+        divisor_in = divisor_out = request.form.get("divisor")
+        # not float input
+        if not isfloat(dividend_in) or not isfloat(divisor_in):
+            error = 1
+            return render_template("dresult.html", error=error)
+        # Validate input
+        dividend = float(dividend_in)
+        divisor = float(divisor_in)
+        # cannot divide 0
+        if dividend < 0 or divisor <= 0:
+            error = 2
+            return render_template("dresult.html", error=error)
+        if "e" in (str(dividend)):
+            # origin input too little
+            # origin input too little, like 0.0000000XXXXXX or 0.0000000XXXXXX00000000000
+            # take away trailing zero
+            dividend_in = dividend_in.rstrip('0')
+            # Don't deal with 0.00000000XXXXX here
+        # Take away the decimal point in divisor
+        # divisor can be XXXX.XXXX or XXXX.0 or 0.XXXXX or integer without ".0"
+        sorstr = str(divisor)
+        # prepare to grow dividend
+        endstr = str(dividend)
+        if "e" in endstr:
+            # use input
+            endstr = dividend_in
+        if ("e" in sorstr):
+            # origin input too little, like 0.0000000XXXXXX or 0.0000000XXXXXX00000000000
+            # take away trailing zero
+            divisor_in = divisor_in.rstrip('0')
+            # growth dividend for division to find quotient
+            # divisor_in is 0.0000000XXXXXX
+            growth = len(divisor_in) - 2
+            for i in range(growth):
+                endstr = movdec(endstr)
+            # take away leading zero
+            sorstr = divisor_in.lstrip('0.')
+            sor = int(sorstr)
+        elif ("." in sorstr):
+            sor = float(sorstr)
+            while not isint(sor): # not integer
+                # Growing
+                sorstr = movdec(sorstr)
+                endstr = movdec(endstr)
+                sor = float(sorstr)
+            sor = int(sor)
+        # divisor is integer
+        else:
+            sor = int(sor)
+        dividend = float(endstr)
+        if isint(dividend):
+            dividend = int(dividend)
+        # sor is always integer without".0" now
+        # redo everything from beginning, sigh~
+        # begin long division
+        temp = str(dividend)
+        if "e" in temp:
+            # dividend still too little
+            temp = endstr # use 0.0000XXX format
+        # prepare quotient list
+        quolist = []
+        # prepare remainder list
+        relist = []
+        # set max looptime
+        looptime = max((len(divisor_in) + len(dividend_in)), 10)
+        count = 0
+        # Dividend can be 0.XXXXXXXXXX or integer or XXXXXXX.XXXXXXXXX
+        # Need to find the position for first digit of dividend
+        dig = 0
+        remainder = 1
+        endpos = 0
+        # Need to know when to add . for quotient
+        pointcheck = 0
+        # Prepare list of Padding prototypes for relist
+        padlist = []
+        padding = 0
+        # some bug
+        bugfix = 0
+        # Add padding for origin input
+        for i in dividend_out:
+            # Add any for leading zero
+            if i == "0":
+                padding += 1
+            elif i == ".":
+                GG = 0
+            else:
+                break
+        for i in range(len(temp)):
+            endpos = i
+            # Not first digit
+            if temp[i] == ".":
+                quolist.append(".")
+                quolist.append("0")
+            elif temp[i] == "0":
+                quolist.append("0")
+            else:
+                # found
+                remainder = int(temp[i]) # treat as remainder
+                # First time bigger
+                if sor <= remainder:
+                    count += 1
+                    quodig = remainder // sor
+                    quolist.append(str(quodig))
+                    relist.append(quodig * sor)
+                    # Add padding to this row
+                    rel = int(log10(remainder))
+                    padding += rel - int(log10(quodig * sor))
+                    padlist.append(padding)
+                    remainder = remainder - (quodig * sor)
+                    if remainder != 0:
+                        relist.append(remainder)
+                        # Add padding to this row
+                        padding += rel - int(log10(remainder))
+                        padlist.append(padding)
+                    else:
+                         padding += rel + 1
+                         if endpos != (len(temp) - 1):
+                             if temp[endpos + 1] == "0":
+                                 padding += 1
+                                 bugfix = 1
+                while sor > remainder and (count < looptime):
+                    count += 1
+                    endpos += 1
+                    if endpos <= (len(temp) - 1):
+                        # can take sommeting, maybe "."
+                        if temp[endpos] == ".":
+                            quolist.append(".")
+                        else:
+                            nextdig = int(temp[endpos])
+                            remainder = remainder * 10 + nextdig
+                            if remainder == 0:
+                                quolist.append("0")
+                                if endpos == (len(temp) - 1):
+                                    break
+                            elif sor > remainder:
+                                quolist.append("0")
+                            else:
+                                # renew last remainder, hope no bug
+                                if len(relist) > 1:
+                                    relist[len(relist) - 1] = remainder
+                                quodig = remainder // sor
+                                quolist.append(str(quodig))
+                                relist.append(quodig * sor)
+                                # Add padding to this row
+                                rel = int(log10(remainder))
+                                padding += rel - int(log10(quodig * sor))
+                                padlist.append(padding)
+                                remainder = remainder - (quodig * sor)
+                                if remainder != 0:
+                                    relist.append(remainder)
+                                    # Add padding to this row
+                                    padding += rel - int(log10(remainder))
+                                    padlist.append(padding)
+                                else:
+                                    relist.append(remainder)
+                                    # Add padding to this row
+                                    padding += rel +1
+                                    padlist.append(padding)
+                    else:
+                        if pointcheck == 0:
+                            pointcheck = 1
+                            if not "." in quolist:
+                                quolist.append(".")
+                        # nothing to take
+                        remainder *= 10
+                        if remainder == 0:
+                            break
+                        elif sor > remainder:
+                            quolist.append("0")
+                        else:
+                            # renew last remainder, hope no bug
+                            if len(relist) > 1:
+                                relist[len(relist) - 1] = remainder
+                            if bugfix == 1:
+                                    relist.append(remainder)
+                                    padlist.append(padding)
+                                    bugfix = 2
+                            quodig = remainder // sor
+                            quolist.append(str(quodig))
+                            relist.append(quodig * sor)
+                            # Add padding to this row
+                            rel = int(log10(remainder))
+                            padding += rel - int(log10(quodig * sor))
+                            padlist.append(padding)
+                            remainder = remainder - (quodig * sor)
+                            if remainder == 0:
+                                break
+                            else:
+                                relist.append(remainder)
+                                # Add padding to this row
+                                padding += rel - int(log10(remainder))
+                                padlist.append(padding)
+                break
+        if relist[len(relist) - 1] == 0:
+            del relist[-1]
+            del padlist[-1]
+        if (len(quolist) > 1):
+            quostr = "".join(quolist)
+        else:
+            quostr = quolist[0]
+        quo = float(quostr)
+        if isint(quo):
+            quo = int(quo)
+        padstr = str(quo)
+        if "e" in padstr:
+            # quo too little
+            padstr = quostr
+            if padstr[0] == ".":
+                padstr = "0" + quostr
+        # Find quotient padding
+        firstrowlength = padlist[0] + int(log10(relist[0]))
+        # Find the first sig. fig.
+        padcount = 0
+        for i in padstr:
+            if i == "0":
+                padcount += 1
+            elif i == ".":
+                GG = 1
+            else:
+                break
+        quopad = firstrowlength - padcount if firstrowlength >= padcount else 0
+        if len(padlist) != len(relist):
+            error = 4
+            return render_template("dresult.html", error=error)
+        error = 0
+        return render_template("dresult.html", error=error, quo=padstr, divisor=divisor_out, dividend=dividend_out, relist=relist, padding=quopad, padlist=padlist)
+        """
+        # Set max numbers
+        quo = dividend / divisor
+        quostr = "%f" % quo
+        quostr = quostr.rstrip("0")
+        # too long
+        if len(quostr) > 10:
+            # cut it
+            quostr = quostr[0:10]
+        # if quotient too little
+        if float(quostr) == 0:
+            error = 3
+            return render_template("dresult.html", error=error)
+        # make divisor to integer
+        if ("." in divisor_in):
+            # split to 2 string by "."
+            splitlist = divisor_in.split(".")
+            # make them to integer string
+            # if numbers after "." are all zero ,ignore
+            if int(splitlist[1]) == 0:
+                sorstr = str(int(splitlist[0]))
+            else:
+                sorstr = str(int(splitlist[0] + splitlist[1]))
+        # if divisor is already integer
+        else:
+            sorstr = divisor_in
+        # Get long list
+        relist = []
+        sorint = int(sorstr)
+        # ignore "pre-zero" in quostr
+        temp = quostr.lstrip('0.')
+        # copy dividend
+        copy = dividend
+        # list of Padding prototypes for relist
+        padlist = []
+        padding = 0
+        quopad = 0
+        firstd = 1
+        # found a bug. Hard to  describe
+        bug = 0
+        # iterate
+        for i in temp:
+            # ignore "."
+            if i != ".":
+                dig = int(i)
+                if dig != 0:
+                    delta = dig * sorint
+                    relist.append(delta) # remember to check padding of this first
+                    if copy == delta:
+                        # padding not needed
+                        padlist.append(padding)
+                        # division should end
+                        relist.append("")
+                        padlist.append(padding)
+                        break
+                    elif copy > delta:
+                        # Should check if inserted "0" needed or not
+                        if (int(log10(copy))) == (int(log10(delta))):
+                            # padding not needed
+                            padlist.append(padding)
+                            # same length not equal value
+                            # Save current "copy" length to check padding
+                            pcheck = int(log10(copy))
+                            # ensure everyting in list are integer
+                            copy = int(copy - (delta))
+                            relist.append(copy)
+                            # add padding by comparing to old length
+                            padding += pcheck - (int(log10(copy)))
+                            padlist.append(padding)
+                        elif bug == 0:
+                            # "copy" is longer than (dig * sorint)
+                            # "copy" can be the integer part, it will cause bug.
+                            if "." in str(copy):
+                                # padding for delta
+                                padding += int(log10(int(copy))) - int(log10(delta))
+                                if firstd == 1:
+                                    quopad = padding
+                                    firstd = 0
+                                    padlist.append(padding)
+                                    padding = 0
+                                else:
+                                    padlist.append(padding)
+                                # Save current "copy" length to check padding
+                                pcheck = int(log10(copy))
+                                copy = copy - delta
+                                relist.append(copy)
+                                # add padding by comparing to old length
+                                padding += pcheck - (int(log10(copy)))
+                                padlist.append(padding)
+                            else:
+                                # find how many "0" should be inserted
+                                zero = (int(log10(copy))) - (int(log10(delta)))
+                                lemma = dig * sorint * (10 ** zero)
+                                # check if division should end
+                                if copy == lemma:
+                                    # division should end
+                                    relist.append("")
+                                    padlist.append(padding)
+                                    break
+                                elif (copy > lemma):
+                                    # Save current "copy" length to check padding
+                                    pcheck = int(log10(copy))
+                                    # ensure everyting in list are integer
+                                    copy = int(copy - lemma)
+                                    relist.append(copy)
+                                    # add padding by comparing to old length
+                                    padding += pcheck - (int(log10(copy)))
+                                    padlist.append(padding)
+                        elif bug != 0:
+                            # padding not needed
+                            padlist.append(padding)
+                            if copy == delta:
+                                # division should end
+                                relist.append("")
+                                padlist.append(padding)
+                                break
+                            elif (copy > delta):
+                                copy = int(copy - delta)
+                                relist.append(copy)
+                                # add padding by comparing to old length
+                                padding += int(log10(delta)) - (int(log10(copy)))
+                                padlist.append(padding)
+                                bug -= 0
+                    else:
+                        # copy < dig * sorint
+                        # if dividend is 0.XXXXXXXXX, should check how many padding for 0
+                        if copy < 1 and firstd == 1:
+                            firstd = 0
+                            for i in str(dividend):
+                                if i == "0": # not add for "."
+                                    padding += 1
+                                elif i == ".":
+                                    padding += 0
+                                else:
+                                    break
+                        # if "copy" have "."
+                        if "." in str(copy):
+                            # can be 0.XXXX or XXXX.XXXXX
+                            if copy < 1:
+                                # 0.XXXXXX
+                                while (copy < delta):
+                                    # Ten times "copy"
+                                    copy = copy * 10
+                                # check length, either same or longer "copy"
+                                if int(log10(copy)) == int(log10(delta)):
+                                    # no padding
+                                    padlist.append(padding)
+                                else:
+                                    padding += 1
+                                    padlist.append(padding)
+                                    # return to default
+                                    padding -= 1
+                            else:
+                                # XXXXX.XXX
+                                padding += int(log10(int(copy))) - int(log10(delta))
+                                if firstd == 1:
+                                    quopad = padding
+                                    firstd = 0
+                                    padlist.append(padding)
+                                    padding = 0
+                                else:
+                                    padlist.append(padding)
+                        else:
+                            # not first time
+                            while (copy < delta):
+                                # Ten times "copy"
+                                copy = copy * 10
+                            padlist.append(padding)
+                        if bug == 1:
+                            padding -= 1
+                            bug -= 0
+                        # check if division should end
+                        if copy == delta:
+                            # division should end
+                            relist.append("")
+                            # no padding
+                            padlist.append(padding)
+                            break
+                        else:
+                            # "copy" > (dig * sorint)
+                            # "copy" can be the integer part, it will cause bug.
+                            # Save current "copy" length to check padding
+                            pcheck = int(log10(copy))
+                            # ensure everyting in list are integer
+                            copy = int(copy - delta)
+                            relist.append(copy)
+                            # add padding by comparing to old length
+                            padding += pcheck - (int(log10(copy)))
+                            padlist.append(padding)
+                else:
+                    # insert "0" to last item in relist and "copy"
+                    padding += 1
+                    copy = copy * 10
+                    relist[len(relist) - 1] = copy
+                    # Causing some bug
+                    bug += 1
+        for i in relist:
+            for j in range(len(divisor_in) + 1):
+                print(" ", end='')
+            print(i)
+        # ensure every integer have no ".0"
+        if float(dividend) == int(dividend):
+            dividend = int (dividend)
+        if float(divisor) == int(divisor):
+            divisor = int (divisor)
+        quo = int (quo) if float(quo) == int(quo) else float(quostr)
+        # add padding to quotient
+        padding = quopad
+        pad = int(temp[0]) * sorint
+        padding += int(log10(pad))
+        """
 
 if __name__ == '__main__':
     app.run()

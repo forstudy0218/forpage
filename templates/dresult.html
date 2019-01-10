@@ -1,0 +1,122 @@
+<!-- jinja2 -->
+{% extends "layout.html" %}
+
+{% block title %}
+    {% if error == 0 %}
+        Result
+    {% else %}
+        Error
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+    <h3 class="dheader">Long Division Calculator with decimals<br>小數直式計算器<br>小数長除</h3>
+    <!-- Grid -->
+    {% if error == 1 %}
+    <div class="row">
+        <!-- not float input -->
+        <!-- left column -->
+        <div class="col-sm-6 bg-dark">
+            <p class="warning">Warning!</p>
+            <p class="derror">Not decimal input(s).</p>
+        </div>
+        <!-- right column -->
+        <div class="col-sm-6 bg-info">
+            <p class="dsolution">Solution</p>
+            <p class="dsolution">Try to use integer or "xx.xxx" where "x" is "0" to "9".</p>
+        </div>
+    </div>
+    {% elif error == 2 %}
+    <div class="row">
+        <!-- cannot divide 0 -->
+        <!-- left column -->
+        <div class="col-sm-6 bg-dark">
+            <p class="warning">Warning!</p>
+            <p class="derror">Divisor should not be zero.</p>
+        </div>
+        <!-- right column -->
+        <div class="col-sm-6 bg-info">
+            <p class="dsolution">Solution</p>
+            <p class="dsolution">Change your divisor.</p>
+        </div>
+    </div>
+    {% elif error == 3 %}
+    <div class="row">
+        <!-- quotient too little -->
+        <!-- left column -->
+        <div class="col-sm-6 bg-dark">
+            <p class="warning">Warning!</p>
+            <p class="derror">The result quotient is too little.</p>
+        </div>
+        <!-- right column -->
+        <div class="col-sm-6 bg-info">
+            <p class="dsolution">Solution</p>
+            <p class="dsolution">Sorry for this issue. Maybe try other calculator somewhere else.</p>
+        </div>
+    </div>
+    {% elif error == 4 %}
+    <div class="row">
+        <!-- Counting miss -->
+        <!-- left column -->
+        <div class="col-sm-6 bg-dark">
+            <p class="warning">Warning!</p>
+            <p class="derror">Code is broken.</p>
+        </div>
+        <!-- right column -->
+        <div class="col-sm-6 bg-info">
+            <p class="dsolution">Solution</p>
+            <p class="dsolution">Unknown error. Please wait for fix.</p>
+        </div>
+    </div>
+    {% elif error == 0 %}
+        <!-- Do the real work -->
+        <!-- try table -->
+        <table id="longdivi" align="center">
+            <!-- first row: [       ][ quotient ] -->
+            <tr>
+                <td></td>
+                <!-- Long division symol -->
+                {% if padding == 0 %}
+                    <td><span style="border-bottom: 1px black solid; ">{{ quo }}</span></td>
+                {%else %}
+                    <td><span style="border-bottom: 1px black solid; ">{% for i in range(padding) %}&numsp;{% endfor %}{{ quo }}</span></td>
+                {% endif %}
+            </tr><tr>
+            <!-- second row: [divisor][ dividend ] -->
+                <!-- Long division symol -->
+                <td><span style="border-right: 1px black solid; border-radius: 0px 0px 10px 0px">{{ divisor }}</span></td>
+                <td><span class="text-left">{{ dividend }}</span></td>
+            </tr>
+            <!-- thrid row: [       ][ relist ] -->
+            <tr>
+                <td></td>
+                <!-- Long division symol -->
+                <td>
+                    <span class="text-left">
+                        <!-- iterate relist -->
+                        {% for i in range(relist|length) %}
+                            {% if i is divisibleby(2) %}
+                                <!-- add padding and underline -->
+                                {% for i in range(padlist[i]) %}&numsp;{% endfor %}<span style="text-decoration:underline;">{{ relist[i] }}</span><br>
+                            {% else %}
+                                <!-- add padding and no underline -->
+                                {% for i in range(padlist[i]) %}&numsp;{% endfor %}{{ relist[i] }}<br>
+                            {% endif %}
+                        {% endfor %}
+                    </span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    {% else %}
+        <br><h1 stlye="font-style: bold;">How do you get here?!</h1>
+    {% endif %}
+    <div align="center">
+        <!-- return button -->
+        <form action="/decimal" method="get">
+            <button type="submit" class="btn btn-dark">
+                <font color="green">Try again</font>
+            </button>
+        </form>
+    </div>
+{% endblock %}

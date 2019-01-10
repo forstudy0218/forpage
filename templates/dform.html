@@ -1,0 +1,22 @@
+<!-- jinja2 -->
+{% extends "layout.html" %}
+
+{% block title %}
+    Decimal Long Division
+{% endblock %}
+
+{% block main %}
+    <h3 class="dheader">Long Division Calculator with decimals<br>小數直式計算器<br>小数長除</h3>
+    <div class="d-flex flex-column" align="center"><div class="p-2 bg-info">
+        <form action="/decimal" method="post" id="dformula">
+            <!-- step can be any -->
+            <input autocomplete="off" name="dividend" placeholder="Dividend" type="number" step="any">
+            &divide;<input autocomplete="off" name="divisor" placeholder="Divisor" type="number" step="any">
+            <br>
+            <button class="btn btn-primary" type="submit">Enter</button>
+        </form>
+    </div><div class="p-2 bg-warning">
+        <span style="font-family: Comic Sans MS, Comic Sans, cursive;">
+            Do you know <a href="https://www.google.com/search?q=Henry+Briggs"><em>Henry Briggs</em></a> ?</span>
+    </div></div>
+{% endblock %}
