@@ -18,29 +18,28 @@
     <script src="/static/scripts.js"></script>
   </head>
   <body style="background-color:lightgray">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span></button>
+        <nav class="navbar navbar-toggleable-xl navbar-dark bg-dark">
             <!-- to do -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- add a search box. Code from: www.google.com -->
+            <form class="form-inline mx-auto" align="center" action="https://www.google.com/search" method="get" target="_blank">
+                <input placeholder="Google it!" maxlength="500" name="q" type="text" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" required>
+            </form>
             <a class="navbar-brand" href="/">FRANK</a>
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li class="nav-item active"><a class="nav-link" href="/">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/convert">Currency Converter</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/decimal">Long Division(Decimal)</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">TODO</a></li>
-                    <li class="nav-item"><a class="nav-link disabled" href="#">Disabled</a></li>
-                </ul>
-            </div>
         </nav>
-        {% if get_flashed_messages() %}
-        <!-- Error -->
-            <header>
-                <div class="alert alert-primary border text-center" role="alert">
-                    {{ get_flashed_messages() | join(" ") }}
+        <div class="pos-f-b">
+            <div class="collapse" id="navbarToggleExternalContent">
+                <div class="bg-dark">
+                    <a class="btn btn-primary" href="/">Home</a>
+                    <a class="btn btn-primary" href="/convert">Currency Converter</a>
+                    <a class="btn btn-primary" href="/decimal">Long Division(Decimal)</a>
+                    <a class="btn btn-secondary" href="#">TODO</a>
+                    <a class="btn btn-secondary disabled" href="#" aria-disabled="true">Disabled</a>
                 </div>
-            </header>
-        {% endif %}
+            </div>
+        </div>
         <main class="container p-5">{% block main %}{% endblock %}</main>
         <footer class="footer">
             <div class="container">

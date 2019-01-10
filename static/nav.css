@@ -3,6 +3,10 @@
     color: yellow;
     font-family: Fantasy, serif;
 }
+/* for button link */
+.bg-dark>a {
+  color: Khaki;
+}
   /* control bottom clock */
 /* https://stackoverflow.com/questions/13476267/
 hide-div-element-when-screen-size-is-smaller-than-a-specific-size */
