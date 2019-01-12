@@ -118,6 +118,7 @@ function createImage(source) {
    console.log("Image should be created.");
 }
 function canvas(coords){
+	document.getElementById("imgcanvas").style.height = '100%';
 	let imageObj = $("#pasted img")[0];
 	let canvas = $("#imgcanvas")[0];
 	canvas.width  = coords.w;
