@@ -1,0 +1,34 @@
+<!-- jinja2 -->
+{% extends "layout.html" %}
+
+{% block title %}
+    Image
+{% endblock %}
+
+{% block main %}
+    <div id="Iheader" style="visibility: visible;">
+        Usage:<br>
+        <ol>
+            <li>Print Screen or Copy Image</li>
+            <li>Ctrl + v</li>
+        </ol>
+    </div>
+    <div id="pasted"></div>
+    <span align="center"><button id="repaste" class="btn btn-danger" onclick="imgreset()" style="visibility: hidden;">Delete</button>
+    <button id="Icomfirm" class="btn btn-warning" onclick="imgconfirm()" style="visibility: hidden;">Confirm</button>
+    <a id="Igoogle" class="btn btn-success" style="visibility: hidden;" target="_blank">Google this!</a>
+    </span>
+    <br>
+    <span id="Itext" style="display: none;">Please crop .(Using Jcrop) Preview: </span>
+    <br>
+    <canvas id="imgcanvas"></canvas>
+    <div id="imageraw"></div>
+    <!--
+     * jquery.Jcrop.min.js v2.0.4 (build:20130202)
+     * jQuery Image Cropping Plugin - released under MIT License
+     * Copyright (c) 2008-2018 Tapmodo Interactive LLC
+     * https://github.com/tapmodo/Jcrop -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.4/js/Jcrop.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.4/css/Jcrop.css" type="text/css" />
+    <script src="/static/clipboard.js"></script>
+{% endblock %}s

@@ -274,9 +274,7 @@ def decimal():
             # Add any for leading zero
             if i == "0":
                 padding += 1
-            elif i == ".":
-                GG = 0
-            else:
+            elif i != ".":
                 break
         for i in range(len(temp)):
             endpos = i
@@ -407,9 +405,7 @@ def decimal():
         for i in padstr:
             if i == "0":
                 padcount += 1
-            elif i == ".":
-                GG = 1
-            else:
+            elif i != ".":
                 break
         quopad = firstrowlength - padcount if firstrowlength >= padcount else 0
         if len(padlist) != len(relist):
@@ -417,6 +413,13 @@ def decimal():
             return render_template("dresult.html", error=error)
         error = 0
         return render_template("dresult.html", error=error, quo=padstr, divisor=divisor_out, dividend=dividend_out, relist=relist, padding=quopad, padlist=padlist)
+
+@app.route("/imgsearch", methods=["GET"])
+def picsearch():
+    if request.method == "GET":
+        return render_template("picture.html")
+    else:
+        return redirect("/")
 
 if __name__ == '__main__':
     app.run()
