@@ -103,7 +103,6 @@ function createImage(source) {
       document.getElementById("Iheader").style.visibility = 'hidden';
       document.getElementById("Iheader").style.height = '0px';
       document.getElementById("Itext").style.display = 'block';
-      document.getElementById("imgcanvas").style.height = '100%';
       picture_width = $("#pasted img").width();
 		picture_height = $("#pasted img").height();
 		console.log("Drawing.");
