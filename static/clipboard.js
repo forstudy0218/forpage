@@ -157,7 +157,7 @@ function imgconfirm() {
 	      document.getElementById("imgcanvas").style.height = '0px';
 	      $("#imageraw")[0].append(this);
 	      /* document.getElementById("Igoogle").style.visibility = 'visible';
-	      seem not support search thought URL */
+	      seem not support search through URL */
       };
       qImg.src = qurl;
    });
