@@ -6,20 +6,59 @@
   bottom: 0;
   left: 0; }
 
-#deletion {
-  position: absolute;
-  top: 0;
-  left: 220px; }
-
-#creation {
+#creation, #rolesetting, #rolecheck, .description {
   width: 100vw;
   height: 100vh;
   display: none; }
+
+#rolecheck {
+  position: relative; }
+
+.description {
+  position: relative; }
 
 .wrappee {
   height: 50px;
   width: 210px;
   border: thick double skyblue;
   border-radius: 6px; }
+
+#deletion {
+  position: absolute;
+  top: 0;
+  left: 220px; }
+
+#playerset {
+  position: absolute;
+  top: 200px;
+  left: 230px; }
+
+#checkarea {
+  position: absolute;
+  width: 50%;
+  align-self: center; }
+
+.nametext {
+  width: 100%; }
+
+.checkbtn {
+  align-self: center; }
+
+.descriptgood, .descriptevil, .descriptsf {
+  border-radius: 6px; }
+
+.descriptgood {
+  border: thick solid Green; }
+
+.descriptevil {
+  border: thick solid Red; }
+
+.descriptsf {
+  border: thick solid purple; }
+
+.backtolist {
+  position: absolute;
+  bottom: 0;
+  right: 0; }
 
 /*# sourceMappingURL=csswolf.css.map */

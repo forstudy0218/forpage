@@ -11,11 +11,7 @@
     bottom: 0;
     left : 0;
 }
-#deletion {
-    position: absolute;
-    top: 0;
-    left: 220px;
-}
+
 // base container attr
 %phasecontain {
     width: 100vw;
@@ -25,10 +21,68 @@
 #creation {
     @extend %phasecontain;
 }
-// phase 0 grid
+#rolesetting {
+    @extend %phasecontain;
+}
+#rolecheck {
+    @extend %phasecontain;
+    position: relative;
+}
+.description {
+    @extend %phasecontain;
+    position: relative;
+}
+
+// phase 0
 .wrappee {
     height: 50px;
     width: 210px;
     border: thick double skyblue;
     border-radius: 6px;
+}
+#deletion {
+    position: absolute;
+    top: 0;
+    left: 220px;
+}
+#playerset {
+    position: absolute;
+    top: 200px;
+    left: 230px;
+}
+
+// phase 1
+#checkarea {
+    position: absolute;
+    width: 50%;
+    align-self: center;
+}
+.nametext {
+    width: 100%;
+}
+.checkbtn {
+    align-self: center;
+}
+// decription box
+%decriptionbox {
+    border-radius: 6px;
+}
+.descriptgood {
+    @extend %decriptionbox;
+    border: thick solid Green;
+}
+.descriptevil {
+    @extend %decriptionbox;
+    border: thick solid Red;
+}
+.descriptsf {
+    @extend %decriptionbox;
+    border: thick solid purple;
+}
+
+// base back to list button
+.backtolist {
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }

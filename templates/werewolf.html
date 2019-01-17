@@ -27,7 +27,79 @@
           <input autocomplete="off" placeholder="Delete Player" type="text" id="delname" required/>
           <button id="delplayer" class="btn btn-danger" type="submit"></button>
         </form>
+        <button class="btn btn-success" id="playerset" onclick="playerset()">GO!</button>
       </div>
+      <!-- phase zero/roles setting -->
+      <div id="rolesetting">
+        <ul>
+          <li>村民<select class="rolesnum" id="vecount"></select></li>
+          <li>占卜師<select class="rolesnum" id="ftcount"></select></li>
+          <li>獵人<select class="rolesnum" id="htcount"></select></li>
+          <li>靈視者<select class="rolesnum" id="dscount"></select></li>
+          <li>人狼<select class="rolesnum" id="wwcount"></select></li>
+          <li>狂人<select class="rolesnum" id="mmcount"></select></li>
+          <li>妖狐<select class="rolesnum" id="sfcount"></select></li>
+        </ul>
+        <button id="startgame" class="btn btn-success" onclick="startgame()">開始</button>
+      </div>
+      <!-- phase one/roles confirmation -->
+      <div id="rolecheck">
+        <div id="checkarea"></div>
+      </div>
+      <!-- role description -->
+      <!-- ve, ft, ht, ds, ww, mm, sf -->
+      <div id="ve" class="description">
+        <div class="descriptgood container">
+          <h1>你是村民 (善良陣營)</h1>
+          <p>能力: 無</p>
+          <p>職責: 推理, 找出狼人, 防止善良的人死去, 盡量不要說謊</p>
+        </div>
+      </div>
+      <div id="ft" class="description">
+        <div class="descriptgood container">
+          <h1>你是占卜師 (善良陣營)</h1>
+          <p>能力: 晚上偵測一個玩家是否狼人, 如對方是妖狐則死亡</p>
+          <p>職責: 找出狼人跟妖狐, 告訴大家情報</p>
+        </div>
+      </div>
+      <div id="ht" class="description">
+        <div class="descriptgood container">
+          <h1>你是獵人 (善良陣營)</h1>
+          <p>能力: 晚上保護一個玩家不被狼人殺死</p>
+          <p>職責: 優先保護占卜師, 不要讓狼人知道你的身份</p>
+        </div>
+      </div>
+      <div id="ds" class="description">
+        <div class="descriptgood container">
+          <h1>你是靈視者 (善良陣營)</h1>
+          <p>能力: 晚上得知被投票吊死者是否狼人</p>
+          <p>職責: 計算還有多少狼人存活, 告訴大家情報</p>
+        </div>
+      </div>
+      <div id="ww" class="description">
+        <div class="descriptevil container">
+          <h1>你是狼人 (邪惡陣營)</h1>
+          <p>能力: 晚上決定要咬死哪一個人, 妖狐不能被你咬死</p>
+          <p>職責: 隱藏身份, 存活, 減少村民生存人數</p>
+        </div>
+      </div>
+      <div id="mm" class="description">
+        <div class="descriptevil container">
+          <h1>你是狂人 (邪惡陣營)</h1>
+          <p>能力: 無, 狼人勝利時你會勝利</p>
+          <p>職責: 干擾討論, 讓村民無法推理出誰是狼人</p>
+        </div>
+      </div>
+      <div id="sf" class="description">
+        <div class="descriptsf container">
+          <h1>你是妖狐 (妖狐陣營)</h1>
+          <p>能力: 不會被狼人咬死</p>
+          <p>職責: 隱藏身份, 存活, 活到最後你就贏了</p>
+        </div>
+      </div>
+      <!-- back to list -->
+      <button class="btn btn-primary backtolist" onclick="backplaylist()">結束遊戲</button>
+      <!-- back to home -->
       <a href="/" class="btn btn-primary backtohome">HOME</a>
   </body>
 </html>
