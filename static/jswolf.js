@@ -35,6 +35,9 @@ function addnew() {
         for (let i = 0; i < playersdata.length; i++) {
             if (playname === playersdata[i].playname) {
                 alert("Already exist.");
+                setTimeout(function() {
+                    $('#newplayer')[0].reset();
+                }, 500);
                 return false;
             }
         }
@@ -42,6 +45,9 @@ function addnew() {
         localStorage.setItem('playersdata', JSON.stringify(playersdata));
         $("#creation").append(`<div class='wrappee'>${playname}</div>`);
         alert('Added.');
+        setTimeout(function() {
+            $('#newplayer')[0].reset();
+        }, 500);
         return false;
     } else {
         alert("Name needed!");

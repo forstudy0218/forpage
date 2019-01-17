@@ -1,3 +1,10 @@
+// input box width on phone
+@media only screen and (max-width: 600px) {
+    input {
+      width: 16.6%;
+    }
+}
+
 // base home button
 .backtohome {
     position: absolute;
