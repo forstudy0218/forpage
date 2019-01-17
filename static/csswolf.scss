@@ -1,0 +1,27 @@
+// base home button
+.backtohome {
+    position: absolute;
+    bottom: 0;
+    left : 0;
+}
+#deletion {
+    position: absolute;
+    top: 0;
+    left: 220px;
+}
+// base container attr
+%phasecontain {
+    width: 100vw;
+    height: 100vh;
+    display: none;
+}
+#creation {
+    @extend %phasecontain;
+}
+// phase 0 grid
+.wrappee {
+    height: 50px;
+    width: 210px;
+    border: thick double skyblue;
+    border-radius: 6px;
+}

@@ -421,5 +421,9 @@ def picsearch():
     else:
         return redirect("/")
 
+@app.route("/werewolf", methods=["GET"])
+def werewolf():
+    return render_template("werewolf.html")
+
 if __name__ == '__main__':
     app.run()

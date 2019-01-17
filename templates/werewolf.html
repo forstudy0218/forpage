@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- little jinja2 here-->
+    <title>WEREWOLF</title>
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <!-- Bootstrap -->
+    <!-- https://getbootstrap.com/docs/4.0/components/navbar/ -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- style navbar -->
+    <link href="/static/csswolf.css" rel="stylesheet">
+    <!-- javascript -->
+    <script src="/static/jswolf.js"></script>
+  </head>
+  <body>
+      <!-- phase zero/player creation -->
+      <div id="creation" class="wrapper">
+        <form id="newplayer" class="wrappee" onsubmit="return addnew();">
+          <input autocomplete="off" placeholder="Name Here" type="text" id="newname" required/>
+          <button id="addplayer" class="btn btn-info" type="submit"></button>
+        </form>
+        <form id="deletion" onsubmit="return deleteplay();">
+          <input autocomplete="off" placeholder="Delete Player" type="text" id="delname" required/>
+          <button id="delplayer" class="btn btn-danger" type="submit"></button>
+        </form>
+      </div>
+      <a href="/" class="btn btn-primary backtohome">HOME</a>
+  </body>
+</html>
