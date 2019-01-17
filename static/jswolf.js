@@ -1,8 +1,8 @@
 // Starting game
 // Set game phase
 if (!localStorage.getItem('gamephase')) {
-    localStorage.setItem('gamephase', 0);
-    var gamephase = 0;
+    localStorage.setItem('gamephase', "0");
+    var gamephase = "0";
 } else {
     var gamephase = localStorage.getItem('gamephase');
 }
