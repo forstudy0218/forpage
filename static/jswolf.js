@@ -13,8 +13,27 @@ if (!localStorage.getItem('playersdata')) {
     let tempdata = localStorage.getItem('playersdata');
     var playersdata = JSON.parse(tempdata);
 }
+if (!localStorage.getItem('hanglist')) {
+    var hanglist = [];
+    localStorage.setItem('hanglist', JSON.stringify(hanglist));
+} else {
+    let tempdata = localStorage.getItem('hanglist');
+    var hanglist = JSON.parse(tempdata);
+}
+if (!localStorage.getItem('nightcount')) {
+    localStorage.setItem('nightcount', 0);
+}
+
+var nightcount = Number(localStorage.getItem('nightcount'));
 
 var rolecon = 0;
+
+// save death list for night
+var nightdeathlist = [];
+// wolf vote for night
+var wolfvotelist = [];
+// hunter protection;
+var htpro = "";
 
 $(document).ready(function(){
     // ready
@@ -33,6 +52,32 @@ function ready(){
         // Confirm one
         starting();
     }
+    // Night time
+    if (gamephase === "2") {
+        // Confirm two
+        night();
+    }
+    // day time
+    if (gamephase === "3") {
+        // Confirm two
+        day();
+    }
+}
+
+function rezero() {
+    // make everything unseen and disable
+    $("#startgame").prop("disabled", true);
+    $("#rolesetting").css("display", "none");
+    $("#creation").css("display", "none");
+    $("#newplayer").prop("disabled", true);
+    $("#deletion").prop("disabled", true);
+    $("#playerset").prop("disabled", true);
+    $("#rolecheck").css("display", "none");
+    $(".description").css("display", "none");
+    $("#checkarea").empty();
+    $(".rolesnum").empty();
+    $(".checkbtn").detach();
+    $(".nightinfo").detach();
 }
 
 function addnew() {
@@ -65,12 +110,8 @@ function addnew() {
 function setzero() {
     // Setting zero
     // make anything unseen and disable
-    $("#startgame").prop("disabled", true);
-    $("#rolesetting").css("display", "none");
-    $(".backtolist").prop("disabled", true);
-    $(".backtolist").css("display", "none");
-    $("#rolecheck").css("display", "none");
-    $(".description").css("display", "none");
+    rezero();
+    $(".playerlist").detach();
     // except current stage
     $("#creation").css("display", "block");
     $("#newplayer").prop("disabled", false);
@@ -83,7 +124,7 @@ function setzero() {
             playdata["role"] = '';
             playdata["alive"] = 1;
             playname = playdata["playname"];
-            $("#creation").append(`<div class='wrappee'>${playname}</div>`);
+            $("#creation").append(`<div class='wrappee playerlist'>${playname}</div>`);
         }
         console.log(playersdata);
     }
@@ -106,12 +147,7 @@ function playerset() {
     } else {
         // Setting roles
         // make anything unseen and disable
-        $("#creation").css("display", "none");
-        $("#newplayer").prop("disabled", true);
-        $("#deletion").prop("disabled", true);
-        $("#playerset").prop("disabled", true);
-        $("#rolecheck").css("display", "none");
-        $(".description").css("display", "none");
+        rezero();
         // except current stage
         $("#startgame").prop("disabled", false);
         $("#rolesetting").css("display", "block");
@@ -124,24 +160,21 @@ function playerset() {
         }
     }
 }
-
+// base button function to reset everything
 function backplaylist(){
     // refresh page should work
-    // reset gamephase
+    // reset gamesave
+    hanglist = [];
+    localStorage.setItem('hanglist', JSON.stringify(hanglist));
     localStorage.setItem('gamephase', "0");
+    gamephase = "0";
+    localStorage.setItem('nightcount', 0);
+    nightcount = 0;
     rolecon = 0;
-    window.location.reload();
-    /* make anything unseen and disable
-    $("#startgame").prop("disabled", true);
-    $("#rolesetting").css("display", "none");
-    $(".backtolist").prop("disabled", true);
-    $(".backtolist").css("display", "none");
-    $(".rolesnum").empty();
-    // except current stage
-    $("#creation").css("display", "block");
-    $("#newplayer").prop("disabled", false);
-    $("#deletion").prop("disabled", false);
-    $("#playerset").prop("disabled", false); */
+    nightdeathlist = [];
+    wolfvotelist =[];
+    htpro = "";
+    setzero();
 }
 
 function startgame() {
@@ -177,6 +210,7 @@ function startgame() {
         }
     } else {
         alert("No werewolf.");
+        roleslist = [];
     }
     let mmnum = Number($("#mmcount option:selected").text());
     if (mmnum > 0) {
@@ -229,14 +263,7 @@ function starting() {
     console.log(playersdata);
     localStorage.setItem('gamephase', "1");
     // make everything unseen and disable
-    $("#startgame").prop("disabled", true);
-    $("#rolesetting").css("display", "none");
-    $("#creation").css("display", "none");
-    $("#newplayer").prop("disabled", true);
-    $("#deletion").prop("disabled", true);
-    $("#playerset").prop("disabled", true);
-    $("#rolecheck").css("display", "none");
-    $(".description").css("display", "none");
+    rezero();
     // start role confirmation
     checkrole(rolecon);
 }
@@ -245,6 +272,9 @@ function checkrole(pos) {
     if (pos >= playersdata.length) {
         alert("Confirmation done.");
         // move to next phase
+        localStorage.setItem('gamephase', "2");
+        rolecon = 0;
+        night();
     } else {
         let playdata = playersdata[pos];
         let playname = playdata["playname"];
@@ -272,4 +302,272 @@ function roled(rolename) {
     // next player
     rolecon++;
     checkrole(rolecon);
+}
+
+function night() {
+    // make everything unseen and disable
+    rezero();
+    nightact(rolecon);
+}
+
+function nightact(pos) {
+    if (pos >= playersdata.length) {
+        alert("Night End.");
+        // the death
+        nightcommit();
+    } else {
+        let playdata = playersdata[pos];
+        if (playdata["alive"] === 1) {
+            let playname = playdata["playname"];
+            let playrole = playdata["role"];
+            $("#checkarea").prepend(`<h1 class="nametext">${playname}</h1>`);
+            $("#checkarea").append(`<button class="checkbtn btn btn-success" onclick="shownight(${playrole})">我是${playname}</button>`);
+            $("#rolecheck").css("display", "block");
+        } else {
+            rolecon++;
+            nightact(rolecon);
+        }
+    }
+}
+
+function shownight(rolename) {
+    $("#rolecheck").css("display", "none");
+    $("#checkarea").empty();
+    roletag = rolename;
+    let playdata = playersdata[rolecon];
+    let playrole = playdata["role"];
+    // ft, ht, ds, ww have action
+    if (playrole === "ft") {
+        showft(roletag);
+    } else if (playrole === "ht") {
+        showht(roletag);
+    } else if (playrole === "ds") {
+        showds(roletag);
+    } else if (playrole === "ww") {
+        showww(roletag);
+    } else {
+        showno(roletag);
+    }
+    $(roletag).css("display", "block");
+}
+
+// Action html generate
+// ft
+function showft(roletag) {
+    let playdata = playersdata[rolecon];
+    let playname = playdata["playname"];
+    $(roletag).append("<h2 class='nightinfo'>請選擇要占卜的人</h2>");
+    $(roletag).append("<select id='tempft' class='nightinfo'></select>");
+    for (let i = 0; i < playersdata.length; i++) {
+     if ((playersdata[i]["playname"] != playname) && (playersdata[i]["alive"] === 1)) {
+            let ftname = playersdata[i]["playname"];
+            $("#tempft").append(`<option class='nightinfo'>${ftname}</option>`);
+        }
+    }
+    $(roletag).append("<button class='nightinfo btn btn-success' onclick='ftact()'>確認</button>");
+}
+
+// ht
+function showht(roletag) {
+    let playdata = playersdata[rolecon];
+    let playname = playdata["playname"];
+    if (nightcount === 0) {
+        // first night no guard
+        $(roletag).append("<h2 class='nightinfo'>第一晚,無需保護,請隨意選一人</h2>");
+        $(roletag).append("<select id='templist' class='nightinfo'></select>");
+        for (let i = 0; i < playersdata.length; i++) {
+            if (playersdata[i]["alive"] === 1) {
+                let tempname = playersdata[i]["playname"];
+                $("#templist").append(`<option class='nightinfo'>${tempname}</option>`);
+            }
+        }
+        $(roletag).append("<button class='nightinfo btn btn-success' onclick='npact()'>確認</button>");
+    } else {
+        $(roletag).append("<h2 class='nightinfo'>請選一人保護,對方今晚將不會被咬殺</h2>");
+        $(roletag).append("<select id='tempht' class='nightinfo'></select>");
+        for (let i = 0; i < playersdata.length; i++) {
+            if ((playersdata[i]["playname"] != playname) && (playersdata[i]["alive"] === 1)) {
+                let tempname = playersdata[i]["playname"];
+                $("#tempht").append(`<option class='nightinfo'>${tempname}</option>`);
+            }
+        }
+        $(roletag).append("<button class='nightinfo btn btn-success' onclick='htact()'>確認</button>");
+    }
+}
+// ds
+function showds(roletag) {
+    $(roletag).append("<h2 class='nightinfo'>上一晚無人被投票驅逐</h2>");
+    hanglen = hanglist.length;
+    if (hanglen > 0) {
+        let ttname = hanglist[hanglen - 1];
+        for (let i = 0; i < playersdata.length; i++) {
+            if (playersdata[i]["playname"] === ttname) {
+                if (playersdata[i]["role"] === "ww") {
+                    $(".nightinfo").detach();
+                    $(roletag).append("<h1 class='nightinfo'>上一晚被投票驅逐的是狼人!</h1>");
+                } else {
+                    $(".nightinfo").detach();
+                    $(roletag).append("<h2 class='nightinfo'>上一晚被投票驅逐的是無辜的</h2>");
+                }
+            }
+        }
+    }
+    showno(roletag);
+}
+// ww
+function showww(roletag) {
+    let wwlist = playersdata.filter(el => el.role === "ww");
+    // show list of ww
+    $(roletag).append("<h2 class='nightinfo'>你的狼人同伴: </h2>");
+    for (let i = 0; i < wwlist.length; i++) {
+        let wwname = wwlist[i]["playname"];
+        $(roletag).append(`<h2 class='nightinfo'>${wwname} (狼人)</h2>`);
+    }
+    if (nightcount != 0) {
+        $(roletag).append("<h1 class='nightinfo'>請選擇你想咬殺的人(若存活狼人多於一人,選擇較多的對象為最終目標,票數相同則隨機一人)</h1>");
+        $(roletag).append("<select id='tempww' class='nightinfo'></select>");
+        let ttlist = playersdata.filter(el => el.role !== "ww");
+        ttlist = ttlist.filter(el => el.alive !== 0);
+        for (let i = 0; i < ttlist.length; i++) {
+            let tempname = ttlist[i]["playname"];
+            $("#wwlist").append(`<option class='nightinfo'>${tempname}</option>`);
+        }
+        $(roletag).append("<button class='nightinfo btn btn-danger' onclick='wwact()'>確認</button>");
+    } else {
+        showno(roletag);
+    }
+}
+// no power
+function showno(roletag) {
+    let playdata = playersdata[rolecon];
+    let playname = playdata["playname"];
+    $(roletag).append("<h2 class='nightinfo'>請隨意選一人</h2>");
+    $(roletag).append("<select id='templist' class='nightinfo'></select>");
+    for (let i = 0; i < playersdata.length; i++) {
+        if ((playersdata[i]["playname"] != playname) && (playersdata[i]["alive"] === 1)) {
+            let tempname = playersdata[i]["playname"];
+            $("#templist").append(`<option class='nightinfo'>${tempname}</option>`);
+        }
+    }
+    $(roletag).append("<button class='nightinfo btn btn-success' onclick='npact()'>確認</button>");
+}
+
+// general action
+function nightnext() {
+    $(".description").css("display", "none");
+    $(".nightinfo").detach();
+    rolecon++;
+    nightact(rolecon);
+}
+
+// ft action
+function ftact() {
+    let ttname = $("#tempft option:selected").text();
+    console.log(`see ${ttname}`);
+    for (let i = 0; i < playersdata.length; i++) {
+        if (playersdata[i]["playname"] === ttname) {
+            if (playersdata[i]["role"] === "ww") {
+                alert(`${ttname} 是狼人!`);
+            } else if (playersdata[i]["role"] === "sf") {
+                nightdeathlist.push(ttname);
+                alert(`${ttname} 是無辜的!`);
+            } else {
+                alert(`${ttname} 是無辜的!`);
+            }
+        }
+    }
+    nightnext();
+}
+
+// ht action
+function htact() {
+    let ttname = $("#tempht option:selected").text();
+    console.log(ttname);
+    alert(`你決定保護 ${ttname}`);
+    htpro = ttname;
+    nightnext();
+}
+
+// ww action
+function wwact() {
+    let ttname = $("#tempww option:selected").text();
+    alert(`你決定咬 ${ttname}`);
+    wolfvotelist.push(ttname);
+    nightnext();
+}
+
+// no power alert
+function npact() {
+    alert("你又睡著了");
+    nightnext();
+}
+
+// night end
+function nightcommit() {
+    // count wolf vote
+    if (wolfvotelist.length > 0) {
+        let possible = playersdata.filter(el => el.role !== "ww");
+        possible = possible.filter(el => el.role !== "ww");
+        let deadbite = countvote(wolfvotelist, possible);
+        // check hunter protection
+        if (htpro != deadbite) {
+            nightdeathlist.push(deadbite);
+        }
+    }
+    // commit dead
+    for (let i = 0; i < nightdeathlist.length; i++) {
+        let deadname = nightdeathlist[i];
+        for (let j = 0; j < playersdata.length; j++) {
+            if (deadname === playersdata[j]["playname"]) {
+                playersdata[j]["alive"] = 0;
+                alert(`${deadname} 已被殺死`);
+            }
+        }
+    }
+    // save the alive list
+    localStorage.setItem('playersdata', JSON.stringify(playersdata));
+    // move to day
+    nightcount++;
+    localStorage.setItem('nightcount', nightcount);
+    localStorage.setItem('gamephase', "3");
+    rolecon = 0;
+    day();
+}
+
+// vote count; return most vote name
+function countvote(votelist, poslist) {
+    let countlist = [];
+    for (let i = 0; i < poslist.length; i++) {
+        let votename = poslist[i]["playname"];
+        let icount = 0;
+        for (let j = 0; j < votelist.length; j++) {
+            if (votelist[j] === votename) {
+                icount++;
+            }
+        }
+        countlist.push(icount);
+    }
+    let mostpos = [];
+    let votecount = 0;
+    for (let k = 0; k < countlist.length; k++) {
+        if (countlist[k] > votecount) {
+            mostpos = [];
+            votecount = countlist[k];
+            mostpos.push(k);
+        } else if (countlist[k] === votecount) {
+            mostpos.push(k);
+        }
+    }
+    mostpos = shuffle(mostpos);
+    votepos = mostpos[0];
+    ttname = poslist[votepos]["playname"];
+    return ttname;
+}
+
+// day time; need table of alive
+function day(){
+    alert("早上好");
+    // nightdeathlist = [];
+    // htpro = "";
+    // wolfvotelist = [];
 }
