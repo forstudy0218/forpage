@@ -18,16 +18,19 @@
   </head>
   <body>
       <!-- phase zero/player creation -->
-      <div id="creation" class="wrapper">
-        <form id="newplayer" class="wrappee" onsubmit="return addnew();">
-          <input autocomplete="off" placeholder="Name Here" type="text" id="newname" required/>
-          <button id="addplayer" class="btn btn-info" type="submit"></button>
-        </form>
-        <form id="deletion" onsubmit="return deleteplay();">
-          <input autocomplete="off" placeholder="Delete Player" type="text" id="delname" required/>
-          <button id="delplayer" class="btn btn-danger" type="submit"></button>
-        </form>
-        <button class="btn btn-success" id="playerset" onclick="playerset()">GO!</button>
+      <div id="creation">
+        <div>
+          <form id="newplayer" onsubmit="return addnew();">
+            <input autocomplete="off" placeholder="Name Here" type="text" id="newname" required/>
+            <button id="addplayer" class="gbtn btn btn-info" type="submit"></button>
+          </form>
+          <form id="deletion" onsubmit="return deleteplay();">
+            <input autocomplete="off" placeholder="Delete Player" type="text" id="delname" required/>
+            <button id="delplayer" class="gbtn btn btn-danger" type="submit"></button>
+          </form>
+          <button class="gbtn btn btn-success" id="playerset" onclick="playerset()">GO!</button>
+        </div>
+        <div id="gamerlist" class="row justify-content-center"></div>
       </div>
       <!-- phase zero/roles setting -->
       <div id="rolesetting">
@@ -40,7 +43,7 @@
           <li>狂人<select class="rolesnum" id="mmcount"></select></li>
           <li>妖狐<select class="rolesnum" id="sfcount"></select></li>
         </ul>
-        <button id="startgame" class="btn btn-success" onclick="startgame()">開始</button>
+        <button id="startgame" class="gbtn btn btn-success" onclick="startgame()">開始</button>
       </div>
       <!-- phase one/roles confirmation -->
       <div id="rolecheck">
@@ -91,7 +94,7 @@
       <div id="mm" class="description">
         <div class="descriptevil container">
           <h1>你是狂人 (邪惡陣營)</h1>
-          <p>能力: 無, 狼人勝利時你會勝利</p>
+          <p>能力: 計算存活人數時被當作善良陣營, 狼人勝利時你會勝利</p>
           <p>職責: 干擾討論, 讓村民無法推理出誰是狼人</p>
           <p>勝利條件: 存活狼人數目 <em>相等或大於</em> 其他存活玩家數目</p>
         </div>
@@ -102,6 +105,38 @@
           <p>能力: 不會被狼人咬死</p>
           <p>職責: 隱藏身份, 不要被投票驅逐</p>
           <p>勝利條件: 活到最後</p>
+        </div>
+      </div>
+      <!-- check stop -->
+      <button class="ckstop gbtn btn btn-success" onclick="night()">確認完畢</button>
+      <!-- night stop -->
+      <button class="ntstop gbtn btn btn-dark" onclick="nightcommit()">夜晚結束</button>
+      <!-- daytime div -->
+      <div class="container" id="daylayout">
+        <div id="dayalive" class="row justify-content-center"></div>
+        <button id="askrolebtn" class="gbtn btn btn-warning" onclick="dayask()">查詢</button>
+        <button id="votetimebtn" class="gbtn btn btn-danger daybtn" onclick="votetime()">投票</button>
+      </div>
+      <!-- vote div -->
+      <div class="container" id="votelayout">
+        <h1 id="votetitle"><em>現在是投票時間</em></h1>
+        <h3>請選擇你想驅逐的玩家:</h3>
+      </div>
+      <!-- vote result div -->
+      <div class="container" id="voteresult">
+        <h1 id="restext">投票結果</h1>
+        <ul id="voteplayers"></ul>
+        <p>被驅逐的是:</p>
+      </div>
+      <!-- Game End Info -->
+      <div class="container" id="geinfo">
+        <br><span class="getext">存活下來的玩家</span>
+        <div class="container" style="padding: 3px;">
+            <div class="row justify-content-center gegrid" id="alivegg"></div>
+        </div>
+        <span class="getext">已死亡的玩家</span>
+        <div class="container" style="padding: 3px;">
+            <div class="row justify-content-center gegrid" id="deadgg"></div>
         </div>
       </div>
       <!-- back to list -->

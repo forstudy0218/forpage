@@ -6,10 +6,18 @@
   bottom: 0;
   left: 0; }
 
-#creation, #rolesetting, #rolecheck, .description {
+#creation, #rolesetting, #rolecheck, .description, #daylayout, #votelayout, #voteresult, #geinfo {
   width: 100vw;
   height: 100vh;
   display: none; }
+
+#rolesetting li {
+  border: thick solid Black;
+  background-color: lightblue;
+  margin: 20px;
+  list-style: none;
+  font-weight: bold;
+  padding: 5px; }
 
 #rolecheck {
   position: relative; }
@@ -17,25 +25,34 @@
 .description {
   position: relative; }
 
-.wrappee {
-  height: 50px;
-  width: 210px;
+#daylayout {
+  position: relative; }
+
+#geinfo {
+  text-align: center;
+  background-color: blanchedalmond; }
+
+#gamerlist {
+  max-width: 300px;
+  position: absolute; }
+
+#gamerlist div {
+  padding: 10px;
   border: thick double skyblue;
   border-radius: 6px; }
 
-#deletion {
-  position: absolute;
-  top: 0;
-  left: 220px; }
+#newplayer {
+  border: thick double skyblue;
+  border-radius: 6px;
+  display: inline-block; }
 
-#playerset {
-  position: absolute;
-  top: 200px;
-  left: 230px; }
+#deletion {
+  border: thick double Red;
+  display: inline-block; }
 
 #checkarea {
   position: absolute;
-  width: 50%;
+  width: 100%;
   align-self: center; }
 
 .nametext {
@@ -44,7 +61,7 @@
 .checkbtn {
   align-self: center; }
 
-.descriptgood, .descriptevil, .descriptsf {
+.descriptgood, .descriptevil, .descriptsf, #dayalive div, #restext, .getext, .endali, .winning {
   border-radius: 6px; }
 
 .descriptgood {
@@ -55,6 +72,80 @@
 
 .descriptsf {
   border: thick solid purple; }
+
+.wwrule {
+  position: absolute;
+  right: 5%; }
+
+.ntsec {
+  min-width: 100px;
+  margin-right: 10%; }
+
+.ntstop, .ckstop {
+  display: none; }
+
+#votetimebtn {
+  position: absolute;
+  right: 0; }
+
+#daylive {
+  visibility: collapse; }
+
+#dayalive div {
+  background-color: lightgreen;
+  border: thick solid Blue;
+  padding: 8px;
+  margin: 8px;
+  list-style: none;
+  font-weight: bold; }
+
+.daybtn {
+  margin-left: 15px; }
+
+#votetitle {
+  font-weight: bold; }
+
+.votecan {
+  margin-left: 10px; }
+
+#voteplayers {
+  list-style: none;
+  display: none; }
+
+#restext {
+  background-color: yellow;
+  font-weight: bold;
+  border: solid Red; }
+
+.getext {
+  border: thick solid Green;
+  background-color: skyblue;
+  font-weight: bold;
+  font-size: 120%; }
+
+.gegrid {
+  visibility: collapse;
+  margin: 3px; }
+
+.endali {
+  border: double Gold;
+  background-color: black;
+  font-weight: bold;
+  color: yellow; }
+
+.enddie {
+  border: solid purple;
+  background-color: lightgray;
+  font-style: italic; }
+
+.winning {
+  background-color: black;
+  font-weight: bold;
+  border: double yellow;
+  color: gold;
+  margin: 10px;
+  display: inline-block;
+  font-size: 200%; }
 
 .backtolist {
   position: absolute;

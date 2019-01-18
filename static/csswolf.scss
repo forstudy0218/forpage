@@ -24,6 +24,14 @@
 #rolesetting {
     @extend %phasecontain;
 }
+#rolesetting li {
+    border: thick solid Black;
+    background-color: lightblue;
+    margin: 20px;
+    list-style: none;
+    font-weight: bold;
+    padding: 5px;
+}
 #rolecheck {
     @extend %phasecontain;
     position: relative;
@@ -32,29 +40,46 @@
     @extend %phasecontain;
     position: relative;
 }
+#daylayout {
+    @extend %phasecontain;
+    position: relative;
+}
+#votelayout {
+    @extend %phasecontain;
+}
+#voteresult {
+    @extend %phasecontain;
+}
+#geinfo {
+    @extend %phasecontain;
+    text-align: center;
+    background-color: blanchedalmond;
+}
 
 // phase 0
-.wrappee {
-    height: 50px;
-    width: 210px;
+#gamerlist {
+    max-width: 300px;
+    position: absolute;
+}
+#gamerlist div {
+    padding: 10px;
     border: thick double skyblue;
     border-radius: 6px;
 }
-#deletion {
-    position: absolute;
-    top: 0;
-    left: 220px;
+#newplayer {
+    border: thick double skyblue;
+    border-radius: 6px;
+    display: inline-block;
 }
-#playerset {
-    position: absolute;
-    top: 200px;
-    left: 230px;
+#deletion {
+    border: thick double Red;
+    display: inline-block;
 }
 
 // phase 1
 #checkarea {
     position: absolute;
-    width: 50%;
+    width: 100%;
     align-self: center;
 }
 .nametext {
@@ -63,7 +88,7 @@
 .checkbtn {
     align-self: center;
 }
-// decription box
+// phase 2 decription box
 %decriptionbox {
     border-radius: 6px;
 }
@@ -78,6 +103,92 @@
 .descriptsf {
     @extend %decriptionbox;
     border: thick solid purple;
+}
+.wwrule {
+    position: absolute;
+    right: 5%;
+}
+.ntsec {
+    min-width: 100px;
+    margin-right: 10%;
+}
+.ntstop, .ckstop {
+    display: none;
+}
+
+// phase 3 daytime menu
+#votetimebtn {
+    position: absolute;
+    right: 0;
+}
+#daylive { // bootstrap grid
+    visibility: collapse;
+}
+#dayalive div {
+    @extend %decriptionbox;
+    background-color: lightgreen;
+    border: thick solid Blue;
+    padding: 8px;
+    margin: 8px;
+    list-style: none;
+    font-weight: bold;
+}
+.daybtn {
+    margin-left: 15px;
+}
+
+// vote add
+#votetitle {
+    font-weight: bold;
+}
+.votecan {
+    margin-left: 10px;
+}
+// vote result
+#voteplayers {
+    list-style: none;
+    display: none;
+}
+#restext {
+    @extend %decriptionbox;
+    background-color: yellow;
+    font-weight: bold;
+    border: solid Red;
+}
+
+// Game End
+.getext {
+    @extend %decriptionbox;
+    border: thick solid Green;
+    background-color: skyblue;
+    font-weight: bold;
+    font-size: 120%;
+}
+.gegrid {
+    visibility: collapse;
+    margin: 3px;
+}
+.endali {
+    @extend %decriptionbox;
+    border: double Gold;
+    background-color: black;
+    font-weight: bold;
+    color: yellow;
+}
+.enddie {
+    border: solid purple;
+    background-color: lightgray;
+    font-style: italic;
+}
+.winning {
+    @extend %decriptionbox;
+    background-color: black;
+    font-weight: bold;
+    border: double yellow;
+    color: gold;
+    margin: 10px;
+    display: inline-block;
+    font-size: 200%;
 }
 
 // base back to list button
