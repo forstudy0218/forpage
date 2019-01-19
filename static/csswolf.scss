@@ -1,8 +1,35 @@
+// base bgcolor
+body {
+    background-color: lightgrey;
+}
 // base home button
 .backtohome {
     position: absolute;
     bottom: 0;
-    left : 0;
+    left: 0;
+    display: none;
+}
+// base back to list button
+.backtolist {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: none;
+}
+// base pause button
+.pausebtn {
+    position: absolute;
+    bottom: 0;
+    right: 48vw;
+}
+// base thank
+#bootstrapfour {
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    display: none;
+    color: deeppink;
+    font-style: italic;
 }
 
 // base container attr
@@ -37,9 +64,11 @@
 #daylayout {
     @extend %phasecontain;
     position: relative;
+    background-color: #07f6ff38;
 }
 #votelayout {
     @extend %phasecontain;
+    background-color: ghostwhite;
 }
 #voteresult {
     @extend %phasecontain;
@@ -116,6 +145,9 @@
 .ntstop, .ckstop {
     display: none;
 }
+.ntstop {
+    color: gold;
+}
 
 // phase 3 daytime menu
 #votetimebtn {
@@ -133,6 +165,7 @@
     margin: 8px;
     list-style: none;
     font-weight: bold;
+    color: black;
 }
 .daybtn {
     margin-left: 15px;
@@ -141,9 +174,21 @@
 // vote add
 #votetitle {
     font-weight: bold;
+    background-color: midnightblue;
+    color: goldenrod;
 }
 .votecan {
     margin-left: 10px;
+}
+.vttnm {
+    color: Blue;
+    font-size: x-large;
+    background-color: gold;
+    border-radius: 6px;
+}
+.votestname {
+    border: dotted Red;
+    background: yellow;
 }
 // vote result
 #voteplayers {
@@ -157,6 +202,16 @@
     border: solid Red;
     display: inline-block;
     font-size: xx-large;
+}
+#vtedtext {
+    background-color: lightgrey;
+    font-weight: bold;
+    border: solid blue;
+    border-radius: 5px;
+}
+.vtres {
+    color: red;
+    font-weight: bolder;
 }
 
 // Game End
@@ -191,11 +246,4 @@
     margin: 10px;
     display: inline-block;
     font-size: 200%;
-}
-
-// base back to list button
-.backtolist {
-    position: absolute;
-    bottom: 0;
-    right: 0;
 }

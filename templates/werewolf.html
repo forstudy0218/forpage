@@ -87,16 +87,16 @@
         <div class="descriptevil container">
           <h1>你是狼人 (邪惡陣營)</h1>
           <p>能力: 晚上決定要咬死哪一個人, 妖狐不能被你咬死</p>
-          <p>職責: 隱藏身份, 存活, 減少村民生存人數</p>
-          <p>勝利條件: 存活狼人數目 <em>相等或大於</em> 其他存活玩家數目</p>
+          <p>職責: 隱藏身份, 存活, 減少善良陣營生存人數</p>
+          <p>勝利條件: 存活狼人數目 <em>相等或大於</em> 善良陣營(包括狂人)的玩家數目, 而且妖狐已死</p>
         </div>
       </div>
       <div id="mm" class="description">
         <div class="descriptevil container">
           <h1>你是狂人 (邪惡陣營)</h1>
-          <p>能力: 計算存活人數時被當作善良陣營, 狼人勝利時你會勝利</p>
+          <p>能力: 計算存活人數時被當作善良陣營</p>
           <p>職責: 干擾討論, 讓村民無法推理出誰是狼人</p>
-          <p>勝利條件: 存活狼人數目 <em>相等或大於</em> 其他存活玩家數目</p>
+          <p>勝利條件: 存活狼人數目 <em>相等或大於</em> 善良陣營(包括狂人)玩家存活數目, 而且妖狐已死</p>
         </div>
       </div>
       <div id="sf" class="description">
@@ -126,7 +126,7 @@
       <div class="container" id="voteresult">
         <span id="restext">投票結果</span>
         <ul id="voteplayers"></ul>
-        <p>被驅逐的是:</p>
+        <span id="vtedtext">被驅逐的是:</span>
       </div>
       <!-- Game End Info -->
       <div class="container" id="geinfo">
@@ -140,8 +140,16 @@
         </div>
       </div>
       <!-- back to list -->
-      <button class="btn btn-primary backtolist" onclick="backplaylist()">結束遊戲</button>
+      <button class="btn btn-primary backtolist" onclick="backplaylist()" disabled>結束遊戲</button>
       <!-- back to home -->
-      <a href="/" class="btn btn-primary backtohome">HOME</a>
+      <a href="/" class="btn btn-primary backtohome" disabled>HOME</a>
+      <!-- pause -->
+      <button class="btn btn-warning pausebtn" onclick="pauseww()">暫停</button>
+      <!-- THANKS -->
+      <span id="bootstrapfour">Supported by bootstrap 4</span>
   </body>
+  <!-- html5 dialog for pop-up -->
+  <dialog id="favDialog">
+    <form method="dialog"><menu><button class="btn btn-success" onclick="dellog()">確認</button></menu></form>
+  </dialog>
 </html>
