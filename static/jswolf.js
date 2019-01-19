@@ -807,10 +807,11 @@ function vtcan() {
 }
 // confirm vote
 function vtcon() {
-    showdialog("Vote Confirmed.");
     let vtconnm = $("#vttemp option:selected").text();
     dayvotelist.push(vtconnm);
     $(".voteinfo").detach();
+    $("#votelayout").css("display", "none");
+    showdialog("Vote Confirmed.");
     rolecon++;
     checkvote(rolecon);
 }
@@ -976,6 +977,8 @@ function pauseww() {
     let basebtn = $(".backtolist");
     if (basebtn.is(':disabled')) {
         $(".backtolist").prop("disabled", false);
+        $(".ckstop").prop("disabled", true);
+        $(".ntstop").prop("disabled", true);
         $(".backtolist").css("display", "block");
         $(".backtohome").css("display", "block");
         showdialog("暫停中");
@@ -983,6 +986,12 @@ function pauseww() {
         $("#bootstrapfour").css("display", "inline-block");
     } else {
         $(".backtolist").prop("disabled", true);
+        if ($('.ckstop').css('display') === 'block') {
+            $(".ckstop").prop("disabled", false);
+        }
+        if ($('.ntstop').css('display') === 'block') {
+            $(".ntstop").prop("disabled", false);
+        }
         $(".backtolist").css("display", "none");
         $(".backtohome").css("display", "none");
         $("body div").css("visibility", "visible");
