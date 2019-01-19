@@ -36,7 +36,7 @@ var nightdeathlist = [];
 // wolf vote for night
 var wolfvotelist = [];
 // hunter protection;
-var htpro = "";
+var htpro = [];
 
 // save vote list
 var dayvotelist =[];
@@ -205,7 +205,7 @@ function backplaylist(){
     rolecon = 0;
     nightdeathlist = [];
     wolfvotelist =[];
-    htpro = "";
+    htpro = [];
     setzero();
 }
 
@@ -213,51 +213,49 @@ function startgame() {
     let roleslist = [];
     let venum = Number($("#vecount option:selected").text());
     if (venum > 0) {
-        for (let i = 0; i < venum; i++){
+        for (let i = 0; i < venum; i++) {
             roleslist.push('ve');
         }
     }
     let ftnum = Number($("#ftcount option:selected").text());
     if (ftnum > 0) {
-        for (let i = 0; i < ftnum; i++){
+        for (let i = 0; i < ftnum; i++) {
             roleslist.push('ft');
         }
     }
     let htnum = Number($("#htcount option:selected").text());
-    if (htnum === 1) {
-        roleslist.push('ht');
-    } else if (htnum > 1) {
-        alert("Sorry! Maximum hunter is 1 for now.");
-        roleslist = [];
+    if (htnum > 0) {
+        for (let i = 0; i < htnum; i++) {
+            roleslist.push('ht');
+        }
     }
     let dsnum = Number($("#dscount option:selected").text());
     if (dsnum > 0) {
-        for (let i = 0; i < dsnum; i++){
+        for (let i = 0; i < dsnum; i++) {
             roleslist.push('ds');
         }
     }
     let wwnum = Number($("#wwcount option:selected").text());
     if (wwnum > 0) {
-        for (let i = 0; i < wwnum; i++){
+        for (let i = 0; i < wwnum; i++) {
             roleslist.push('ww');
         }
     } else {
         alert("No werewolf.");
-        roleslist = [];
     }
     let mmnum = Number($("#mmcount option:selected").text());
     if (mmnum > 0) {
-        for (let i = 0; i < mmnum; i++){
+        for (let i = 0; i < mmnum; i++) {
             roleslist.push('mm');
         }
     }
     let sfnum = Number($("#sfcount option:selected").text());
     if (sfnum > 0) {
-        for (let i = 0; i < sfnum; i++){
+        for (let i = 0; i < sfnum; i++) {
             roleslist.push('sf');
         }
     }
-    if (roleslist.length != playersdata.length) {
+    if ((roleslist.length != playersdata.length) || (wwnum === 0)) {
         alert("Not match.");
     } else {
         alert("Randomizing.");
@@ -346,7 +344,7 @@ function night() {
     alert("進入晚上")
     localStorage.setItem('gamephase', "2");
     nightdeathlist = [];
-    htpro = "";
+    htpro = [];
     wolfvotelist = [];
     rolecon = 0;
     nightact(rolecon);
@@ -535,7 +533,7 @@ function ftact() {
 function htact() {
     let ttname = $("#tempht option:selected").text();
     alert(`你決定保護 ${ttname}`);
-    htpro = ttname;
+    htpro.push(ttname);
     nightnext();
 }
 
@@ -563,7 +561,15 @@ function nightcommit() {
         // check hunter protection and deadbite role
         let bitedata = possible.filter(el => el.playname === deadbite);
         let biterole = bitedata[0]["role"];
-        if ((htpro !== deadbite) && (biterole !== "sf")) {
+        let protection = 0;
+        // check ht protection
+        for (let i = 0; i < htpro.length; i++) {
+            if (deadbite === htpro[i]){
+                // protected
+                protection = 1;
+            }
+        }
+        if ((protection !== 1) && (biterole !== "sf")) {
             nightdeathlist.push(deadbite);
         }
     }
@@ -664,7 +670,7 @@ function countvotenk(votelist, poslist) {
 // day time; need li of alive
 function day() {
     nightdeathlist = [];
-    htpro = "";
+    htpro = [];
     wolfvotelist = [];
     // make everything unseen and disable
     rezero();
@@ -885,7 +891,7 @@ function end() {
     // clean up
     rezero();
     nightdeathlist = [];
-    htpro = "";
+    htpro = [];
     wolfvotelist = [];
     dayvotelist =[];
     rolecon = 0;
@@ -930,11 +936,11 @@ function end() {
         }
     }
     if (winside === 1) {
-        $("#geinfo").prepend('<span class="endgame winning">善良陣營勝利</span>');
+        $("#geinfo").prepend('<span class="endgame winning" style="color: silver;">善良陣營勝利</span>');
     } else if (winside === 2) {
-        $("#geinfo").prepend('<span class="endgame winning">狼人陣營勝利</span>');
+        $("#geinfo").prepend('<span class="endgame winning" style="color: red;">狼人陣營勝利</span>');
     } else if (winside === 3) {
-        $("#geinfo").prepend('<span class="endgame winning">妖狐陣營勝利</span>');
+        $("#geinfo").prepend('<span class="endgame winning" style="color: purple;">妖狐陣營勝利</span>');
     } else {
         // developer mode
         alert("Invalid Game.");

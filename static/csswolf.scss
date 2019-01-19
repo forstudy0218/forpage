@@ -1,10 +1,3 @@
-// input box width on phone
-@media only screen and (max-width: 600px) {
-    input {
-      width: 45%;
-    }
-}
-
 // base home button
 .backtohome {
     position: absolute;
@@ -20,6 +13,7 @@
 }
 #creation {
     @extend %phasecontain;
+        background-color: grey;
 }
 #rolesetting {
     @extend %phasecontain;
@@ -49,6 +43,7 @@
 }
 #voteresult {
     @extend %phasecontain;
+    background-color: beige
 }
 #geinfo {
     @extend %phasecontain;
@@ -58,22 +53,28 @@
 
 // phase 0
 #gamerlist {
-    max-width: 300px;
+    min-width: 300px;
     position: absolute;
 }
 #gamerlist div {
     padding: 10px;
     border: thick double skyblue;
     border-radius: 6px;
+    background-color: gold;
 }
 #newplayer {
     border: thick double skyblue;
     border-radius: 6px;
     display: inline-block;
+    background-color: lightgreen;
 }
 #deletion {
     border: thick double Red;
     display: inline-block;
+    background-color: beige;
+}
+#playerset {
+    margin-left: 10vw;
 }
 
 // phase 1
@@ -154,6 +155,8 @@
     background-color: yellow;
     font-weight: bold;
     border: solid Red;
+    display: inline-block;
+    font-size: xx-large;
 }
 
 // Game End
@@ -176,7 +179,7 @@
     color: yellow;
 }
 .enddie {
-    border: solid purple;
+    border: solid silver;
     background-color: lightgray;
     font-style: italic;
 }
@@ -184,8 +187,7 @@
     @extend %decriptionbox;
     background-color: black;
     font-weight: bold;
-    border: double yellow;
-    color: gold;
+    border: double gold;
     margin: 10px;
     display: inline-block;
     font-size: 200%;
