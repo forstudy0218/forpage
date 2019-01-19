@@ -844,6 +844,7 @@ function calvote() {
         localStorage.setItem('playersdata', JSON.stringify(playersdata));
         $("#voteresult").append(`<p class="vtres">${vtedone}</p>`);
     }
+    dellog();
     showdialog("全部玩家均已投票,點算完畢");
     $("#voteresult").append('<button class="vtres btn btn-success" onclick="votewin()">確認</button>');
     $("#voteplayers").css("display", "block");
