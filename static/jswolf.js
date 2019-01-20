@@ -201,16 +201,16 @@ function playerset() {
 // base button function to reset everything
 function backplaylist(){
     // reset gamesave
-    dayvotelist =[];
+    localStorage.removeItem('hanglist');
+    localStorage.removeItem('gamephase');
+    localStorage.removeItem('winside');
+    localStorage.removeItem('nightcount');
     hanglist = [];
-    localStorage.setItem('hanglist', JSON.stringify(hanglist));
-    localStorage.setItem('gamephase', "0");
-    localStorage.setItem('winside', "0");
     winside = "0";
     gamephase = "0";
-    localStorage.setItem('nightcount', 0);
     nightcount = 0;
     rolecon = 0;
+    dayvotelist =[];
     nightdeathlist = [];
     wolfvotelist =[];
     htpro = [];
