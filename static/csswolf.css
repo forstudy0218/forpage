@@ -26,6 +26,13 @@ body {
   color: deeppink;
   font-style: italic; }
 
+@keyframes grow {
+  from {
+    transform: scale(0);
+    opacity: 0; }
+  to {
+    transform: scale(1);
+    opacity: 1; } }
 #creation, #rolesetting, #rolecheck, .description, #daylayout, #votelayout, #voteresult, #geinfo {
   width: 100vw;
   height: 100vh;
@@ -46,7 +53,8 @@ body {
   position: relative; }
 
 .description {
-  position: relative; }
+  position: relative;
+  text-align: center; }
 
 #daylayout {
   position: relative;
@@ -93,9 +101,6 @@ body {
 
 .nametext {
   width: 100%; }
-
-.checkbtn {
-  align-self: center; }
 
 .descriptgood, .descriptevil, .descriptsf, #dayalive div, #restext, .getext, .endali, .winning {
   border-radius: 6px; }

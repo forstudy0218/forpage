@@ -46,12 +46,12 @@ var htpro = [];
 // save vote list
 var dayvotelist =[];
 
-$(document).ready(function(){
+$(document).ready(function() {
     // ready
     ready();
 });
 
-function ready(){
+function ready() {
     // Check gamephase
     // On creation phase
     if (gamephase === "0") {
@@ -127,16 +127,27 @@ function addnew() {
         }
         playersdata.push(playdata);
         localStorage.setItem('playersdata', JSON.stringify(playersdata));
-        $("#gamerlist").append(`<div class="playerlist col-5 col-lg-3">${playname}</div>`);
         showdialog('Added.');
         setTimeout(function() {
             $('#newplayer')[0].reset();
         }, 500);
+        setzero();
         return false;
     } else {
         showdialog("Name needed!");
         return false;
     }
+}
+// overflow
+function turnoverflow() {
+    let listht = $("#gamerlist").outerHeight();
+    let addht = $("#newplayer").outerHeight();
+    let delht = $("#deletion").outerHeight();
+    let pauseht = $(".pausebtn").outerHeight();
+    let wholeht = $("#creation").outerHeight();
+    listht = wholeht - (addht + delht + pauseht);
+    $("#gamerlist").css("overflow", "auto");
+    $("#gamerlist").css("max-height", `${listht}px`);
 }
 
 function setzero() {
@@ -161,6 +172,7 @@ function setzero() {
             playname = playdata["playname"];
             $("#gamerlist").append(`<div class="playerlist col-5 col-lg-3">${playname}</div>`);
         }
+        turnoverflow();
     }
 }
 
@@ -335,11 +347,20 @@ function showrole(rolename) {
     let playdata = playersdata[rolecon];
     let playrole = playdata["role"];
     $(roletag).append(`<button class="checkbtn btn btn-success" onclick="roled(${playrole})">確認</button>`);
+    $(".checkbtn").attr("disabled", true);
     $(roletag).css("display", "block");
+    // add animation
+    $(".animated").css("animation-name", "grow");
+    $(".animated").css("animation-duration", "2s");
+    $(".animated").css("animation-fill-mode", "forwards");
+    setTimeout(() => {
+        $(".checkbtn").attr("disabled", false);
+    }, 3000);
 }
 
 function roled(rolename) {
     $(rolename).css("display", "none");
+    $(".animated").css("animation-name", "");
     $(".checkbtn").detach();
     // next player
     showdialog("已確認");

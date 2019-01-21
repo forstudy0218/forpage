@@ -32,6 +32,18 @@ body {
     font-style: italic;
 }
 
+// animation for description
+@keyframes grow {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
 // base container attr
 %phasecontain {
     width: 100vw;
@@ -60,6 +72,7 @@ body {
 .description {
     @extend %phasecontain;
     position: relative;
+    text-align: center;
 }
 #daylayout {
     @extend %phasecontain;
@@ -115,9 +128,7 @@ body {
 .nametext {
     width: 100%;
 }
-.checkbtn {
-    align-self: center;
-}
+
 // phase 2 decription box
 %decriptionbox {
     border-radius: 6px;
