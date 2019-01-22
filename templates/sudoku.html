@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- little jinja2 here-->
+    <title>Sudoku</title>
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <!-- Bootstrap -->
+    <!-- https://getbootstrap.com/docs/4.0/components/navbar/ -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- style navbar -->
+    <link href="/static/sudokucss.css" rel="stylesheet">
+    <!-- javascript -->
+    <script src="/static/sudokujs.js"></script>
+  </head>
+  <body id="subody">
+    <header id="infohead"><span id="sudodiff"></span><span id="sudorec"></span><span id="sudotime"></span></header>
+    <div class="container">
+        <table id="sudokuraw"></table>
+    </div>
+    <div class="row justify-content-center btnsec">
+        <button class="btn btn-primary snumpad" id="sudo1" onclick="sudosolnum(1)">1</button>
+        <button class="btn btn-primary snumpad" id="sudo2" onclick="sudosolnum(2)">2</button>
+        <button class="btn btn-primary snumpad" id="sudo3" onclick="sudosolnum(3)">3</button>
+        <button class="btn btn-primary snumpad" id="sudo4" onclick="sudosolnum(4)">4</button>
+        <button class="btn btn-primary snumpad" id="sudo5" onclick="sudosolnum(5)">5</button>
+        <button class="btn btn-primary snumpad" id="sudo6" onclick="sudosolnum(6)">6</button>
+        <button class="btn btn-primary snumpad" id="sudo7" onclick="sudosolnum(7)">7</button>
+        <button class="btn btn-primary snumpad" id="sudo8" onclick="sudosolnum(8)">8</button>
+        <button class="btn btn-primary snumpad" id="sudo9" onclick="sudosolnum(9)">9</button>
+    </div>
+    <div style="position: absolute; bottom: 0px;">
+        <button class="btn btn-danger" onclick="end()">NEW GAME</button>
+    </div>
+    <dialog id="askdiff">
+        <form method="dialog">
+            <button class="btn btn-success diffbtn" onclick="diffask(20)">Easy</button><br>
+            <button class="btn btn-success diffbtn" onclick="diffask(40)">Normal</button><br>
+            <button class="btn btn-success diffbtn" onclick="diffask(50)">Hard</button><br>
+            <button class="btn btn-success diffbtn" onclick="diffask(0)">Extreme</button>
+        </form>
+    </dialog>
+    <dialog id="sudopop"><form method="dialog"><button class="btn btn-success" id="closepop">OK</button></form></dialog>
+  </body>
+</html>

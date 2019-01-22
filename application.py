@@ -425,5 +425,9 @@ def picsearch():
 def werewolf():
     return render_template("werewolf.html")
 
+@app.route("/sudoku", methods=["GET"])
+def sudoku():
+    return render_template("sudoku.html")
+
 if __name__ == '__main__':
     app.run()
