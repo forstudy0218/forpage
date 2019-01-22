@@ -285,6 +285,7 @@ function startgame() {
         for (let i = 0; i < playersdata.length; i++) {
             playersdata[i]["role"] = roleslist[i];
         }
+        localStorage.setItem('playersdata', JSON.stringify(playersdata));
         starting();
     }
 }
