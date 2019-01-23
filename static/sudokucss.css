@@ -19,9 +19,10 @@
 }
 .tds {
     border: 1px solid grey;
-    min-width: 30px;
-    min-height: 30px;
+    min-width: 35px;
+    min-height: 35px;
     text-align: center;
+    font-size: 21px;
 }
 #tr2, #tr5 {
     border-bottom: 3px solid skyblue;
@@ -47,10 +48,10 @@ dialog {
     VISIBILITY: collapse;
 }
 .snumpad {
-    margin-right: 5px;
+    margin-right: 13px;
 }
 #sudo1 {
-    margin-left: 5px;
+    margin-left: 13px;
 }
 .diffbtn {
     margin: 8px;
