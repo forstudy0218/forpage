@@ -102,6 +102,12 @@ body {
 .nametext {
   width: 100%; }
 
+.wwstorynote {
+  display: none;
+  font-size: small;
+  font-style: italic;
+  color: grey; }
+
 .descriptgood, .descriptevil, .descriptsf, #dayalive div, #restext, .getext, .endali, .winning {
   border-radius: 6px; }
 

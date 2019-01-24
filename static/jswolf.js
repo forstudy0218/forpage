@@ -94,6 +94,7 @@ function rezero() {
     $("#voteresult").css("display", "none");
     $("#voteplayers").css("display", "none");
     $("#votelayout").css("display", "none");
+    $(".wwstorynote").css("display", "none");
     $("#geinfo").css("display", "none");
     $(".gegrid").css("visibility", "collapse");
     $("#gamerlist").css("visibility", "collapse");
@@ -349,6 +350,7 @@ function showrole(rolename) {
     let playrole = playdata["role"];
     $(roletag).append(`<button class="checkbtn btn btn-success" onclick="roled(${playrole})">確認</button>`);
     $(".checkbtn").attr("disabled", true);
+    $(".wwstorynote").css("display", "inline-block");
     $(roletag).css("display", "block");
     // add animation
     $(".animated").css("animation-name", "grow");
@@ -362,6 +364,7 @@ function showrole(rolename) {
 function roled(rolename) {
     $(rolename).css("display", "none");
     $(".animated").css("animation-name", "");
+    $(".wwstorynote").css("display", "none");
     $(".checkbtn").detach();
     // next player
     showdialog("已確認");
