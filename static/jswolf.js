@@ -381,7 +381,7 @@ function night() {
     $("#rolecheck").css("background", "black");
     $("#rolecheck").css("color", "yellow");
     $(".description").css("background", "black");
-    $(".description").css("color", "aquamarine");
+    $(".description").css("color", "darkgoldenrod");
     nightdeathlist = [];
     htpro = [];
     wolfvotelist = [];
