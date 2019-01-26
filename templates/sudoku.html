@@ -36,13 +36,13 @@
         <button class="btn btn-danger" onclick="end()">NEW GAME</button>
     </div>
     <dialog id="askdiff">
-        <!-- form method="dialog" -->
+        <form method="dialog" id="difform">
             <button class="btn btn-success diffbtn" onclick="diffask(20)">Easy</button><br>
             <button class="btn btn-success diffbtn" onclick="diffask(40)">Normal</button><br>
             <button class="btn btn-success diffbtn" onclick="diffask(50)">Hard</button><br>
             <button class="btn btn-success diffbtn" onclick="diffask(0)">Extreme</button>
-        <!-- /form -->
+        </form>
     </dialog>
-    <dialog id="sudopop"><!-- form method="dialog" --><button class="btn btn-success" id="closepop">OK</button><!-- /form --></dialog>
+    <dialog id="sudopop"><form method="dialog" id="popform"><button class="btn btn-success" id="closepop">OK</button></form></dialog>
   </body>
 </html>

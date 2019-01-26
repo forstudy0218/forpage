@@ -205,11 +205,11 @@ function ready(rawmatrix) {
 function diffmenu() {
     let diffmenu = document.querySelector("#askdiff");
     diffmenu.showModal();
+    $("#difform").css("display", "block");
 }
 // choose difficulty
 function diffask(numstring) {
-    let diffmenu = document.querySelector("#askdiff");
-    diffmenu.close();
+    $("#difform").css("display", "none");
     let diffcho = Number(numstring);
     dchoice = diffcho;
     createrawsu();
@@ -374,9 +374,10 @@ function win() {
     let winpop = $("#sudopop");
     winpop.prepend('<h1 class="popinfo">WIN</h1>');
     winpop.prepend(`<h3 class="popinfo">${timer}</h3>`);
+    $("#popform").css("display", "block");
     let winbtn = document.querySelector("#closepop");
     winbtn.onclick = () => {
-        winpop[0].close();
+        $("#popform").css("display", "none");
         resetgame();
     };
     winpop[0].showModal();
