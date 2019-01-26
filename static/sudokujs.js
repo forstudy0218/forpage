@@ -204,12 +204,12 @@ function ready(rawmatrix) {
 // pop difficulty
 function diffmenu() {
     let diffmenu = document.querySelector("#askdiff");
-    diffmenu.style.display = "block";
     diffmenu.showModal();
 }
 // choose difficulty
 function diffask(numstring) {
-    document.querySelector("#askdiff").style.display = "none";
+    let diffmenu = document.querySelector("#askdiff");
+    diffmenu.close();
     let diffcho = Number(numstring);
     dchoice = diffcho;
     createrawsu();
@@ -376,6 +376,7 @@ function win() {
     winpop.prepend(`<h3 class="popinfo">${timer}</h3>`);
     let winbtn = document.querySelector("#closepop");
     winbtn.onclick = () => {
+        winpop[0].close();
         resetgame();
     };
     winpop[0].showModal();
