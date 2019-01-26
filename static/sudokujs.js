@@ -209,7 +209,7 @@ function diffmenu() {
 // choose difficulty
 function diffask(numstring) {
     let diffmenu = document.querySelector("#askdiff");
-    diffmenu.close(false);
+    diffmenu.close();
     let diffcho = Number(numstring);
     dchoice = diffcho;
     createrawsu();
@@ -376,7 +376,7 @@ function win() {
     winpop.prepend(`<h3 class="popinfo">${timer}</h3>`);
     let winbtn = document.querySelector("#closepop");
     winbtn.onclick = () => {
-        winpop[0].close(false);
+        winpop[0].close();
         resetgame();
     };
     winpop[0].show();
