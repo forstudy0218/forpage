@@ -204,12 +204,12 @@ function ready(rawmatrix) {
 // pop difficulty
 function diffmenu() {
     let diffmenu = document.querySelector("#askdiff");
-    diffmenu.showModal();
-    $("#difform").css("display", "block");
+    diffmenu.show();
 }
 // choose difficulty
 function diffask(numstring) {
-    $("#difform").css("display", "none");
+    let diffmenu = document.querySelector("#askdiff");
+    diffmenu.close();
     let diffcho = Number(numstring);
     dchoice = diffcho;
     createrawsu();
@@ -374,13 +374,12 @@ function win() {
     let winpop = $("#sudopop");
     winpop.prepend('<h1 class="popinfo">WIN</h1>');
     winpop.prepend(`<h3 class="popinfo">${timer}</h3>`);
-    $("#popform").css("display", "block");
     let winbtn = document.querySelector("#closepop");
     winbtn.onclick = () => {
-        $("#popform").css("display", "none");
+        winpop[0].close();
         resetgame();
     };
-    winpop[0].showModal();
+    winpop[0].show();
 }
 // save record
 function calrec(difficulty, minute) {
