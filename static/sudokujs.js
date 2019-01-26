@@ -204,7 +204,7 @@ function ready(rawmatrix) {
 // pop difficulty
 function diffmenu() {
     let diffmenu = document.querySelector("#askdiff");
-    diffmenu.show();
+    diffmenu.showModal();
 }
 // choose difficulty
 function diffask(numstring) {
@@ -379,7 +379,7 @@ function win() {
         winpop[0].close();
         resetgame();
     };
-    winpop[0].show();
+    winpop[0].showModal();
 }
 // save record
 function calrec(difficulty, minute) {
