@@ -18,7 +18,7 @@
     margin: 0 auto;
 }
 .tds {
-    border: 1px solid grey;
+    border: 1px solid lightgrey;
     min-width: 35px;
     min-height: 35px;
     text-align: center;

@@ -204,10 +204,12 @@ function ready(rawmatrix) {
 // pop difficulty
 function diffmenu() {
     let diffmenu = document.querySelector("#askdiff");
+    diffmenu.style.display = "block";
     diffmenu.showModal();
 }
 // choose difficulty
 function diffask(numstring) {
+    document.querySelector("#askdiff").style.display = "none";
     let diffcho = Number(numstring);
     dchoice = diffcho;
     createrawsu();
