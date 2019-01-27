@@ -52,6 +52,9 @@ $(document).ready(function() {
 });
 
 function ready() {
+    // make dialog good
+    var dialog = document.querySelector('#favDialog');
+    dialogPolyfill.registerDialog(dialog);
     // Check gamephase
     // On creation phase
     if (gamephase === "0") {
