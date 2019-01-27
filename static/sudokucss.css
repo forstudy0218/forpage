@@ -60,14 +60,3 @@ dialog {
 .cellselected {
     background-color: lightblue;
 }
-#askdiff,#sudopop {
-    display: none;
-    text-align:center;
-}
-li {
-    display:table;
-    margin:0px auto 0px auto;
-}
-#closepop {
-    margin: auto;
-}
