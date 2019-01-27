@@ -369,15 +369,14 @@ function win() {
     // cal rec
     calrec(difflv, min);
     removesaved();
-    let popup = document.querySelector("#sudopop");
-    popup.showModal();
-    // let winpop = $("#sudopop");
-    // winpop.prepend('<h1 class="popinfo">WIN</h1>');
-    // winpop.prepend(`<h3 class="popinfo">${timer}</h3>`);
+    let winpop = $("#sudopop");
+    winpop.prepend('<h1 class="popinfo">WIN</h1>');
+    winpop.prepend(`<h3 class="popinfo">${timer}</h3>`);
     let winbtn = document.querySelector("#closepop");
     winbtn.onclick = () => {
         resetgame();
     };
+    winpop[0].showModal();
 }
 // save record
 function calrec(difficulty, minute) {
@@ -501,8 +500,10 @@ function removesaved() {
 }
 $(document).ready(function() {
     // make dialog possible
-    var dialog = document.querySelector('dialog');
+    var dialog = document.querySelector('#askdiff');
     dialogPolyfill.registerDialog(dialog);
+    var dialog2 = document.querySelector('#sudopop');
+    dialogPolyfill.registerDialog(dialog2);
     // ready, trigger shown
     startsudoku();
 
