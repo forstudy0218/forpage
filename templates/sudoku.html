@@ -35,14 +35,13 @@
     <div style="position: absolute; bottom: 0px;">
         <button class="btn btn-danger" onclick="end()">NEW GAME</button>
     </div>
-    <dialog id="askdiff">
-        <form method="dialog">
-            <button class="btn btn-success diffbtn" onclick="diffask(20)" type="reset">Easy</button><br>
-            <button class="btn btn-success diffbtn" onclick="diffask(40)" type="reset">Normal</button><br>
-            <button class="btn btn-success diffbtn" onclick="diffask(50)" type="reset">Hard</button><br>
-            <button class="btn btn-success diffbtn" onclick="diffask(0)" type="reset">Extreme</button>
-        </form>
-    </dialog>
-    <dialog id="sudopop"><form method="dialog"><button class="btn btn-success" id="closepop" type="reset">OK</button></form></dialog>
+    <div id="askdiff" class="container">
+        <button class="btn btn-success diffbtn" onclick="diffask(20)" type="reset">Easy</button><br>
+        <button class="btn btn-success diffbtn" onclick="diffask(40)" type="reset">Normal</button><br>
+        <button class="btn btn-success diffbtn" onclick="diffask(50)" type="reset">Hard</button><br>
+        <button class="btn btn-success diffbtn" onclick="diffask(0)" type="reset">Extreme</button>
+    </form>
+    </div>
+    <div id="sudopop" class="container"><button class="btn btn-success" id="closepop">OK</button></div>
   </body>
 </html>
