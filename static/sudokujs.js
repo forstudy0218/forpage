@@ -369,6 +369,8 @@ function win() {
     // cal rec
     calrec(difflv, min);
     removesaved();
+    let popup = document.querySelector("#sudopop");
+    popup.showModal();
     let winpop = $("#sudopop");
     winpop.prepend('<h1 class="popinfo">WIN</h1>');
     winpop.prepend(`<h3 class="popinfo">${timer}</h3>`);
@@ -376,8 +378,6 @@ function win() {
     winbtn.onclick = () => {
         resetgame();
     };
-    let popup = document.querySelector("#sudopop");
-    popup.showModal();
 }
 // save record
 function calrec(difficulty, minute) {
