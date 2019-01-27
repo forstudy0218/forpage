@@ -376,7 +376,8 @@ function win() {
     winbtn.onclick = () => {
         resetgame();
     };
-    winpop[0].showModal();
+    let popup = document.querySelector("#sudopop");
+    popup.showModal();
 }
 // save record
 function calrec(difficulty, minute) {
