@@ -13,6 +13,8 @@ let zeroed = 0;
 let soldict = [];
 // stop timer
 let timestop = 1;
+// rank integer
+let rkint;
 // https://stackoverflow.com/questions/2450954/
 // randomize list
 function shuffle(array) {
@@ -374,7 +376,11 @@ function win() {
     winpop.prepend(`<h3 class="popinfo">${timer}</h3>`);
     let winbtn = document.querySelector("#closepop");
     winbtn.onclick = () => {
-        resetgame();
+        if (!checkrank(timerec)) {
+            resetgame();
+        } else {
+            nameform();
+        }
     };
     winpop[0].showModal();
 }
@@ -454,12 +460,134 @@ function loadrec(difficulty) {
         }
     }
 }
+// checkrank
+function checkrank(timerck) {
+    let rank5rec = Number(localStorage.getItem('rank5'));
+    if (timerck > rank5rec) {
+        let rank4rec = Number(localStorage.getItem('rank4'));
+        if (timerck > rank4rec) {
+            let rank3rec = Number(localStorage.getItem('rank3'));
+            if (timerck > rank3rec) {
+                let rank2rec = Number(localStorage.getItem('rank2'));
+                if (timerck > rank2rec) {
+                    let rank1rec = Number(localStorage.getItem('rank1'));
+                    if (timerck > rank1rec) {
+                        localStorage.setItem('rank1', timerck);
+                        rkint = 1;
+                        return true;
+                    } else {
+                        localStorage.setItem('rank2', timerck);
+                        rkint = 2;
+                        return true;
+                    }
+                } else {
+                    localStorage.setItem('rank3', timerck);
+                    rkint = 3;
+                    return true;
+                }
+            } else {
+               localStorage.setItem('rank4', timerck);
+               rkint = 4;
+               return true;
+            }
+        } else {
+            localStorage.setItem('rank5', timerck);
+            rkint = 5;
+            return true;
+        }
+    } else {
+        return false;
+    }
+}
+// rank name form
+function nameform() {
+    let winbtn = document.querySelector("#closepop");
+    winbtn.onclick = "";
+    let btnsec = document.querySelector(".btnsec");
+    btnsec.style.visibility = "collapse";
+    $(".snumpad").css("visibility", "");
+    $(".popinfo").detach();
+    $("#sudokuraw").empty();
+    $("#sudorec").empty();
+    $("#sudodiff").html("");
+    $(".samenum").removeClass("samenum");
+    $('#rknmfm')[0].reset();
+    $("#rknmbtn").attr("disabled", false);
+    $("#newsdk").attr("disabled", true);
+    $(".rknm").css("display", "block");
+}
+// rank name
+function rankname() {
+    let playname = $("#rknmbx")[0].value;
+    if (rkint === 1) {
+        localStorage.setItem('rank1nm', playname);
+    } else if (rkint === 2) {
+        localStorage.setItem('rank2nm', playname);
+    } else if (rkint === 3) {
+        localStorage.setItem('rank3nm', playname);
+    } else if (rkint === 4) {
+        localStorage.setItem('rank4nm', playname);
+    } else if (rkint === 5) {
+        localStorage.setItem('rank5nm', playname);
+    }
+    $("#rknmbtn").attr("disabled", true);
+    $("#newsdk").attr("disabled", false);
+    $(".rknm").css("display", "none");
+    resetgame();
+    return false;
+}
+// show rank
+function sdkrk() {
+    $(".rkli").detach();
+    if ((localStorage.getItem('rank1') !== null) && (localStorage.getItem('rank1nm') !== null)) {
+        let temp1 = Number(localStorage.getItem('rank1'));
+        let nmfirst = localStorage.getItem('rank1nm');
+        let min1 = Math.floor(temp1 / 60);
+        let sec1 = temp1 % 60;
+        let recfirst = min1 + ":" + sec1;
+        $("#ranklist").append(`<li class="rkli">${recfirst} (${nmfirst})</li>`);
+        if ((localStorage.getItem('rank2') !== null) && (localStorage.getItem('rank2nm') !== null)) {
+            let temp2 = Number(localStorage.getItem('rank2'));
+            let nmsec = localStorage.getItem('rank2nm');
+            let min2 = Math.floor(temp2 / 60);
+            let sec2 = temp2 % 60;
+            let recsec = min2 + ":" + sec2;
+            $("#ranklist").append(`<li class="rkli">${recsec} (${nmsec})</li>`);
+            if ((localStorage.getItem('rank3') !== null) && (localStorage.getItem('rank3nm') !== null)) {
+                let temp3 = Number(localStorage.getItem('rank3'));
+                let nmtd = localStorage.getItem('rank3nm');
+                let min3 = Math.floor(temp3 / 60);
+                let sec3 = temp3 % 60;
+                let rectd = min3 + ":" + sec3;
+                $("#ranklist").append(`<li class="rkli">${rectd} (${nmtd})</li>`);
+                if ((localStorage.getItem('rank4') !== null) && (localStorage.getItem('rank4nm') !== null)) {
+                    let temp4 = Number(localStorage.getItem('rank4'));
+                    let nmfo = localStorage.getItem('rank4nm');
+                    let min4 = Math.floor(temp4 / 60);
+                    let sec4 = temp4 % 60;
+                    let recfo = min4 + ":" + sec4;
+                    $("#ranklist").append(`<li class="rkli">${recfo} (${nmfo})</li>`);
+                    if ((localStorage.getItem('rank5') !== null) && (localStorage.getItem('rank5nm') !== null)) {
+                        let temp5 = Number(localStorage.getItem('rank5'));
+                        let nmfi = localStorage.getItem('rank5nm');
+                        let min5 = Math.floor(temp5 / 60);
+                        let sec5 = temp5 % 60;
+                        let recfi = min5 + ":" + sec5;
+                        $("#ranklist").append(`<li class="rkli">${recfi} (${nmfi})</li>`);
+                    }
+                }
+            }
+        }
+    }
+    $("#ranklist").css("display", "block");
+}
 
 // New game btn
 function end() {
     // stop timer
     timestop = 1;
     $("#sudotime").html("");
+    $("#ranklist").css("display", "none");
     removesaved();
     resetgame();
 }
@@ -479,6 +607,7 @@ function resetgame(){
     zeroed = 0;
     solvedct = 0;
     soldict = [];
+    rkint = null;
     setTimeout(diffmenu(), 300);
 }
 // save game

@@ -4,7 +4,6 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- little jinja2 here-->
     <title>Sudoku</title>
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -16,7 +15,7 @@
     <!-- https://github.com/GoogleChrome/dialog-polyfill -->
     <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.10/dialog-polyfill.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.10/dialog-polyfill.min.js"></script>
-    <!-- style navbar -->
+    <!-- style -->
     <link href="/static/sudokucss.css" rel="stylesheet">
     <!-- javascript -->
     <script src="/static/sudokujs.js"></script>
@@ -38,14 +37,20 @@
         <button class="btn btn-primary snumpad btn-sm" id="sudo9" onclick="sudosolnum(9)">9</button>
     </div>
     <div style="position: absolute; bottom: 0px;">
-        <button class="btn btn-danger" onclick="end()">NEW GAME</button>
+        <button class="btn btn-danger" onclick="end()" id="newsdk">NEW GAME</button>
     </div>
+    <form id="rknmfm" class="rknm" onsubmit="return rankname()">
+        <input autocomplete="off" placeholder="Your Name" type="text" class="rknm" id="rknmbx" required/>
+        <button id="rknmbtn" class="gbtn btn btn-success rknm" type="submit" disabled></button>
+    </form>
+    <ol id="ranklist"></ol>
     <dialog id="askdiff">
         <form method="dialog">
             <button class="btn btn-success diffbtn" onclick="diffask(20)">Easy</button><br>
             <button class="btn btn-success diffbtn" onclick="diffask(40)">Normal</button><br>
             <button class="btn btn-success diffbtn" onclick="diffask(50)">Hard</button><br>
-            <button class="btn btn-success diffbtn" onclick="diffask(0)">Extreme</button>
+            <button class="btn btn-success diffbtn" onclick="diffask(0)">Extreme</button><br>
+            <button class="btn btn-success diffbtn" onclick="sdkrk()">Rank</button>
         </form>
     </dialog>
     <dialog id="sudopop"><form method="dialog"><button class="btn btn-success" id="closepop">OK</button></form></dialog>
