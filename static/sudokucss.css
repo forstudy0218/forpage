@@ -55,7 +55,7 @@ dialog {
     margin-left: 13px;
 }
 .diffbtn {
-    margin: 8px;
+    margin: 8px auto;
     color: black;
 }
 .cellselected {
