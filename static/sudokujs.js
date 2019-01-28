@@ -14,7 +14,6 @@ let soldict = [];
 // stop timer
 let timestop = 1;
 // rank data
-let rkint;
 let rankdata;
 if (!localStorage.getItem('sdkrank')) {
     rankdata = [];
@@ -408,77 +407,51 @@ function win() {
 }
 // save record
 function calrec(difficulty, minute) {
+    let recstorage;
     if (difficulty === 20) {
         // easy
-        for (let i = 0; i < 8; i++) {
-            if (minute === i) {
-                let recstorage = "easyrec" + i;
-                localStorage.setItem(recstorage, "1");
-            }
-        }
+        recstorage = "easyrec";
     } else if (difficulty === 40) {
         // norm
-        for (let i = 0; i < 8; i++) {
-            if (minute === i) {
-                let recstorage = "normrec" + i;
-                localStorage.setItem(recstorage, "1");
-            }
-        }
+        recstorage = "normrec"
     } else if (difficulty === 50) {
         // hard
-        for (let i = 0; i < 8; i++) {
-            if (minute === i) {
-                let recstorage = "hardrec" + i;
-                localStorage.setItem(recstorage, "1");
-            }
-        }
+        recstorage = "hardrec" + i;
     } else if (difficulty === 0) {
         // ex
-        for (let i = 0; i < 8; i++) {
-            if (minute === i) {
-                let recstorage = "exrec" + i;
-                localStorage.setItem(recstorage, "1");
-            }
+        recstorage = "exrec";
+    }
+    for (let i = 0; i < 8; i++) {
+        if (minute === i) {
+            let storenm = recstorage + i;
+            localStorage.setItem(storenm, "1");
         }
     }
 }
 // load record
 function loadrec(difficulty) {
+    let recstorage;
     if (difficulty === 20) {
         // easy
         $("#sudodiff").html("EASY");
-        for (let i = 0; i < 8; i++) {
-            let recstorage = "easyrec" + i;
-            if (localStorage.getItem(recstorage) !== null) {
-                $("#sudorec").append(`<img src="/static/img/${i}.png" title="${i} minutes trophy" alt="${i}"></img>`);
-            }
-        }
+        recstorage = "easyrec";
     } else if (difficulty === 40) {
         $("#sudodiff").html("NORMAL");
         // norm
-        for (let i = 0; i < 8; i++) {
-            let recstorage = "normrec" + i;
-            if (localStorage.getItem(recstorage) !== null) {
-                $("#sudorec").append(`<img src="/static/img/${i}.png" title="${i} minutes trophy" alt="${i}"></img>`);
-            }
-        }
+        recstorage = "normrec";
     } else if (difficulty === 50) {
         $("#sudodiff").html("HARD");
         // hard
-        for (let i = 0; i < 8; i++) {
-            let recstorage = "hardrec" + i;
-            if (localStorage.getItem(recstorage) !== null) {
-                $("#sudorec").append(`<img src="/static/img/${i}.png" title="${i} minutes trophy" alt="${i}"></img>`);
-            }
-        }
+        recstorage = "hardrec";
     } else if (difficulty === 0) {
         $("#sudodiff").html("EXTREME");
         // ex
-        for (let i = 0; i < 8; i++) {
-            let recstorage = "exrec" + i;
-            if (localStorage.getItem(recstorage) !== null) {
-                $("#sudorec").append(`<img src="/static/img/${i}.png" title="${i} minutes trophy" alt="${i}"></img>`);
-            }
+        recstorage = "exrec";
+    }
+    for (let i = 0; i < 8; i++) {
+        let storenm = recstorage + i;
+        if (localStorage.getItem(storenm) !== null) {
+            $("#sudorec").append(`<img src="/static/img/${i}.png" title="${i} minutes trophy" alt="${i}"></img>`);
         }
     }
 }
@@ -607,7 +580,6 @@ function resetgame(){
     zeroed = 0;
     solvedct = 0;
     soldict = [];
-    rkint = null;
     setTimeout(diffmenu(), 300);
 }
 // save game
