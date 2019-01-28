@@ -39,11 +39,33 @@
     <div style="position: absolute; bottom: 0px;">
         <button class="btn btn-danger" onclick="end()" id="newsdk">NEW GAME</button>
     </div>
-    <form id="rknmfm" class="rknm" onsubmit="return rankname()">
+    <div id="newrec" class="container rknm">
+        <h1 class="rknm">New Record</h1>
         <input autocomplete="off" placeholder="Your Name" type="text" class="rknm" id="rknmbx" required/>
-        <button id="rknmbtn" class="gbtn btn btn-success rknm" type="submit" disabled></button>
-    </form>
-    <ol id="ranklist"></ol>
+        <button id="rknmbtn" class="gbtn btn btn-success rknm" disabled>Confirm</button>
+    </div>
+    <div class="container" id="fourlist">
+        <div class="row">
+            <div class="col">
+                <h4 class="lihead">EASY</h4>
+                <ol id="easyrkli"></ol>
+            </div>
+            <div class="col">
+                <h4 class="lihead">NORMAL</h4>
+                <ol id="normrkli"></ol>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h4 class="lihead">HARD</h4>
+                <ol id="hardrkli"></ol>
+            </div>
+            <div class="col">
+                <h4 class="lihead">EXTREME</h4>
+                <ol id="exrkli"></ol>
+            </div>
+        </div>
+    </div>
     <dialog id="askdiff">
         <form method="dialog">
             <button class="btn btn-success diffbtn" onclick="diffask(20)">Easy</button><br>

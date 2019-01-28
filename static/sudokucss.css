@@ -63,7 +63,22 @@ dialog {
 }
 .rknm {
     display: none;
+    margin: 5px auto;
 }
-#ranklist {
+#fourlist {
+    background-color: lightgrey;
     display: none;
+}
+#fourlist>.row>.col {
+    border: thick double gold;
+}
+.lihead {
+    color: deeppink;
+}
+#newrec {
+    text-align: center;
+    background: yellow;
+    border: thick double red;
+    border-radius: 5px;
+    max-width: 80vw;
 }

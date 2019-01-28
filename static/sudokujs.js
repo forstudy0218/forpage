@@ -13,8 +13,26 @@ let zeroed = 0;
 let soldict = [];
 // stop timer
 let timestop = 1;
-// rank integer
+// rank data
 let rkint;
+let rankdata;
+if (!localStorage.getItem('sdkrank')) {
+    rankdata = [];
+    // create data set for four difficulty, each with lists of records and names
+    for (let i = 0; i < 4; i++) {
+        let dataset = {"rankrec": [], "ranknm": []};
+        for (let j = 0; j < 5; j++) {
+            dataset["rankrec"].push(9999);
+            dataset["ranknm"].push("");
+        }
+        rankdata.push(dataset);
+    }
+    // rankdata should be [{"rankrec": [9999,9999,9999,9999,9999], "ranknm": ["","","","",""]}, ...]
+    localStorage.setItem('sdkrank', JSON.stringify(rankdata));
+} else {
+    let datai = localStorage.getItem('sdkrank');
+    rankdata = JSON.parse(datai);
+}
 // https://stackoverflow.com/questions/2450954/
 // randomize list
 function shuffle(array) {
@@ -286,15 +304,20 @@ function starttimer(countnum) {
         }
         // do what is to be done
         timerct += 1;
-        let min = Math.floor(timerct / 60);
-        let sec = timerct % 60;
-        let timer = min + ":" + sec;
+        let timer = timerlk(timerct);
         $("#sudotime").html(timer);
         // save new time
         localStorage.setItem('stimer', timerct);
         expected += interval;
         setTimeout(step, Math.max(0, interval - dt)); // take into account drift
     }
+}
+// timer-look
+function timerlk(num) {
+    let min = Math.floor(num / 60);
+    let sec = num % 60;
+    let timestr = min + ":" + sec;
+    return timestr;
 }
 
 // button use. Get position in table
@@ -363,11 +386,10 @@ function win() {
     timestop = 1;
     $("#sudotime").html("");
     let timerec = Number(localStorage.getItem('stimer'));
-    let min = Math.floor(timerec / 60);
-    let sec = timerec % 60;
-    let timer = min + ":" + sec;
+    let timer = timerlk(timerec);
     // find difficulty
     let difflv = zeroed;
+    let min = Math.floor(timerec / 60);
     // cal rec
     calrec(difflv, min);
     removesaved();
@@ -376,10 +398,10 @@ function win() {
     winpop.prepend(`<h3 class="popinfo">${timer}</h3>`);
     let winbtn = document.querySelector("#closepop");
     winbtn.onclick = () => {
-        if (!checkrank(timerec)) {
+        if (!checkrank(timerec, difflv)) {
             resetgame();
         } else {
-            nameform();
+            nameform(timerec, difflv);
         }
     };
     winpop[0].showModal();
@@ -460,47 +482,37 @@ function loadrec(difficulty) {
         }
     }
 }
+// rank data position
+function getpos(diffnum) {
+    // diff could be 20, 40, 50, 0
+    if (diffnum === 20) {
+        return 0;
+    } else if (diffnum === 40) {
+        return 1;
+    } else if (diffnum === 50) {
+        return 2;
+    } else if (diffnum === 0) {
+        return 3;
+    } else {
+        alert("Error! Call me!");
+        resetgame();
+        return false;
+    }
+}
 // checkrank
-function checkrank(timerck) {
-    let rank5rec = Number(localStorage.getItem('rank5'));
-    if (timerck > rank5rec) {
-        let rank4rec = Number(localStorage.getItem('rank4'));
-        if (timerck > rank4rec) {
-            let rank3rec = Number(localStorage.getItem('rank3'));
-            if (timerck > rank3rec) {
-                let rank2rec = Number(localStorage.getItem('rank2'));
-                if (timerck > rank2rec) {
-                    let rank1rec = Number(localStorage.getItem('rank1'));
-                    if (timerck > rank1rec) {
-                        localStorage.setItem('rank1', timerck);
-                        rkint = 1;
-                        return true;
-                    } else {
-                        localStorage.setItem('rank2', timerck);
-                        rkint = 2;
-                        return true;
-                    }
-                } else {
-                    localStorage.setItem('rank3', timerck);
-                    rkint = 3;
-                    return true;
-                }
-            } else {
-               localStorage.setItem('rank4', timerck);
-               rkint = 4;
-               return true;
-            }
-        } else {
-            localStorage.setItem('rank5', timerck);
-            rkint = 5;
-            return true;
-        }
+function checkrank(timerck, diff) {
+    let thistime = timerck;
+    let datapos = getpos(diff);
+    let rank5rec = rankdata[datapos]["rankrec"][4];
+    if (thistime < rank5rec) {
+        return true;
     } else {
         return false;
     }
 }
-// rank name form
-function nameform() {
+
+// clean playarea
+function playclean() {
     let winbtn = document.querySelector("#closepop");
     winbtn.onclick = "";
     let btnsec = document.querySelector(".btnsec");
@@ -511,99 +523,87 @@ function nameform() {
     $("#sudorec").empty();
     $("#sudodiff").html("");
     $(".samenum").removeClass("samenum");
-    $('#rknmfm')[0].reset();
+}
+
+// rank name form
+function nameform(timerck, diff) {
+    playclean();
+    $("#rknmbx")[0].value = "";
+    $("#rknmbtn")[0].onclick = () => {
+        let playname = $("#rknmbx")[0].value;
+        if (playname === "") {
+            alert("Missing Name.");
+        } else {
+            rankname(playname, timerck, diff);
+        }
+    };
     $("#rknmbtn").attr("disabled", false);
     $("#newsdk").attr("disabled", true);
     $(".rknm").css("display", "block");
 }
 // rank name
-function rankname() {
-    let playname = $("#rknmbx")[0].value;
-    if (rkint === 1) {
-        localStorage.setItem('rank1nm', playname);
-    } else if (rkint === 2) {
-        localStorage.setItem('rank2nm', playname);
-    } else if (rkint === 3) {
-        localStorage.setItem('rank3nm', playname);
-    } else if (rkint === 4) {
-        localStorage.setItem('rank4nm', playname);
-    } else if (rkint === 5) {
-        localStorage.setItem('rank5nm', playname);
+function rankname(playname, timerck, diff) {
+    let thistime = timerck;
+    let datapos = getpos(diff);
+    let curdata = rankdata[datapos];
+    let currec = curdata["rankrec"];
+    let curnm = curdata["ranknm"];
+    let thispos = 5;
+    for (let i = 4; i > -1; i--) {
+        if (thistime < currec[i]) {
+            thispos--;
+        } else {
+            break;
+        }
     }
+    // insert
+    currec.splice(thispos, 0, thistime);
+    // delete last item
+    currec.splice(5);
+    curnm.splice(thispos, 0, playname);
+    curnm.splice(5);
+    localStorage.setItem('sdkrank', JSON.stringify(rankdata));
+    $("#rknmbtn")[0].onclick = "";
     $("#rknmbtn").attr("disabled", true);
     $("#newsdk").attr("disabled", false);
     $(".rknm").css("display", "none");
     resetgame();
-    return false;
 }
 // show rank
 function sdkrk() {
     $(".rkli").detach();
-    if ((localStorage.getItem('rank1') !== null) && (localStorage.getItem('rank1nm') !== null)) {
-        let temp1 = Number(localStorage.getItem('rank1'));
-        let nmfirst = localStorage.getItem('rank1nm');
-        let min1 = Math.floor(temp1 / 60);
-        let sec1 = temp1 % 60;
-        let recfirst = min1 + ":" + sec1;
-        $("#ranklist").append(`<li class="rkli">${recfirst} (${nmfirst})</li>`);
-        if ((localStorage.getItem('rank2') !== null) && (localStorage.getItem('rank2nm') !== null)) {
-            let temp2 = Number(localStorage.getItem('rank2'));
-            let nmsec = localStorage.getItem('rank2nm');
-            let min2 = Math.floor(temp2 / 60);
-            let sec2 = temp2 % 60;
-            let recsec = min2 + ":" + sec2;
-            $("#ranklist").append(`<li class="rkli">${recsec} (${nmsec})</li>`);
-            if ((localStorage.getItem('rank3') !== null) && (localStorage.getItem('rank3nm') !== null)) {
-                let temp3 = Number(localStorage.getItem('rank3'));
-                let nmtd = localStorage.getItem('rank3nm');
-                let min3 = Math.floor(temp3 / 60);
-                let sec3 = temp3 % 60;
-                let rectd = min3 + ":" + sec3;
-                $("#ranklist").append(`<li class="rkli">${rectd} (${nmtd})</li>`);
-                if ((localStorage.getItem('rank4') !== null) && (localStorage.getItem('rank4nm') !== null)) {
-                    let temp4 = Number(localStorage.getItem('rank4'));
-                    let nmfo = localStorage.getItem('rank4nm');
-                    let min4 = Math.floor(temp4 / 60);
-                    let sec4 = temp4 % 60;
-                    let recfo = min4 + ":" + sec4;
-                    $("#ranklist").append(`<li class="rkli">${recfo} (${nmfo})</li>`);
-                    if ((localStorage.getItem('rank5') !== null) && (localStorage.getItem('rank5nm') !== null)) {
-                        let temp5 = Number(localStorage.getItem('rank5'));
-                        let nmfi = localStorage.getItem('rank5nm');
-                        let min5 = Math.floor(temp5 / 60);
-                        let sec5 = temp5 % 60;
-                        let recfi = min5 + ":" + sec5;
-                        $("#ranklist").append(`<li class="rkli">${recfi} (${nmfi})</li>`);
-                    }
-                }
-            }
-        }
-    }
-    $("#ranklist").css("display", "block");
+    printlist("#easyrkli", 0);
+    printlist("#normrkli", 1);
+    printlist("#hardrkli", 2);
+    printlist("#exrkli", 3);
+    $("#fourlist").css("display", "block");
 }
-
+// print lists
+function printlist(listid, posnum) {
+    let listdata = rankdata[posnum];
+    for (let i = 0; i < 5; i++) {
+        let timerec = listdata["rankrec"][i];
+        if (timerec === 9999) {
+            timerec = 0;
+        }
+        let timenm = listdata["ranknm"][i];
+        let timer = timerlk(timerec);
+        $(listid).append(`<li class="rkli">${timer} (${timenm})</li>`);
+    }
+}
 // New game btn
 function end() {
     // stop timer
     timestop = 1;
     $("#sudotime").html("");
-    $("#ranklist").css("display", "none");
+    $("#fourlist").css("display", "none");
     removesaved();
     resetgame();
 }
 // reset game
 function resetgame(){
-    let winbtn = document.querySelector("#closepop");
-    winbtn.onclick = "";
-    let btnsec = document.querySelector(".btnsec");
-    btnsec.style.visibility = "collapse";
+    playclean();
     $(".snumpad").attr("disabled", false);
-    $(".snumpad").css("visibility", "");
-    $(".popinfo").detach();
-    $("#sudokuraw").empty();
-    $("#sudorec").empty();
-    $("#sudodiff").html("");
-    $(".samenum").removeClass("samenum");
     zeroed = 0;
     solvedct = 0;
     soldict = [];
@@ -633,6 +633,8 @@ $(document).ready(function() {
     dialogPolyfill.registerDialog(dialog);
     var dialog2 = document.querySelector('#sudopop');
     dialogPolyfill.registerDialog(dialog2);
+    // clear old rank system
+    clearold();
     // ready, trigger shown
     startsudoku();
 
@@ -671,5 +673,13 @@ function loadsoldict(soldict) {
         shouldput[0].innerHTML = numint;
         shouldput.addClass("solvednum");
         checkisnine(numint);
+    }
+}
+// clear old rank system save
+function clearold() {
+    let itemlist = ['rank5', 'rank4', 'rank3', 'rank2', 'rank1', 'rank5nm', 'rank4nm', 'rank3nm', 'rank2nm', 'rank1nm'];
+    for (let i = 0; i < itemlist.length; i++) {
+        let itemnm = itemlist[i];
+        localStorage.removeItem(itemnm);
     }
 }
