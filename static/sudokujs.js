@@ -166,9 +166,10 @@ function createrawsu() {
         let savednum = rawmatrix[xnum][ynum];
         rawmatrix[xnum][ynum] = 0;
         let testmatrix = rawmatrix;
-        if (solcount(testmatrix, 0, 0, 0) > 1) {
+        let anscount = solcount(testmatrix, 0, 0, 0);
+        if (anscount > 1) {
             rawmatrix[xnum][ynum] = savednum;
-        } else if (solcount(testmatrix, 0, 0, 0) < 1) {
+        } else if (anscount < 1) {
             console.log("error.");
         } else {
             zeroed += 1;
