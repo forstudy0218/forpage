@@ -45,6 +45,14 @@ var htpro = [];
 
 // save vote list
 var dayvotelist =[];
+// vote setting
+let voteset;
+if (!localStorage.getItem('voteset')) {
+    localStorage.setItem('voteset', 1);
+    voteset = 1;
+} else {
+    voteset = Number(localStorage.getItem('voteset'));
+}
 
 $(document).ready(function() {
     // ready
@@ -215,12 +223,13 @@ function playerset() {
     }
 }
 // base button function to reset everything
-function backplaylist(){
+function backplaylist() {
     // reset gamesave
     localStorage.removeItem('hanglist');
     localStorage.removeItem('gamephase');
     localStorage.removeItem('winside');
     localStorage.removeItem('nightcount');
+    localStorage.removeItem('voteset');
     hanglist = [];
     winside = "0";
     gamephase = "0";
@@ -290,8 +299,16 @@ function startgame() {
             playersdata[i]["role"] = roleslist[i];
         }
         localStorage.setItem('playersdata', JSON.stringify(playersdata));
+        savevoteset();
         starting();
     }
+}
+
+// vote setting
+function savevoteset() {
+    let setvote = Number($("#samevote").val());
+    voteset = setvote;
+    localStorage.setItem('voteset', setvote);
 }
 
 // https://stackoverflow.com/questions/2450954/
@@ -854,9 +871,18 @@ function calvote() {
         $("#voteplayers").append(`<li class="vtres">${votedname}</li>`);
     }
     let vtalilist = playersdata.filter(el => el.alive === 1);
-    let vtedone = countvotenk(dayvotelist, vtalilist);
+    let vtedone;
+    if (voteset === 0) {
+        vtedone = countvotenk(dayvotelist, vtalilist);
+    } else if (voteset === 1) {
+        vtedone = countvoteran(dayvotelist, vtalilist);
+    } else {
+        alert("Game error. Restart now.");
+        backplaylist();
+        return false;
+    }
     if (vtedone === "") {
-        $("#voteresult").append(`<p class="vtres">${vtedone}</p>`);
+        $("#voteresult").append(`<p class="vtres" style="color: black;">無</p>`);
         hanglist.push(vtedone);
         localStorage.setItem('hanglist', JSON.stringify(hanglist));
     } else {

@@ -4,7 +4,6 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- little jinja2 here-->
     <title>WEREWOLF</title>
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -48,6 +47,9 @@
           <li>狂人<select class="rolesnum" id="mmcount"></select></li>
           <li>妖狐<select class="rolesnum" id="sfcount"></select></li>
         </ul>
+        <span style="margin-left: 30vw;">
+          同票處決  <select id="samevote"><option value="1">隨機</option><option value="0">失效</option></select>
+        </span><br>
         <button id="startgame" class="gbtn btn btn-success" onclick="startgame()">開始</button>
       </div>
       <!-- phase one/roles confirmation -->
