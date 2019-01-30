@@ -418,7 +418,7 @@ function calrec(difficulty, minute) {
     } else if (difficulty === 50) {
         // hard
         recstorage = "hardrec" + i;
-    } else if (difficulty === 0) {
+    } else if (difficulty > 50) {
         // ex
         recstorage = "exrec";
     }
@@ -444,7 +444,7 @@ function loadrec(difficulty) {
         $("#sudodiff").html("HARD");
         // hard
         recstorage = "hardrec";
-    } else if (difficulty === 0) {
+    } else if ((difficulty > 50) || (difficulty === 0)) {
         $("#sudodiff").html("EXTREME");
         // ex
         recstorage = "exrec";
@@ -465,7 +465,7 @@ function getpos(diffnum) {
         return 1;
     } else if (diffnum === 50) {
         return 2;
-    } else if (diffnum === 0) {
+    } else if (diffnum > 50) {
         return 3;
     } else {
         alert("Error! Call me!");
@@ -579,6 +579,7 @@ function resetgame(){
     playclean();
     $(".snumpad").attr("disabled", false);
     zeroed = 0;
+    dchoice = null;
     solvedct = 0;
     soldict = [];
     setTimeout(diffmenu(), 300);
