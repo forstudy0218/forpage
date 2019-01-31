@@ -368,6 +368,8 @@ function showrole(rolename) {
     roletag = rolename;
     let playdata = playersdata[rolecon];
     let playrole = playdata["role"];
+    let playname = playdata["playname"];
+    $(roletag).append(`<h4 class="checkbtn">${playname}</h4>`);
     $(roletag).append(`<button class="checkbtn btn btn-success" onclick="roled(${playrole})">確認</button>`);
     $(".checkbtn").attr("disabled", true);
     $(".wwstorynote").css("display", "inline-block");
@@ -461,8 +463,10 @@ function shownight(rolename) {
 function showft(roletag) {
     let playdata = playersdata[rolecon];
     let playname = playdata["playname"];
+    $(roletag).append(`<h4 class='nightinfo'>${playname}</h4>`);
     $(roletag).append("<h2 class='nightinfo'>請選擇要占卜的人</h2>");
     $(roletag).append("<select id='tempft' class='nightinfo ntsec'></select>");
+    $("#tempft").append(`<option class='nightinfo' selected disabled value="null">請選擇</option>`);
     for (let i = 0; i < playersdata.length; i++) {
      if ((playersdata[i]["playname"] != playname) && (playersdata[i]["alive"] === 1)) {
             let ftname = playersdata[i]["playname"];
@@ -474,10 +478,13 @@ function showft(roletag) {
 
 // ht
 function showht(roletag) {
+    let playname = playersdata[rolecon]["playname"];
+    $(roletag).append(`<h4 class='nightinfo'>${playname}</h4>`);
     if (nightcount === 0) {
         // first night no guard
         $(roletag).append("<h2 class='nightinfo'>第一晚,無需保護,請隨意選一人</h2>");
         $(roletag).append("<select id='templist' class='nightinfo ntsec'></select>");
+        $("#templist").append(`<option class='nightinfo' selected disabled value="null">請選擇</option>`);
         for (let i = 0; i < playersdata.length; i++) {
             if (playersdata[i]["alive"] === 1) {
                 let tempname = playersdata[i]["playname"];
@@ -488,6 +495,7 @@ function showht(roletag) {
     } else {
         $(roletag).append("<h2 class='nightinfo'>請選一人保護,對方今晚將不會被咬殺</h2>");
         $(roletag).append("<select id='tempht' class='nightinfo ntsec'></select>");
+        $("#tempht").append(`<option class='nightinfo' disabled selected value="null">請選擇</option>`);
         for (let i = 0; i < playersdata.length; i++) {
             if (playersdata[i]["alive"] === 1) {
                 let tempname = playersdata[i]["playname"];
@@ -499,6 +507,8 @@ function showht(roletag) {
 }
 // ds
 function showds(roletag) {
+    let playname = playersdata[rolecon]["playname"];
+    $(roletag).append(`<h4 class='nightinfo'>${playname}</h4>`);
     $(roletag).append("<h2 class='nightinfo'>上一晚無人被投票驅逐</h2>");
     hanglen = hanglist.length;
     if (hanglen > 0) {
@@ -519,6 +529,8 @@ function showds(roletag) {
 }
 // ww
 function showww(roletag) {
+    let playname = playersdata[rolecon]["playname"];
+    $(roletag).append(`<h4 class='nightinfo'>${playname}</h4>`);
     let wwlist = playersdata.filter(el => el.role === "ww");
     // show list of ww
     $(roletag).append("<h3 class='nightinfo'>以下玩家是狼人:</h3>");
@@ -530,6 +542,7 @@ function showww(roletag) {
         $(roletag).append("<h1 class='nightinfo'>請選擇你想咬殺的人</h1>");
         $(roletag).append("<button class='nightinfo wwrule btn btn-info' onclick='wwrule()'>RULE</button>");
         $(roletag).append("<select id='tempww' class='nightinfo ntsec'></select>");
+        $("#tempww").append(`<option class='nightinfo' selected disabled value="null">請選擇</option>`);
         let ttlist = playersdata.filter(el => el.role !== "ww");
         ttlist = ttlist.filter(el => el.alive !== 0);
         for (let i = 0; i < ttlist.length; i++) {
@@ -548,8 +561,13 @@ function wwrule() {
 function showno(roletag) {
     let playdata = playersdata[rolecon];
     let playname = playdata["playname"];
+    let playrole = playdata["role"];
+    if ((playrole !== "ww") && (playrole !== "ds")) {
+        $(roletag).append(`<h4 class='nightinfo'>${playname}</h4>`);
+    }
     $(roletag).append("<h2 class='nightinfo'>請隨意選一人</h2>");
     $(roletag).append("<select id='templist' class='nightinfo ntsec'></select>");
+    $("#templist").append(`<option class='nightinfo' selected disabled value="null">請選擇</option>`);
     for (let i = 0; i < playersdata.length; i++) {
         if ((playersdata[i]["playname"] != playname) && (playersdata[i]["alive"] === 1)) {
             let tempname = playersdata[i]["playname"];
@@ -570,6 +588,10 @@ function nightnext() {
 
 // ft action
 function ftact() {
+    if ($("#tempft").val() === null) {
+        showdialog("還未選擇任何人");
+        return;
+    }
     let ttname = $("#tempft option:selected").text();
     for (let i = 0; i < playersdata.length; i++) {
         if (playersdata[i]["playname"] === ttname) {
@@ -588,6 +610,10 @@ function ftact() {
 
 // ht action
 function htact() {
+    if ($("#tempht").val() === null) {
+        showdialog("還未選擇任何人");
+        return;
+    }
     let ttname = $("#tempht option:selected").text();
     showdialog(`你決定保護 ${ttname}`);
     htpro.push(ttname);
@@ -596,6 +622,10 @@ function htact() {
 
 // ww action
 function wwact() {
+    if ($("#tempww").val() === null) {
+        showdialog("還未選擇任何人");
+        return;
+    }
     let ttname = $("#tempww option:selected").text();
     showdialog(`你決定咬 ${ttname}`);
     wolfvotelist.push(ttname);
@@ -604,6 +634,10 @@ function wwact() {
 
 // no power alert
 function npact() {
+    if ($("#templist").val() === null) {
+        showdialog("還未選擇任何人");
+        return;
+    }
     showdialog("然後你又睡著了");
     nightnext();
 }
