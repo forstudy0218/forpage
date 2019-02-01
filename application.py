@@ -429,5 +429,9 @@ def werewolf():
 def sudoku():
     return render_template("sudoku.html")
 
+@app.route("/enwerewolf", methods=["GET"])
+def enwerewolf():
+    return render_template("enwerewolf.html")
+
 if __name__ == '__main__':
     app.run()
