@@ -647,7 +647,7 @@ function nightcommit() {
     // count wolf vote
     if (wolfvotelist.length > 0) {
         let possible = playersdata.filter(el => el.role !== "ww");
-        possible = possible.filter(el => el.role !== "ww");
+        possible = possible.filter(el => el.alive === 1);
         let deadbite = countvoteran(wolfvotelist, possible);
         // check hunter protection and deadbite role
         let bitedata = possible.filter(el => el.playname === deadbite);
