@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>WEREWOLF</title>
+    <!-- Try vue.js this time //development version, should change when done -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- Bootstrap -->
+    <!-- https://getbootstrap.com/docs/4.0/components/navbar/ -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Modal from vue
+    https://vuejs.org/v2/examples/modal.html
+    template for the modal component -->
+    <script type="text/x-template" id="modal-template">
+      <transition name="modal">
+        <div class="modal-mask">
+          <div class="modal-wrapper">
+            <div class="modal-container">
+
+              <div class="modal-header">
+                <slot name="header">
+                  Loading...
+                </slot>
+              </div>
+
+              <div class="modal-body">
+                <slot name="body">
+                  Loading...
+                </slot>
+              </div>
+
+              <div class="modal-footer">
+                <slot name="footer">
+                  Loading...
+                </slot>
+                <button class="modal-default-button" @click="$emit('close')">
+                  OK
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </transition>
+    </script>
+    <!-- Modal app -->
+    <div id="popwin">
+      <modal v-if="showModal" @close="showModal = false">
+        <!--
+          you can use custom content here to overwrite
+          default content
+        -->
+        {% raw -%}
+        <h3 slot="header" :style="{ color: headerColor }">{{ header }}</h3>
+        <p slot="body">{{ body }}</p>
+        <span slot="footer">{{ footer }}</span> <!-- Cannot use $emit in slot -->
+        {%- endraw %}
+      </modal>
+    </div>
+    <!-- Phase 0 set player -->
+    <div class="container" id="player-creation">
+      <template v-if="shared.state.gamestate.phase === 0">
+        <h1 id="gametitle">Werewolf</h1>
+        <form @submit.prevent="addPlayer" class="playerform">
+          <input placeholder="Your Name" type="text" v-model="addquery" required>
+          <button class="btn btn-success" type="submit">ADD</button>
+        </form>
+        <form @submit.prevent="delPlayer" class="playerform">
+          <input placeholder="Name to delete" type="text" v-model="delquery" required>
+          <button class="btn btn-danger" type="submit">DEL</button>
+        </form>
+        <br>
+        <button class="btn btn-info" id="startbtn" @click="playersSet">GO</button>
+        <div id="gamerlist" class="row justify-content-center">
+          <div class="col-5 col-lg-3" v-for="player in shared.state.players">
+            {% raw -%} {{ player.playname }} {%- endraw %}
+          </div>
+        </div>
+      </template>
+    </div>
+    <!-- Phase 1 game setting -->
+    <div id="gamesetting">
+      <template v-if="shared.state.gamestate.phase === 1">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-4 col-lg-3 roleset" v-for="roledict in roleset">
+              {% raw -%} {{ roledict.name }}
+              <br>
+              <select v-model="roledict.selid">
+                <option v-for="n in shared.state.players.length">{{ n - 1 }} {%- endraw %}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <br>
+        <span id="rolesetnum" :style="styleSetNum">Number of roles left: {% raw -%}{{ rolesToSet }}{%- endraw %}</span>
+        <br>
+        <div id="detailset">
+          <div id="samevote">
+            Same count on vote:
+            <ul style="list-style: none; text-align: left;">
+              <li>
+                <input type="radio" id ="Random" value="1" v-model="voteset">
+                <label for="Random">Random</label>
+              </li>
+              <li>
+                <input type="radio" id ="Noexe" value="0" v-model="voteset">
+                <label for="Noexe">No Execution</label>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <br>
+        <button class="btn btn-success" @click="startGame">START</button>
+      </template>
+    </div>
+    <!-- Players control centre -->
+    <div id="maincontrol">
+      <template v-if="shared.state.gamestate.phase === 2">
+        <div id="playerbtns" class="container">
+          <div class="row justify-content-center btnspace">
+            <button class="btn btn-warning" @click="toggleInfo(player.playname)"
+            :disabled="((player.alive === 0) || (isChecking) || (isStageEnd) || ((shared.state.gamestate.playstage !== 0) && (checkedList.includes(player.playname))))"
+            v-for="player in shared.state.players">
+              {% raw -%}{{ player.playname }}{%- endraw %}
+            </button>
+          </div>
+        </div>
+        <span style="color: Red;">
+          Player confirmed: <span v-for="name in checkedList">{% raw -%}{{ name }},{%- endraw %}</span>
+        </span>
+        <div id="controlrm" class="container">
+          <div id="controlpage" :style="pageBack">
+            <template v-if="toggled">
+              <h1>{% raw -%}{{ playername }}</h1>
+              <h4 v-if="shared.state.gamestate.playstage === 0">Please confirm your role.</h4>
+              <h4 v-else-if="shared.state.gamestate.playstage === 1">Night</h4>
+              <h4 v-else-if="shared.state.gamestate.playstage === 2">Daytime Vote</h4>
+              <button class="btn btn-primary" @click="confirmId">I am {{ playername }}{%- endraw %}</button>
+            </template>
+            <template v-if="idConfirmed">
+              <component v-if="shared.state.gamestate.playstage === 0" :is="findRoleTab" class="animated" stage0></component>
+              <component v-else-if="shared.state.gamestate.playstage === 1" :is="findRoleTab"></component>
+              <br>
+              <h3>{% raw -%}{{ playername }}{%- endraw %}</h3>
+              <template v-if="shared.state.gamestate.playstage === 1">
+                <h4>{% raw -%}{{ firstnotice }}</h4>
+                <h4>{{ rolenotice }}{%- endraw %}</h4>
+                <select v-model="actTarget">
+                  <option selected disabled :value="null">Please choose</option>
+                  <option v-for="name in targetList">{% raw -%}{{ name }} {%- endraw %}</option>
+                </select>
+                <button v-if="playrole === 'ww'" @click="wwRule" class="btn btn-info">RULE</button>
+              </template>
+              <template v-else-if="shared.state.gamestate.playstage === 2">
+                <h1 style="color: Red;">Choose the one you want to exile</h1>
+                <select v-model="actTarget">
+                  <option selected disabled :value="null">Please choose</option>
+                  <option v-for="name in targetList">{% raw -%}{{ name }} {%- endraw %}</option>
+                </select>
+                <br><br>
+              </template>
+              <button class="btn btn-success" @click="confirmRole"
+              :disabled="((shared.state.gamestate.playstage !== 0) && (actTarget === ''))">Confirm</button>
+            </template>
+            <template v-if="((isStageEnd) && (shared.state.gamestate.playstage === 2))">
+              <h3>Vote Result</h3>
+              <ul style="list-style: none;">
+                <li v-for="(value, key) in voteresultdict">{% raw -%}{{ key }}: {{ value }}{%- endraw %}</li>
+              </ul>
+              <h2>The exile one:</h2>
+              <h1 :style="{ color: exilecolor }">{% raw -%}{{ vtexile }}{%- endraw %}</h1>
+              <br><br>
+            </template>
+            <button v-if="isStageEnd" @click="endButton" class="btn btn-success">Stage End</button>
+          </div>
+        </div>
+      </template>
+    </div>
+    <div id="winresult">
+      <template v-if="shared.state.gamestate.phase === 3">
+        <span class="winning" :style="{ color: getTitle.color }">{% raw -%}{{ getTitle.text }}{%- endraw %}</span><br>
+        <span class="getext">Players alive</span>
+        <div class="container" style="padding: 3px;">
+            <div class="row justify-content-center gegrid" id="alivegg">
+              <div class="endali col-5 col-lg-3" v-for="(value, key) in getAlive">{% raw -%}{{ key }} ({{ value }}){%- endraw %}</div>
+            </div>
+        </div>
+        <span class="getext">Players dead</span>
+        <div class="container" style="padding: 3px;">
+            <div class="row justify-content-center gegrid" id="deadgg">
+              <div class="enddie col-5 col-lg-3" v-for="(value, key) in getDie">{% raw -%}{{ key }} ({{ value }}){%- endraw %}</div>
+            </div>
+        </div>
+      </template>
+    </div>
+    <!-- templates for role info -->
+    <template id="ftinfo">
+      <div class="descriptgood container">
+        <h1>You are Fortuneteller</h1>
+        <h1>(Good Faction)</h1>
+        <p>Ability: Check role of one person per night, Spirit-Fox would die if chosen</p>
+        <p>Duty: Find out Werewolf and Spirit-Fox, supply information</p>
+        <p>Winning condition: No Werewolf and Spirit-Fox alive</p>
+        <span class="wwstorynote" v-if="stage0">One day, the truth of village was revealed...</span>
+      </div>
+    </template>
+    <template id="htinfo">
+      <div class="descriptgood container">
+        <h1>You are Hunter</h1>
+        <h1>(Good Faction)</h1>
+        <p>Ability: Protect one person from Werewolf's attack per night</p>
+        <p>Duty: Protect the valuable role(e.g. Fortuneteller), don't let Werewolf know you are Hunter.</p>
+        <p>Winning condition: No Werewolf and Spirit-Fox alive</p>
+        <span class="wwstorynote" v-if="stage0">One day, experienced protection was needed...</span>
+      </div>
+    </template>
+    <template id="mdinfo">
+      <div class="descriptgood container">
+        <h1>You are Medium</h1>
+        <h1>(Good Faction)</h1>
+        <p>Ability: Know if the player exiled last day was Werewolf at night</p>
+        <p>Duty: Counting how many Werewolf alive</p>
+        <p>Winning condition: No Werewolf and Spirit-Fox alive</p>
+        <span class="wwstorynote" v-if="stage0">One day, the pure soul could be seen...</span>
+      </div>
+    </template>
+    <template id="wwinfo">
+      <div class="descriptevil container">
+        <h1>You are Werewolf</h1>
+        <h1>(Evil Faction)</h1>
+        <p>Ability:Attack one person per night, Spirit-Fox would survive this attack</p>
+        <p>Duty: Kill people in Good Faction, find out Spirit-Fox</p>
+        <p>Winning condition: Werewolf alive <em>equal to or greater than</em> people alive in Good Faction(including Madman); and No Spirit-Fox alive</p>
+        <span class="wwstorynote" v-if="stage0">One day, violence was the answer...</span>
+      </div>
+    </template>
+    <template id="veinfo">
+      <div class="descriptgood container">
+        <h1>You are Villager</h1>
+        <h1>(Good Faction)</h1>
+        <p>Ability: None</p>
+        <p>Duty: Find out Werewolf and Spirit-Fox, keep good people alive</p>
+        <p>Winning condition: No Werewolf and Spirit-Fox alive</p>
+        <span class="wwstorynote" v-if="stage0">One day, footprints of werewolf were found...</span>
+      </div>
+    </template>
+    <template id="sfinfo">
+      <div class="descriptsf container">
+        <h1>You are Spirit-Fox</h1>
+        <h1>(Spirit-Fox Faction)</h1>
+        <p>Ability: Werewolf attack won't kill you</p>
+        <p>Duty: hide yourself, survive</p>
+        <p>Winning condition: Alive at the end</p>
+        <span class="wwstorynote" v-if="stage0">One day, the plan of swallowing was started...</span>
+      </div>
+    </template>
+    <template id="mminfo">
+      <div class="descriptevil container">
+        <h1>You are Madman</h1>
+        <h1>(Evil Faction)</h1>
+        <p>Ability: Counted to be Good Faction</p>
+        <p>Duty: Confuse discussion, help hiding Werewolf</p>
+        <p>Winning condition: Werewolf alive <em>equal to or greater than</em> people alive in Good Faction(including Madman); and No Spirit-Fox alive</p>
+        <span class="wwstorynote" v-if="stage0">One day, the evil dream came true...</span>
+      </div>
+    </template>
+    <!-- universe pause button -->
+    <div id="unipause">
+      <a v-show="paused" href="/" class="btn btn-primary" id="tohome">HOME</a>
+      <button class="btn btn-warning" id="pausebtn" @click="togglePause">PAUSE</button>
+      <button v-show="paused" class="btn btn-danger" id="tostart" @click="restartGame" :disabled="!paused">RESTART</button>
+    </div>
+    <!-- style -->
+    <link href="/static/enwolfcss.css" rel="stylesheet">
+    <!-- javascript -->
+    <script src="/static/enwolfjs.js"></script>
+  </body>
+</html>
