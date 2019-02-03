@@ -11,6 +11,12 @@ let gbv = {
             playstage: 0,
             nightcount: 0,
             lasthang: "",
+            checkedList: [],
+            protectlist: [],
+            nightdead: [],
+            nightww: [],
+            dayvotelist: [],
+            isStageEnd: false,
         },
     },
     setPlayers (newList) {
@@ -31,6 +37,20 @@ let gbv = {
         this.state.gamestate[keyname] = newValue;
         localStorage.setItem("enwwstate", JSON.stringify(this.state.gamestate));
     },
+    pushAnyList (listname, pushValue) {
+        if (this.debug) console.log(listname,' pushed ', pushValue);
+        this.state.gamestate[listname].push(pushValue);
+        localStorage.setItem("enwwstate", JSON.stringify(this.state.gamestate));
+    },
+    resetAllList () {
+        if (this.debug) console.log('Checked list reset.');
+        this.state.gamestate.checkedList = [];
+        this.state.gamestate.protectlist = [];
+        this.state.gamestate.nightdead = [];
+        this.state.gamestate.nightww = [];
+        this.state.gamestate.dayvotelist = [];
+        localStorage.setItem("enwwstate", JSON.stringify(this.state.gamestate));
+    },
     resetGame () {
         if (this.debug) console.log("Game data had been reset.");
         let playerslist = this.state.players;
@@ -46,6 +66,12 @@ let gbv = {
             playstage: 0,
             nightcount: 0,
             lasthang: "",
+            checkedList: [],
+            protectlist: [],
+            nightdead: [],
+            nightww: [],
+            dayvotelist: [],
+            isStageEnd: false,
         };
         localStorage.setItem("enwwstate", JSON.stringify(this.state.gamestate));
         changebody();
@@ -67,6 +93,12 @@ if (!localStorage.getItem("enwwstate")) {
             playstage: 0,
             nightcount: 0,
             lasthang: "",
+            checkedList: [],
+            protectlist: [],
+            nightdead: [],
+            nightww: [],
+            dayvotelist: [],
+            isStageEnd: false,
         };
     localStorage.setItem("enwwstate", JSON.stringify(nullstate));
 } else {
@@ -485,16 +517,10 @@ var controlcentre = new Vue({
         idConfirmed: false,
         playrole: "",
         isChecking: false,
-        checkedList: [],
-        isStageEnd: false,
         firstnotice: "",
         rolenotice: "",
         actTarget: "",
         targetList: [],
-        protectlist: [],
-        nightdead: [],
-        nightww: [],
-        dayvotelist: [],
         voteresultdict: {},
         vtexile: "",
         exilecolor: "",
@@ -526,27 +552,27 @@ var controlcentre = new Vue({
             } else if (this.shared.state.gamestate.playstage === 1) {
                 this.nightAct(this.playrole);
             } else if (this.shared.state.gamestate.playstage === 2) {
-                this.dayvotelist.push(this.actTarget);
+                this.shared.pushAnyList("dayvotelist", this.actTarget);
                 popmodal.showmessage("You voted.", "Below is who you voted.", this.actTarget, "Green");
                 this.actTarget = "";
                 this.targetList = [];
             }
             this.isChecking = false;
             this.idConfirmed = false;
-            if (!this.checkedList.includes(this.playername)) {
-                this.checkedList.push(this.playername);
+            let checkthelist = this.shared.state.gamestate.checkedList;
+            if (!checkthelist.includes(this.playername)) {
+                this.shared.pushAnyList("checkedList", this.playername);
                 let alivelist = this.shared.state.players.filter(el => el.alive === 1);
-                if (this.checkedList.length === alivelist.length) {
-                    this.isStageEnd = true;
+                if (checkthelist.length === alivelist.length) {
+                    this.shared.setGamestate ("isStageEnd", true);
                     if (this.shared.state.gamestate.playstage === 2) {
                         this.calVote();
-                        this.dayvotelist = [];
                     }
                 }
             }
         },
         endButton: function() {
-            this.isStageEnd = false;
+            this.shared.setGamestate ("isStageEnd", false);
             if (this.shared.state.gamestate.playstage === 0) {
                 this.checkEnd();
             } else if (this.shared.state.gamestate.playstage === 1) {
@@ -554,6 +580,7 @@ var controlcentre = new Vue({
             } else if (this.shared.state.gamestate.playstage === 2) {
                 this.dayEnd();
             }
+            this.shared.resetAllList();
             this.resetData();
             changebody();
         },
@@ -623,7 +650,7 @@ var controlcentre = new Vue({
                     bodymessage = ttnm + " is Werewolf!";
                     popmodal.showmessage("Result", bodymessage, "Tell everyone!", "Red");
                 } else if (ttrole === "sf") {
-                    this.nightdead.push(ttnm);
+                    this.shared.pushAnyList("nightdead",ttnm);
                     bodymessage = ttnm + " is NOT Werewolf.";
                     popmodal.showmessage("Result", bodymessage, "Target would die if role is Spirit-Fox.", "Green");
                 } else {
@@ -634,7 +661,7 @@ var controlcentre = new Vue({
                 if (this.shared.state.gamestate.nightcount === 0) {
                     popmodal.showmessage("Sleeping", "Waiting for next day.", "ZzZzzZ...", "Green");
                 } else {
-                    this.protectlist.push(ttnm);
+                    this.shared.pushAnyList("protectlist", ttnm);
                     bodymessage = ttnm + " would be protected.";
                     popmodal.showmessage("Done", bodymessage, "Werewolf can't kill him/her now.", "Green");
                 }
@@ -642,7 +669,7 @@ var controlcentre = new Vue({
                 if (this.shared.state.gamestate.nightcount === 0) {
                     popmodal.showmessage("Sleeping", "Waiting for next day.", "ZzZzzZ...", "Green");
                 } else {
-                    this.nightww.push(ttnm);
+                    this.shared.pushAnyList("nightww", ttnm);
                     let wwtitle = "Your target is " + ttnm + ".";
                     let footermessage = "Wish the target is not protected by Hunter or Spirit-Fox.";
                     bodymessage = "If other Werewolf alive choose another target, your target might not be attacked this night.";
@@ -654,22 +681,24 @@ var controlcentre = new Vue({
             this.actTarget = "";
         },
         nightEnd: function() {
-            if (this.nightww.length > 0) {
+            let nightw = this.shared.state.gamestate.nightww;
+            if (nightw.length > 0) {
                 let possible = this.shared.state.players.filter(el => el.role !== "ww");
                 possible = possible.filter(el => el.alive === 1);
-                let deadbite = countvoteran(this.nightww, possible);
+                let deadbite = countvoteran(nightw, possible);
                 // check hunter protection and deadbite role
                 let bitedata = possible.filter(el => el.playname === deadbite);
                 let biterole = bitedata[0]["role"];
-                if ((!this.protectlist.includes(deadbite)) && (biterole !== "sf")) {
-                    this.nightdead.push(deadbite);
+                if ((!this.shared.state.gamestate.protectlist.includes(deadbite)) && (biterole !== "sf")) {
+                    this.shared.pushAnyList("nightdead", deadbite);
                 }
             }
             // commit dead
             let bodymessage = "";
             let allplayers = this.shared.state.players;
-            for (let i = 0; i < this.nightdead.length; i++) {
-                let deadname = this.nightdead[i];
+            let nightd = this.shared.state.gamestate.nightdead;
+            for (let i = 0; i < nightd.length; i++) {
+                let deadname = nightd[i];
                 for (let j = 0; j < allplayers.length; j++) {
                     if (deadname === allplayers[j]["playname"]) {
                         allplayers[j]["alive"] = 0;
@@ -679,7 +708,7 @@ var controlcentre = new Vue({
             }
             bodymessage = bodymessage.slice(0, -2);
             bodymessage += " became dead.";
-            if (this.nightdead.length === 0) {
+            if (nightd.length === 0) {
                 // no death alert
                 popmodal.showmessage("Night End.", "No one died this night.", "Game keep going...", "Green");
             } else {
@@ -711,16 +740,16 @@ var controlcentre = new Vue({
         calVote: function() {
             // calcute vote and execcute
             // https://stackoverflow.com/questions/5667888
-             this.dayvotelist.sort();
-            for (let i = 0; i < this.dayvotelist.length; i++) {
-                let vtname = this.dayvotelist[i];
+            let sorted = this.shared.state.gamestate.dayvotelist.sort();
+            for (let i = 0; i < sorted.length; i++) {
+                let vtname = sorted[i];
                 this.voteresultdict[vtname] = (this.voteresultdict[vtname] || 0) + 1;
             }
             let alivelist = this.shared.state.players.filter(el => el.alive === 1);
             if ( this.shared.state.gamestate.voteset === 0) {
-                this.vtexile = countvotenk(this.dayvotelist, alivelist);
+                this.vtexile = countvotenk(sorted, alivelist);
             } else if (this.shared.state.gamestate.voteset === 1) {
-                this.vtexile = countvoteran(this.dayvotelist, alivelist);
+                this.vtexile = countvoteran(sorted, alivelist);
             } else {
                 alert("Game error. Restart now.");
                 gbv.resetGame ();
@@ -760,15 +789,28 @@ var controlcentre = new Vue({
         },
         Val: function(namestr) {
             let thisdata = this.shared.state.players.filter(el => el.playname === namestr)[0];
-            let longcon = ((this.shared.state.gamestate.playstage !== 0) && (this.checkedList.includes(thisdata.playname)));
-            return ((thisdata.alive === 0) || (this.isChecking) || (this.isStageEnd) || longcon);
+            let checkthelist = this.shared.state.gamestate.checkedList;
+            let longcon = ((this.shared.state.gamestate.playstage !== 0) && (checkthelist.includes(thisdata.playname)));
+            return ((thisdata.alive === 0) || (this.isChecking) || (this.shared.state.gamestate.isStageEnd) || longcon);
         },
         getCls: function(namestr) {
-            if ((this.shared.state.gamestate.playstage === 0) && (this.checkedList.includes(namestr))) {
+            let checkthelist = this.shared.state.gamestate.checkedList;
+            if ((this.shared.state.gamestate.playstage === 0) && (checkthelist.includes(namestr))) {
                 return "btn btn-success";
             } else {
             return "btn btn-warning";
             }
+        },
+        popThisRole: function() {
+            let rolenm;
+            let rolelist = gamesetting.roleset;
+            for (let j = 0; j < rolelist.length; j++) {
+                if (rolelist[j]["short"] === this.playrole) {
+                    rolenm = rolelist[j]["name"];
+                    break;
+                }
+            }
+            popmodal.showmessage("Your Role", rolenm, "Don't forget it.", "Green");
         },
     },
     computed: {
