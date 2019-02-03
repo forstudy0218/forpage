@@ -169,6 +169,9 @@ body {
   border: dotted Red;
   background: yellow; }
 
+#vttemp {
+  margin: 15px; }
+
 #voteplayers {
   list-style: none;
   display: none; }
