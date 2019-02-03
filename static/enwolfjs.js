@@ -1,6 +1,6 @@
 // global variables
 let gbv = {
-    debug: false,
+    debug: true,
     state: {
         players: [], // players
         // game state
@@ -11,12 +11,6 @@ let gbv = {
             playstage: 0,
             nightcount: 0,
             lasthang: "",
-            checkedList: [],
-            protectlist: [],
-            nightdead: [],
-            nightww: [],
-            dayvotelist: [],
-            isStageEnd: false,
         },
     },
     setPlayers (newList) {
@@ -37,20 +31,6 @@ let gbv = {
         this.state.gamestate[keyname] = newValue;
         localStorage.setItem("enwwstate", JSON.stringify(this.state.gamestate));
     },
-    pushAnyList (listname, pushValue) {
-        if (this.debug) console.log(listname,' pushed ', pushValue);
-        this.state.gamestate[listname].push(pushValue);
-        localStorage.setItem("enwwstate", JSON.stringify(this.state.gamestate));
-    },
-    resetAllList () {
-        if (this.debug) console.log('Checked list reset.');
-        this.state.gamestate.checkedList = [];
-        this.state.gamestate.protectlist = [];
-        this.state.gamestate.nightdead = [];
-        this.state.gamestate.nightww = [];
-        this.state.gamestate.dayvotelist = [];
-        localStorage.setItem("enwwstate", JSON.stringify(this.state.gamestate));
-    },
     resetGame () {
         if (this.debug) console.log("Game data had been reset.");
         let playerslist = this.state.players;
@@ -66,12 +46,6 @@ let gbv = {
             playstage: 0,
             nightcount: 0,
             lasthang: "",
-            checkedList: [],
-            protectlist: [],
-            nightdead: [],
-            nightww: [],
-            dayvotelist: [],
-            isStageEnd: false,
         };
         localStorage.setItem("enwwstate", JSON.stringify(this.state.gamestate));
         changebody();
@@ -93,12 +67,6 @@ if (!localStorage.getItem("enwwstate")) {
             playstage: 0,
             nightcount: 0,
             lasthang: "",
-            checkedList: [],
-            protectlist: [],
-            nightdead: [],
-            nightww: [],
-            dayvotelist: [],
-            isStageEnd: false,
         };
     localStorage.setItem("enwwstate", JSON.stringify(nullstate));
 } else {
@@ -521,13 +489,22 @@ var controlcentre = new Vue({
         rolenotice: "",
         actTarget: "",
         targetList: [],
-        voteresultdict: {},
-        vtexile: "",
-        exilecolor: "",
+        saved: {
+            checkedList: [],
+            isStageEnd: false,
+            protectlist: [],
+            nightdead: [],
+            nightww: [],
+            dayvotelist: [],
+            voteresultdict: {},
+            vtexile: "",
+            exilecolor: "",
+        },
     }),
     methods: {
         resetData: function() { // https://jsfiddle.net/bf1631pu/
             Object.assign(this.$data, this.$options.data());
+            this.saveData();
         },
         toggleInfo: function(playername) {
             let playerdata = this.shared.state.players.filter(el => el.playname === playername);
@@ -552,19 +529,18 @@ var controlcentre = new Vue({
             } else if (this.shared.state.gamestate.playstage === 1) {
                 this.nightAct(this.playrole);
             } else if (this.shared.state.gamestate.playstage === 2) {
-                this.shared.pushAnyList("dayvotelist", this.actTarget);
+                this.pushSave("dayvotelist", this.actTarget);
                 popmodal.showmessage("You voted.", "Below is who you voted.", this.actTarget, "Green");
                 this.actTarget = "";
                 this.targetList = [];
             }
             this.isChecking = false;
             this.idConfirmed = false;
-            let checkthelist = this.shared.state.gamestate.checkedList;
-            if (!checkthelist.includes(this.playername)) {
-                this.shared.pushAnyList("checkedList", this.playername);
+            if (!this.saved.checkedList.includes(this.playername)) {
+                this.pushSave("checkedList", this.playername);
                 let alivelist = this.shared.state.players.filter(el => el.alive === 1);
-                if (checkthelist.length === alivelist.length) {
-                    this.shared.setGamestate ("isStageEnd", true);
+                if (this.saved.checkedList.length === alivelist.length) {
+                    this.changeSave("isStageEnd", true);
                     if (this.shared.state.gamestate.playstage === 2) {
                         this.calVote();
                     }
@@ -572,7 +548,7 @@ var controlcentre = new Vue({
             }
         },
         endButton: function() {
-            this.shared.setGamestate ("isStageEnd", false);
+            this.changeSave("isStageEnd", false);
             if (this.shared.state.gamestate.playstage === 0) {
                 this.checkEnd();
             } else if (this.shared.state.gamestate.playstage === 1) {
@@ -580,7 +556,6 @@ var controlcentre = new Vue({
             } else if (this.shared.state.gamestate.playstage === 2) {
                 this.dayEnd();
             }
-            this.shared.resetAllList();
             this.resetData();
             changebody();
         },
@@ -613,7 +588,7 @@ var controlcentre = new Vue({
                         if (hangedrole === "ww") {
                             this.firstnotice = "Last exile " + hangname + " was Werewolf!";
                         } else {
-                            this.firstnotice = "Last exile " + hangname + " was not Werewolf";
+                            this.firstnotice = "Last exile " + hangname + " was NOT Werewolf";
                         }
                     } else {
                         this.firstnotice = "No exile today.";
@@ -648,9 +623,9 @@ var controlcentre = new Vue({
                 let ttrole = ttlist[0]["role"];
                 if (ttrole === "ww") {
                     bodymessage = ttnm + " is Werewolf!";
-                    popmodal.showmessage("Result", bodymessage, "Tell everyone!", "Red");
+                    popmodal.showmessage("Result", bodymessage, "Tell everyone during daytime!", "Red");
                 } else if (ttrole === "sf") {
-                    this.shared.pushAnyList("nightdead",ttnm);
+                    this.pushSave("nightdead", ttnm);
                     bodymessage = ttnm + " is NOT Werewolf.";
                     popmodal.showmessage("Result", bodymessage, "Target would die if role is Spirit-Fox.", "Green");
                 } else {
@@ -661,7 +636,7 @@ var controlcentre = new Vue({
                 if (this.shared.state.gamestate.nightcount === 0) {
                     popmodal.showmessage("Sleeping", "Waiting for next day.", "ZzZzzZ...", "Green");
                 } else {
-                    this.shared.pushAnyList("protectlist", ttnm);
+                     this.pushSave("protectlist", ttnm);
                     bodymessage = ttnm + " would be protected.";
                     popmodal.showmessage("Done", bodymessage, "Werewolf can't kill him/her now.", "Green");
                 }
@@ -669,7 +644,7 @@ var controlcentre = new Vue({
                 if (this.shared.state.gamestate.nightcount === 0) {
                     popmodal.showmessage("Sleeping", "Waiting for next day.", "ZzZzzZ...", "Green");
                 } else {
-                    this.shared.pushAnyList("nightww", ttnm);
+                    this.pushSave("nightww", ttnm);
                     let wwtitle = "Your target is " + ttnm + ".";
                     let footermessage = "Wish the target is not protected by Hunter or Spirit-Fox.";
                     bodymessage = "If other Werewolf alive choose another target, your target might not be attacked this night.";
@@ -681,24 +656,22 @@ var controlcentre = new Vue({
             this.actTarget = "";
         },
         nightEnd: function() {
-            let nightw = this.shared.state.gamestate.nightww;
-            if (nightw.length > 0) {
+            if (this.saved.nightww.length > 0) {
                 let possible = this.shared.state.players.filter(el => el.role !== "ww");
                 possible = possible.filter(el => el.alive === 1);
-                let deadbite = countvoteran(nightw, possible);
+                let deadbite = countvoteran(this.saved.nightww, possible);
                 // check hunter protection and deadbite role
                 let bitedata = possible.filter(el => el.playname === deadbite);
                 let biterole = bitedata[0]["role"];
-                if ((!this.shared.state.gamestate.protectlist.includes(deadbite)) && (biterole !== "sf")) {
-                    this.shared.pushAnyList("nightdead", deadbite);
+                if ((!this.saved.protectlist.includes(deadbite)) && (biterole !== "sf")) {
+                    this.pushSave("nightdead", deadbite);
                 }
             }
             // commit dead
             let bodymessage = "";
             let allplayers = this.shared.state.players;
-            let nightd = this.shared.state.gamestate.nightdead;
-            for (let i = 0; i < nightd.length; i++) {
-                let deadname = nightd[i];
+            for (let i = 0; i < this.saved.nightdead.length; i++) {
+                let deadname = this.saved.nightdead[i];
                 for (let j = 0; j < allplayers.length; j++) {
                     if (deadname === allplayers[j]["playname"]) {
                         allplayers[j]["alive"] = 0;
@@ -708,7 +681,7 @@ var controlcentre = new Vue({
             }
             bodymessage = bodymessage.slice(0, -2);
             bodymessage += " became dead.";
-            if (nightd.length === 0) {
+            if (this.saved.nightdead.length === 0) {
                 // no death alert
                 popmodal.showmessage("Night End.", "No one died this night.", "Game keep going...", "Green");
             } else {
@@ -740,30 +713,33 @@ var controlcentre = new Vue({
         calVote: function() {
             // calcute vote and execcute
             // https://stackoverflow.com/questions/5667888
-            let sorted = this.shared.state.gamestate.dayvotelist.sort();
-            for (let i = 0; i < sorted.length; i++) {
-                let vtname = sorted[i];
-                this.voteresultdict[vtname] = (this.voteresultdict[vtname] || 0) + 1;
+            this.saved.dayvotelist.sort();
+            for (let i = 0; i < this.saved.dayvotelist.length; i++) {
+                let vtname = this.saved.dayvotelist[i];
+                this.dictSave("voteresultdict", vtname);
             }
             let alivelist = this.shared.state.players.filter(el => el.alive === 1);
+            let targetnm;
             if ( this.shared.state.gamestate.voteset === 0) {
-                this.vtexile = countvotenk(sorted, alivelist);
+                targetnm = countvotenk(this.saved.dayvotelist, alivelist);
+                this.changeSave("vtexile", targetnm);
             } else if (this.shared.state.gamestate.voteset === 1) {
-                this.vtexile = countvoteran(sorted, alivelist);
+                targetnm = countvoteran(this.saved.dayvotelist, alivelist);
+                this.changeSave("vtexile", targetnm);
             } else {
                 alert("Game error. Restart now.");
                 gbv.resetGame ();
                 return;
             }
             let newhang = "";
-            this.exilecolor = "Red";
-            if (this.vtexile === "") {
-                this.vtexile = "NO EXILE";
-                this.exilecolor = "black";
+            this.changeSave("exilecolor", "Red");
+            if (this.saved.vtexile === "") {
+                this.changeSave("vtexile", "NO EXILE");
+                this.changeSave("exilecolor", "black");
                 popmodal.showmessage("Result", "No one gone this time.", "Good luck next time.", "Green");
             } else {
                 for (let j = 0; j < this.shared.state.players.length; j++) {
-                    if (this.vtexile === this.shared.state.players[j]["playname"]) {
+                    if (this.saved.vtexile === this.shared.state.players[j]["playname"]) {
                         // kill
                         this.shared.state.players[j]["alive"] = 0;
                         break;
@@ -771,7 +747,7 @@ var controlcentre = new Vue({
                 }
                 // save the alive list
                 gbv.setPlayers(this.shared.state.players);
-                newhang = this.vtexile;
+                newhang = this.saved.vtexile;
                 popmodal.showmessage(newhang, "Time to leave.", "But game may not be over though...", "Red");
             }
             this.shared.setGamestate ("lasthang", newhang);
@@ -789,13 +765,11 @@ var controlcentre = new Vue({
         },
         Val: function(namestr) {
             let thisdata = this.shared.state.players.filter(el => el.playname === namestr)[0];
-            let checkthelist = this.shared.state.gamestate.checkedList;
-            let longcon = ((this.shared.state.gamestate.playstage !== 0) && (checkthelist.includes(thisdata.playname)));
-            return ((thisdata.alive === 0) || (this.isChecking) || (this.shared.state.gamestate.isStageEnd) || longcon);
+            let longcon = ((this.shared.state.gamestate.playstage !== 0) && (this.saved.checkedList.includes(thisdata.playname)));
+            return ((thisdata.alive === 0) || (this.isChecking) || (this.saved.isStageEnd) || longcon);
         },
         getCls: function(namestr) {
-            let checkthelist = this.shared.state.gamestate.checkedList;
-            if ((this.shared.state.gamestate.playstage === 0) && (checkthelist.includes(namestr))) {
+            if ((this.shared.state.gamestate.playstage === 0) && (this.saved.checkedList.includes(namestr))) {
                 return "btn btn-success";
             } else {
             return "btn btn-warning";
@@ -811,6 +785,25 @@ var controlcentre = new Vue({
                 }
             }
             popmodal.showmessage("Your Role", rolenm, "Don't forget it.", "Green");
+        },
+        changeSave: function(keyname, newValue) {
+            if (this.shared.debug) console.log(keyname, "changed to", newValue);
+            this.saved[keyname] = newValue;
+            this.saveData();
+        },
+        pushSave: function(listname, newValue) {
+            if (this.shared.debug) console.log(listname, "pushed", newValue);
+            this.saved[listname].push(newValue);
+            this.saveData();
+        },
+        dictSave: function(dictname, keyname) {
+            if (this.shared.debug) console.log(dictname, keyname, "plus 1.");
+            this.saved[dictname][keyname] = (this.saved[dictname][keyname] || 0) + 1;//
+            this.saveData();
+        },
+        saveData: function() {
+            const parsed = JSON.stringify(this.saved);
+            localStorage.setItem('enwwsave', parsed);
         },
     },
     computed: {
@@ -846,7 +839,16 @@ var controlcentre = new Vue({
             let wwalive = this.shared.state.players.filter(el => ((el.role === "ww") && (el.alive === 1)));
             return (wwalive.length > 1);
         }
-    }
+    },
+    mounted() {
+        if (localStorage.getItem('enwwsave')) {
+            try {
+            this.saved = JSON.parse(localStorage.getItem('enwwsave'));
+            } catch(e) {
+            localStorage.removeItem('enwwsave');
+            }
+        }
+    },
 });
 
 // phase 3 win

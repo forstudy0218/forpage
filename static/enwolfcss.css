@@ -10,6 +10,13 @@ body.night {
 body.day {
   background-color: beige; }
 
+body.win {
+  background-color: lightblue; }
+
+em {
+  text-decoration: underline;
+  font-weight: bold; }
+
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -114,9 +121,20 @@ body.day {
   text-align: center; }
 
 .roleset {
-  border: 1px solid black;
-  border-radius: 3px;
-  background-color: lightblue; }
+  border: 1px solid Blue;
+  border-radius: 3px; }
+
+.Good_side {
+  background-color: lightblue;
+  color: yellow; }
+
+.Evil_side {
+  background-color: black;
+  color: Red; }
+
+.Spirit-Fox_side {
+  background-color: #b29ab9;
+  color: #9d33ac; }
 
 #rolesetnum {
   display: inline-block;
@@ -125,11 +143,20 @@ body.day {
   padding: 3px; }
 
 #detailset {
-  display: inline-block; }
+  display: inline-block;
+  border: 1px solid grey;
+  margin: 10px; }
 
-#samevote {
-  background-color: azure;
-  border: 1px solid grey; }
+.detailli {
+  margin-bottom: 0px;
+  list-style: none;
+  text-align: left; }
+
+.oddSet {
+  background-color: azure; }
+
+.evenSet {
+  background-color: lightgreen; }
 
 .btnspace {
   margin: 10px auto;
@@ -180,6 +207,17 @@ body.day {
   animation-name: grow;
   animation-duration: 2s;
   animation-fill-mode: forwards; }
+
+.wwli_1 {
+  color: Gold; }
+
+.wwli_0 {
+  color: Grey;
+  text-decoration: line-through Red; }
+
+#wwrule {
+  right: 5%;
+  position: absolute; }
 
 #winresult {
   text-align: center;

@@ -181,18 +181,16 @@
               <button class="btn btn-success" @click="confirmRole"
               :disabled="((shared.state.gamestate.playstage !== 0) && (actTarget === ''))">Confirm</button>
             </template>
-            <template v-if="((shared.state.gamestate.isStageEnd) && (shared.state.gamestate.playstage === 2))">
-              {% raw -%}
+            <template v-if="((saved.isStageEnd) && (shared.state.gamestate.playstage === 2))">
               <h3>Vote Result</h3>
               <ul style="list-style: none;">
-                <li v-for="(value, key) in shared.state.gamestate.voteresultdict">{{ key }}: {{ value }}</li>
+                <li v-for="(value, key) in saved.voteresultdict">{% raw -%}{{ key }}: {{ value }}{%- endraw %}</li>
               </ul>
               <h2>The exile one:</h2>
-              <h1 :style="{ color: shared.state.gamestate.exilecolor }">{{ shared.state.gamestate.vtexile }}</h1>
+              <h1 :style="{ color: saved.exilecolor }">{% raw -%}{{ saved.vtexile }}{%- endraw %}</h1>
               <br><br>
-              {%- endraw %}
             </template>
-            <button v-if="shared.state.gamestate.isStageEnd" @click="endButton" class="btn btn-success">Press me</button>
+            <button v-if="saved.isStageEnd" @click="endButton" class="btn btn-success">Press me</button>
           </div>
         </div>
       </template>
@@ -274,7 +272,7 @@
         <h1>You are Spirit-Fox</h1>
         <h1>(Spirit-Fox Faction)</h1>
         <p>Ability: Werewolf attack won't kill you</p>
-        <p>Duty: hide yourself, survive</p>
+        <p>Duty: hide yourself, survive, Fortuneteller is your BIGGEST enemy</p>
         <p>Winning condition: Alive at the end</p>
         <span class="wwstorynote" v-if="stage0">One day, the plan of swallowing was started...</span>
       </div>
