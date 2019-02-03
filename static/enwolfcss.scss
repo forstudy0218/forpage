@@ -13,14 +13,6 @@ body.night {
 body.day {
     background-color: beige;
 }
-// Win color
-body.win {
-    background-color: lightblue;
-}
-em {
-  text-decoration: underline;
-  font-weight: bold;
-}
 
 // Modal from vue
 .modal-mask {
@@ -143,20 +135,9 @@ em {
   text-align: center;
 }
 .roleset {
-  border: 1px solid Blue;
+  border: 1px solid black;
   border-radius: 3px;
-}
-.Good_side {
   background-color: lightblue;
-  color: yellow;
-}
-.Evil_side {
-  background-color: black;
-  color: Red;
-}
-.Spirit-Fox_side {
-  background-color: #b29ab9;
-  color: #9d33ac;
 }
 #rolesetnum {
   display: inline-block;
@@ -166,19 +147,10 @@ em {
 }
 #detailset {
   display: inline-block;
-  border: 1px solid grey;
-  margin: 10px;
 }
-.detailli {
-  margin-bottom: 0px;
-  list-style: none;
-  text-align: left;
-}
-.oddSet {
+#samevote {
   background-color: azure;
-}
-.evenSet {
-  background-color: lightgreen;
+  border: 1px solid grey;
 }
 
 //phase 2
@@ -240,19 +212,6 @@ em {
   animation-duration: 2s;
   animation-fill-mode: forwards;
 }
-// stage 1
-.wwli_1 {
-  color: Gold;
-}
-.wwli_0 {
-  color: Grey;
-  text-decoration: line-through Red;
-}
-#wwrule {
-  right: 5%;
-  position: absolute;
-}
-
 // phase 3
 #winresult {
   text-align: center;
