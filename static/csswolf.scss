@@ -69,6 +69,7 @@ body {
     @extend %phasecontain;
     position: relative;
     text-align: center;
+    padding-bottom: 40px;
 }
 #daylayout {
     @extend %phasecontain;
@@ -147,8 +148,8 @@ body {
     @extend %decriptionbox;
     border: thick solid purple;
 }
-.wwdead {
-    text-decoration: line-through;
+.deadww {
+    text-decoration: line-through Red;
 }
 .wwrule {
     position: absolute;

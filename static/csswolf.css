@@ -49,7 +49,8 @@ body {
 
 .description {
   position: relative;
-  text-align: center; }
+  text-align: center;
+  padding-bottom: 40px; }
 
 #daylayout {
   position: relative;
@@ -115,8 +116,8 @@ body {
 .descriptsf {
   border: thick solid purple; }
 
-.wwdead {
-  text-decoration: line-through; }
+.deadww {
+  text-decoration: line-through Red; }
 
 .wwrule {
   position: absolute;

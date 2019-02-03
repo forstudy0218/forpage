@@ -42,7 +42,6 @@ var nightdeathlist = [];
 var wolfvotelist = [];
 // hunter protection;
 var htpro = [];
-
 // save vote list
 var dayvotelist =[];
 // vote setting
@@ -537,23 +536,22 @@ function showww(roletag) {
     let playname = playersdata[rolecon]["playname"];
     $(roletag).append(`<h4 class='nightinfo'>${playname}</h4>`);
     let wwlist = playersdata.filter(el => el.role === "ww");
-    let littlelist =[];
+    let littlelist = wwlist.filter(el => el.alive === 1);
     // show list of ww
     $(roletag).append("<h3 class='nightinfo'>以下玩家是狼人:</h3>");
+    if (littlelist.length > 1) {
+        $(roletag).append("<button class='nightinfo wwrule btn btn-info' onclick='wwrule()'>RULE</button>");
+    }
     for (let i = 0; i < wwlist.length; i++) {
         let wwname = wwlist[i]["playname"];
         let wwstate = wwlist[i]["alive"];
         if (wwstate === 1) {
             $(roletag).append(`<h3 class='nightinfo'>${wwname} (狼人)</h3>`);
-            littlelist.push(wwname);
         } else {
             $(roletag).append(`<h3 class='nightinfo deadww'>${wwname} (狼人)(已死)</h3>`);
         }
     }
     if (nightcount != 0) {
-        if (littlelist.length > 1) {
-            $(roletag).append("<button class='nightinfo wwrule btn btn-info' onclick='wwrule()'>RULE</button><br>");
-        }
         $(roletag).append("<h1 class='nightinfo'>請選擇你想咬殺的人</h1>");
         $(roletag).append("<select id='tempww' class='nightinfo ntsec'></select>");
         $("#tempww").append(`<option class='nightinfo' selected disabled value="null">請選擇</option>`);
@@ -882,9 +880,10 @@ function showvote(currentpos) {
 }
 // first press
 function vtfirst() {
+    $('#vttemp').prop('disabled', true);
+    $("#votefirst").prop("disabled", true);
     let vtstname = $("#vttemp option:selected").text();
     showdialog(`你選擇了${vtstname}`);
-    $("#votefirst").prop("disabled", true);
     $("#votelayout").append(`<h1 class="votestname voteinfo">你是否決定投 ${vtstname}</h1>`);
     $("#votelayout").append(`<div class="row vtbtn voteinfo justify-content-center"></div>`);
     $(".vtbtn").append('<button class="votecon voteinfo btn btn-danger" onclick="vtcon();">確認</button>');
@@ -896,6 +895,7 @@ function vtcan() {
     $(".votecon").detach();
     $(".votecan").detach();
     $(".vtbtn").detach();
+    $('#vttemp').prop('disabled', false);
     $("#votefirst").prop("disabled", false);
 }
 // confirm vote
