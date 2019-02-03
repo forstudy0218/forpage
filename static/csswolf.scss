@@ -10,19 +10,16 @@ body {
 // base home button
 .backtohome {
     display: none;
-    margin-right: 20vw;
+    float: left;
 }
 // base back to list button
 .backtolist {
     display: none;
-    margin-left: 17vw;
+    float: right;
 }
 // base pause button
 .pausebtn {
     display: inline-block;
-}
-// not paused
-.notpaused {
 }
 // base thank
 #bootstrapfour {

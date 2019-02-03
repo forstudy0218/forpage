@@ -1075,7 +1075,6 @@ function pauseww() {
         $(".backtolist").css("display", "initial");
         $(".backtohome").css("display", "initial");
         showdialog("暫停中");
-        $( ".pausebtn" ).removeClass( "notpaused" ).addClass( "pausedb" );
         $("body div").css("visibility", "collapse");
         $("#pausection").css("visibility", "visible");
         $("#bootstrapfour").css("display", "inline-block");
@@ -1089,7 +1088,6 @@ function pauseww() {
         }
         $(".backtolist").css("display", "none");
         $(".backtohome").css("display", "none");
-        $( ".pausebtn" ).removeClass( "pausedb" ).addClass( "notpaused" );
         $("body div").css("visibility", "visible");
         $("#bootstrapfour").css("display", "none");
     }

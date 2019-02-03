@@ -7,11 +7,11 @@ body {
 
 .backtohome {
   display: none;
-  margin-right: 20vw; }
+  float: left; }
 
 .backtolist {
   display: none;
-  margin-left: 17vw; }
+  float: right; }
 
 .pausebtn {
   display: inline-block; }
