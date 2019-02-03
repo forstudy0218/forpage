@@ -537,15 +537,24 @@ function showww(roletag) {
     let playname = playersdata[rolecon]["playname"];
     $(roletag).append(`<h4 class='nightinfo'>${playname}</h4>`);
     let wwlist = playersdata.filter(el => el.role === "ww");
+    let littlelist =[];
     // show list of ww
     $(roletag).append("<h3 class='nightinfo'>以下玩家是狼人:</h3>");
     for (let i = 0; i < wwlist.length; i++) {
         let wwname = wwlist[i]["playname"];
-        $(roletag).append(`<h3 class='nightinfo'>${wwname} (狼人)</h3>`);
+        let wwstate = wwlist[i]["alive"];
+        if (wwstate === 1) {
+            $(roletag).append(`<h3 class='nightinfo'>${wwname} (狼人)</h3>`);
+            littlelist.push(wwname);
+        } else {
+            $(roletag).append(`<h3 class='nightinfo deadww'>${wwname} (狼人)(已死)</h3>`);
+        }
     }
     if (nightcount != 0) {
+        if (littlelist.length > 1) {
+            $(roletag).append("<button class='nightinfo wwrule btn btn-info' onclick='wwrule()'>RULE</button><br>");
+        }
         $(roletag).append("<h1 class='nightinfo'>請選擇你想咬殺的人</h1>");
-        $(roletag).append("<button class='nightinfo wwrule btn btn-info' onclick='wwrule()'>RULE</button>");
         $(roletag).append("<select id='tempww' class='nightinfo ntsec'></select>");
         $("#tempww").append(`<option class='nightinfo' selected disabled value="null">請選擇</option>`);
         let ttlist = playersdata.filter(el => el.role !== "ww");
@@ -560,7 +569,7 @@ function showww(roletag) {
     }
 }
 function wwrule() {
-    showdialog("若存活狼人多於一人,較多狼人選擇的對象為最終目標,票數相同則隨機一人");
+    showdialog("每晚最多只有一人被狼人襲擊,其為較多狼人選擇的對象,同票數則在最高票數當中隨機選擇一人");
 }
 // no power
 function showno(roletag) {

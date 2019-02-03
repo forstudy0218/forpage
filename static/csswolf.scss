@@ -147,6 +147,9 @@ body {
     @extend %decriptionbox;
     border: thick solid purple;
 }
+.wwdead {
+    text-decoration: line-through;
+}
 .wwrule {
     position: absolute;
     right: 5%;
