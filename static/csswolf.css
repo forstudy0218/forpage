@@ -1,23 +1,20 @@
 body {
   background-color: lightgrey; }
 
+#pausection {
+  background-color: Blue;
+  text-align: center; }
+
 .backtohome {
   display: none;
   margin-right: 20vw; }
-
-#pausection {
-  background-color: Blue; }
 
 .backtolist {
   display: none;
   margin-left: 17vw; }
 
 .pausebtn {
-  display: inline-block;
-  margin: 0px auto; }
-
-.notpaused {
-  margin: 0px 39vw; }
+  display: inline-block; }
 
 #bootstrapfour {
   display: none;

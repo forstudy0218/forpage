@@ -2,15 +2,17 @@
 body {
     background-color: lightgrey;
 }
+// pause button section
+#pausection {
+    background-color: Blue;
+    text-align: center;
+}
 // base home button
 .backtohome {
     display: none;
     margin-right: 20vw;
 }
 // base back to list button
-#pausection {
-    background-color: Blue;
-}
 .backtolist {
     display: none;
     margin-left: 17vw;
@@ -18,11 +20,9 @@ body {
 // base pause button
 .pausebtn {
     display: inline-block;
-    margin: 0px auto;
 }
 // not paused
 .notpaused {
-    margin: 0px 39vw;
 }
 // base thank
 #bootstrapfour {
