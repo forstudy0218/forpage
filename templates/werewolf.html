@@ -50,6 +50,9 @@
         <span style="margin-left: 30vw;">
           同票處決  <select id="samevote"><option value="1">隨機</option><option value="0">失效</option></select>
         </span><br>
+        <span style="margin-left: 30vw;">
+          跳過確認  <select id="skipcheck"><option value="0">否</option><option value="1">是</option></select>
+        </span><br>
         <button id="startgame" class="gbtn btn btn-success" onclick="startgame()">開始</button>
       </div>
       <!-- phase one/roles confirmation -->
@@ -160,17 +163,20 @@
             <div class="row justify-content-center gegrid" id="deadgg"></div>
         </div>
       </div>
-      <!-- back to list -->
-      <button class="btn btn-primary backtolist" onclick="backplaylist()" disabled>結束遊戲</button>
-      <!-- back to home -->
-      <a href="/" class="btn btn-primary backtohome">HOME</a>
-      <!-- pause -->
-      <button class="btn btn-warning pausebtn" onclick="pauseww()">暫停</button>
-      <!-- THANKS -->
-      <span id="bootstrapfour">Supported by bootstrap 4</span>
+      <div id="pausection" class="container">
+        <!-- THANKS -->
+        <span id="bootstrapfour">Supported by bootstrap 4</span><br>
+        <!-- back to home -->
+        <a href="/" class="btn btn-primary backtohome">HOME</a>
+        <!-- pause -->
+        <button class="btn btn-warning pausebtn notpaused" onclick="pauseww()">暫停</button>
+        <!-- back to list -->
+        <button class="btn btn-primary backtolist" onclick="backplaylist()" disabled>結束遊戲</button>
+      </div>
   </body>
   <!-- html5 dialog for pop-up -->
   <dialog id="favDialog">
+    <span id="messagezone"></span>
     <form method="dialog"><menu><button class="btn btn-success" onclick="dellog()">確認</button></menu></form>
   </dialog>
 </html>

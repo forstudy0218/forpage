@@ -4,29 +4,28 @@ body {
 }
 // base home button
 .backtohome {
-    position: absolute;
-    bottom: 0;
-    left: 0;
     display: none;
+    margin-right: 20vw;
 }
 // base back to list button
+#pausection {
+    background-color: Blue;
+}
 .backtolist {
-    position: absolute;
-    bottom: 0;
-    right: 0;
     display: none;
+    margin-left: 17vw;
 }
 // base pause button
 .pausebtn {
-    position: absolute;
-    bottom: 0;
-    right: 48vw;
+    display: inline-block;
+    margin: 0px auto;
+}
+// not paused
+.notpaused {
+    margin: 0px 39vw;
 }
 // base thank
 #bootstrapfour {
-    position: absolute;
-    bottom: 40px;
-    left: 0;
     display: none;
     color: deeppink;
     font-style: italic;
@@ -47,7 +46,7 @@ body {
 // base container attr
 %phasecontain {
     width: 100vw;
-    height: 100vh;
+    height: 90vh;
     display: none;
 }
 #creation {
@@ -161,8 +160,9 @@ body {
 }
 .ntstop, .ckstop {
     display: none;
-    margin-left: 30vw;
-    margin-top: 10vw;
+    margin-left: 39vw;
+    margin-top: 40vh;
+    margin-bottom: 46vh;
 }
 .ntstop {
     color: gold;

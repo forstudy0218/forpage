@@ -334,11 +334,16 @@ function shuffle(array) {
 
 function starting() {
     showdialog("Game Start!");
-    localStorage.setItem('gamephase', "1");
-    // make everything unseen and disable
-    rezero();
-    // start role confirmation
-    checkrole(rolecon);
+    let setskip = Number($("#skipcheck").val());
+    if (setskip === 0) {
+        localStorage.setItem('gamephase', "1");
+        // make everything unseen and disable
+        rezero();
+        // start role confirmation
+        checkrole(rolecon);
+    } else if (setskip === 1) {
+        night();
+    }
 }
 
 function checkrole(pos) {
@@ -1067,10 +1072,12 @@ function pauseww() {
         $(".backtolist").prop("disabled", false);
         $(".ckstop").prop("disabled", true);
         $(".ntstop").prop("disabled", true);
-        $(".backtolist").css("display", "block");
-        $(".backtohome").css("display", "block");
+        $(".backtolist").css("display", "initial");
+        $(".backtohome").css("display", "initial");
         showdialog("暫停中");
+        $( ".pausebtn" ).removeClass( "notpaused" ).addClass( "pausedb" );
         $("body div").css("visibility", "collapse");
+        $("#pausection").css("visibility", "visible");
         $("#bootstrapfour").css("display", "inline-block");
     } else {
         $(".backtolist").prop("disabled", true);
@@ -1082,6 +1089,7 @@ function pauseww() {
         }
         $(".backtolist").css("display", "none");
         $(".backtohome").css("display", "none");
+        $( ".pausebtn" ).removeClass( "pausedb" ).addClass( "notpaused" );
         $("body div").css("visibility", "visible");
         $("#bootstrapfour").css("display", "none");
     }
@@ -1089,7 +1097,7 @@ function pauseww() {
 
 // introduce dialog
 function showdialog(purestring) {
-    $("#favDialog").prepend(`<p class="dialogtext">${purestring}</p>`);
+    $("#messagezone").append(`<p class="dialogtext">${purestring}</p>`);
     if (!$("#favDialog")[0].open) {
         $("#favDialog")[0].showModal();
     }
