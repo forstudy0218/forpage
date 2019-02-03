@@ -1,6 +1,6 @@
 // global variables
 let gbv = {
-    debug: true,
+    debug: false,
     state: {
         players: [], // players
         // game state
@@ -82,6 +82,8 @@ function changebody() {
         document.body.className = 'night';
     } else if (bodystage === 2) {
         document.body.className = 'day';
+    } else if (gbv.state.gamestate.phase === 3) {
+        document.body.className = 'win';
     } else {
         document.body.className = 'home';
     }
@@ -269,6 +271,9 @@ var pausebtns = new Vue ({
             this.paused = false;
             popmodal.showmessage("Notification", "Game restarted.", "", "Blue");
         },
+        toggleDebbug: function() {
+            gbv.debug = (gbv.debug) ? false : true;
+        }
     },
 });
 
@@ -322,16 +327,17 @@ var gamesetting = new Vue({
     data: {
         shared: gbv,
         roleset: [
-            {name: "Villager", selid: 0, short: "ve"},
-            {name: "Fortuneteller", selid: 0, short: "ft"},
-            {name: "Hunter", selid: 0, short: "ht"},
-            {name: "Medium", selid: 0, short: "md"},
-            {name: "Werewolf", selid: 0, short: "ww"},
-            {name: "Madman", selid: 0, short: "mm"},
-            {name: "Spirit-Fox", selid: 0, short: "sf"}
+            {name: "Villager", selid: 0, short: "ve", faction: "Good"},
+            {name: "Fortuneteller", selid: 0, short: "ft", faction: "Good"},
+            {name: "Hunter", selid: 0, short: "ht", faction: "Good"},
+            {name: "Medium", selid: 0, short: "md", faction: "Good"},
+            {name: "Werewolf", selid: 0, short: "ww", faction: "Evil"},
+            {name: "Madman", selid: 0, short: "mm", faction: "Evil"},
+            {name: "Spirit-Fox", selid: 0, short: "sf", faction: "Spirit-Fox"}
         ],
         styleSetNum: {},
         voteset: "",
+        skipCheck: false,
     },
     methods: {
         startGame: function() {
@@ -362,7 +368,9 @@ var gamesetting = new Vue({
                 } else {
                     this.shared.setGamestate ("voteset", Number(this.voteset));
                     this.shared.setGamestate ("phase", 2);
-                    this.shared.setGamestate ("playstage", 0);
+                    let skipchoose = (this.skipCheck) ? 1 : 0;
+                    this.shared.setGamestate ("playstage", skipchoose);
+                    changebody();
                 }
             }
         },
@@ -468,32 +476,10 @@ Vue.component('info-mm', {
     },
 });
 
-// background color
-// this function should define first
-function getBackColor() {
-    let backcolorstr;
-    let fontcolorstr;
-    if (gbv.state.gamestate.playstage === 0) {
-        backcolorstr = "white";
-        fontcolorstr = "black";
-    } else if (gbv.state.gamestate.playstage === 1) {
-        backcolorstr = "black";
-        fontcolorstr = "yellow";
-    } else if (gbv.state.gamestate.playstage === 3) {
-        backcolorstr = "silver";
-        fontcolorstr = "black";
-    }
-    return {
-        "background-color": backcolorstr,
-        "color": fontcolorstr,
-    };
-}
-
 var controlcentre = new Vue({
     el: '#maincontrol',
     data: () => ({
         shared: gbv,
-        pageBack: getBackColor(), // cannot use getBackColor until whole vue render, and it will let vue not render.
         toggled: false,
         playername: "",
         idConfirmed: false,
@@ -581,7 +567,7 @@ var controlcentre = new Vue({
             // ft, ht, md, ww have action, sf, mm, ve have none
             if (rolestr === "ft") {
                 this.firstnotice = "Check one player each night.";
-                this.rolenotice = "Choose one to see whether he/she is Werewolf.";
+                this.rolenotice = "Choose one to see whether he/she is Werewolf. Spirit-Fox would die if chosen.";
                 ttlist = ttlist.filter(el => el.playname !== this.playername);
             } else if (rolestr === "ht") {
                 this.firstnotice = "Protect one from Werewolf attack";
@@ -600,7 +586,7 @@ var controlcentre = new Vue({
                         if (hangedrole === "ww") {
                             this.firstnotice = "Last exile " + hangname + " was Werewolf!";
                         } else {
-                            this.firstnotice = "Last exile " + hangname + "was not Werewolf";
+                            this.firstnotice = "Last exile " + hangname + " was not Werewolf";
                         }
                     } else {
                         this.firstnotice = "No exile today.";
@@ -610,12 +596,7 @@ var controlcentre = new Vue({
                 }
                 this.rolenotice = "Choose anyone.";
             } else if (rolestr === "ww") {
-                let wwlist = this.shared.state.players.filter(el => el.role === "ww");
-                let wwnotice = "Werewolf player(s): ";
-                for (let i = 0; i < wwlist.length; i++) {
-                    wwnotice += wwlist[i]["playname"] + "/";
-                }
-                this.firstnotice = wwnotice.slice(0, -1);
+                this.firstnotice = "Werewolf player(s): ";
                 if (this.shared.state.gamestate.nightcount === 0) {
                     this.rolenotice = "Can't attack on the first night. Choose anyone.";
                 } else {
@@ -644,10 +625,10 @@ var controlcentre = new Vue({
                 } else if (ttrole === "sf") {
                     this.nightdead.push(ttnm);
                     bodymessage = ttnm + " is NOT Werewolf.";
-                    popmodal.showmessage("Result", bodymessage, "Good luck next time.", "Green");
+                    popmodal.showmessage("Result", bodymessage, "Target would die if role is Spirit-Fox.", "Green");
                 } else {
                     bodymessage = ttnm + " is NOT Werewolf.";
-                    popmodal.showmessage("Result", bodymessage, "Good luck next time.", "Green");
+                    popmodal.showmessage("Result", bodymessage, "Target would die if role is Spirit-Fox.", "Green");
                 }
             } else if (rolestr === "ht") {
                 if (this.shared.state.gamestate.nightcount === 0) {
@@ -662,9 +643,10 @@ var controlcentre = new Vue({
                     popmodal.showmessage("Sleeping", "Waiting for next day.", "ZzZzzZ...", "Green");
                 } else {
                     this.nightww.push(ttnm);
-                    bodymessage = ttnm + " would be your target.";
-                    let footmessage = "If other Werewolf choose another target, your target might not be attacked this night.";
-                    popmodal.showmessage("Done", bodymessage, footmessage, "Green");
+                    let wwtitle = "Your target is " + ttnm + ".";
+                    let footermessage = "Wish the target is not protected by Hunter or Spirit-Fox.";
+                    bodymessage = "If other Werewolf alive choose another target, your target might not be attacked this night.";
+                    popmodal.showmessage(wwtitle, bodymessage, footermessage, "Green");
                 }
             } else {
                 popmodal.showmessage("Sleeping", "Waiting for next day.", "ZzZzzZ...", "Green");
@@ -715,7 +697,7 @@ var controlcentre = new Vue({
             this.shared.setGamestate ("playstage", 2);
         },
         wwRule: function() {
-            let rule = "If more than one Werewolf alive, the most chosen one would be attacked.";
+            let rule = "If Werewolfs do not choose the same target, only one of the most chosen target(s) would be attacked.";
             popmodal.showmessage("Rule for Werewolf attack", rule, "Spirit-Fox would survive this attack.", "Green");
         },
         voteInfo: function(namestr) {
@@ -729,6 +711,7 @@ var controlcentre = new Vue({
         calVote: function() {
             // calcute vote and execcute
             // https://stackoverflow.com/questions/5667888
+             this.dayvotelist.sort();
             for (let i = 0; i < this.dayvotelist.length; i++) {
                 let vtname = this.dayvotelist[i];
                 this.voteresultdict[vtname] = (this.voteresultdict[vtname] || 0) + 1;
@@ -775,11 +758,52 @@ var controlcentre = new Vue({
                 return;
             }
         },
+        Val: function(namestr) {
+            let thisdata = this.shared.state.players.filter(el => el.playname === namestr)[0];
+            let longcon = ((this.shared.state.gamestate.playstage !== 0) && (this.checkedList.includes(thisdata.playname)));
+            return ((thisdata.alive === 0) || (this.isChecking) || (this.isStageEnd) || longcon);
+        },
+        getCls: function(namestr) {
+            if ((this.shared.state.gamestate.playstage === 0) && (this.checkedList.includes(namestr))) {
+                return "btn btn-success";
+            } else {
+            return "btn btn-warning";
+            }
+        },
     },
     computed: {
         findRoleTab: function() {
             return 'info-' + this.playrole;
         },
+        getBackColor: function() {
+            // background color
+            // this function should define first
+            let backcolorstr;
+            let fontcolorstr;
+            if (gbv.state.gamestate.playstage === 0) {
+                backcolorstr = "white";
+                fontcolorstr = "black";
+            } else if (gbv.state.gamestate.playstage === 1) {
+                backcolorstr = "black";
+                fontcolorstr = "yellow";
+            } else if (gbv.state.gamestate.playstage === 3) {
+                backcolorstr = "silver";
+                fontcolorstr = "black";
+            }
+            return {
+                "background-color": backcolorstr,
+                "color": fontcolorstr,
+            };
+        },
+        getWWList: function() {
+            // list of ww player(s)
+            let res = this.shared.state.players.filter(el => el.role === "ww");
+            return res;
+        },
+        wwAlive : function() {
+            let wwalive = this.shared.state.players.filter(el => ((el.role === "ww") && (el.alive === 1)));
+            return (wwalive.length > 1);
+        }
     }
 });
 
@@ -788,6 +812,25 @@ var gamresult = new Vue ({
     el: '#winresult',
     data: {
         shared: gbv,
+    },
+    methods: {
+        calList: function(listForCal) {
+            let tempdict = {};
+            let rolelist = gamesetting.roleset;
+            for (let i = 0; i < listForCal.length; i++) {
+                let playnm = listForCal[i]["playname"];
+                let roleshort = listForCal[i]["role"];
+                let rolenm;
+                for (let j = 0; j < rolelist.length; j++) {
+                    if (rolelist[j]["short"] === roleshort) {
+                        rolenm = rolelist[j]["name"];
+                        break;
+                    }
+                }
+                tempdict[playnm] = rolenm
+            }
+            return tempdict;
+        },
     },
     computed: {
         getTitle: function () {
@@ -816,40 +859,12 @@ var gamresult = new Vue ({
             }
         },
         getAlive: function() {
-            let tempdict = {};
             let alives = this.shared.state.players.filter(el => el.alive === 1);
-            let rolelist = gamesetting.roleset;
-            for (let i = 0; i < alives.length; i++) {
-                let playnm = alives[i]["playname"];
-                let roleshort = alives[i]["role"];
-                let rolenm;
-                for (let j = 0; j < rolelist.length; j++) {
-                    if (rolelist[j]["short"] === roleshort) {
-                        rolenm = rolelist[j]["name"];
-                        break;
-                    }
-                }
-                tempdict[playnm] = rolenm
-            }
-            return tempdict;
+            return this.calList(alives);
         },
         getDie: function() {
-            let tempdict = {};
             let dies = this.shared.state.players.filter(el => el.alive === 0);
-            let rolelist = gamesetting.roleset;
-            for (let i = 0; i < dies.length; i++) {
-                let playnm = dies[i]["playname"];
-                let roleshort = dies[i]["role"];
-                let rolenm;
-                for (let j = 0; j < rolelist.length; j++) {
-                    if (rolelist[j]["short"] === roleshort) {
-                        rolenm = rolelist[j]["name"];
-                        break;
-                    }
-                }
-                tempdict[playnm] = rolenm
-            }
-            return tempdict;
+            return this.calList(dies);
         },
     },
 });
