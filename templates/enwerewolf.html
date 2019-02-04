@@ -198,13 +198,17 @@
         <span class="getext">Players alive</span>
         <div class="container" style="padding: 3px;">
             <div class="row justify-content-center gegrid" id="alivegg">
-              <div class="endali col-7 col-lg-3" v-for="(value, key) in getAlive">{{ key }} ({{ value }})</div>
+              <div class="endali col-7 col-lg-3" v-for="(value, key) in getAlive" :class="value.class">
+                {{ key }} ({{ value.long }})
+              </div>
             </div>
         </div>
         <span class="getext">Players dead</span>
         <div class="container" style="padding: 3px;">
             <div class="row justify-content-center gegrid" id="deadgg">
-              <div class="enddie col-7 col-lg-3" v-for="(value, key) in getDie">{{ key }} ({{ value }})</div>
+              <div class="enddie col-7 col-lg-3" v-for="(value, key) in getDie" :class="value.class">
+                {{ key }} ({{ value.long }})
+              </div>
             </div>
         </div>
         {%- endraw %}

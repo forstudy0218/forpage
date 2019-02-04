@@ -241,17 +241,26 @@ em {
   margin: 3px; }
 
 .endali, .enddie {
-  margin-bottom: 20px; }
+  margin-bottom: 15px; }
 
 .endali {
   border: double Gold;
   background-color: black;
-  font-weight: bold;
-  color: yellow; }
+  font-weight: bold; }
 
 .enddie {
   border: solid silver;
   background-color: lightgray;
-  font-style: italic; }
+  font-style: italic;
+  opacity: 0.7; }
+
+.Good_end {
+  color: Green; }
+
+.Evil_end {
+  color: Red; }
+
+.Spirit-Fox_end {
+  color: #9d33ac; }
 
 /*# sourceMappingURL=enwolfcss.css.map */

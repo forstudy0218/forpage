@@ -1,6 +1,6 @@
 // global variables
 let gbv = {
-    debug: false,
+    debug: true,
     state: {
         players: [], // players
         // game state
@@ -817,19 +817,23 @@ var gamresult = new Vue ({
     },
     methods: {
         calList: function(listForCal) {
+            // tempdict: {playname: {rolename: namestr, faction: factionstr}, }
             let tempdict = {};
             let rolelist = gamesetting.roleset;
             for (let i = 0; i < listForCal.length; i++) {
                 let playnm = listForCal[i]["playname"];
                 let roleshort = listForCal[i]["role"];
                 let rolenm;
+                let factionstr = "_end";
                 for (let j = 0; j < rolelist.length; j++) {
                     if (rolelist[j]["short"] === roleshort) {
+                        factionstr = rolelist[j]["faction"] + factionstr;
                         rolenm = rolelist[j]["name"];
                         break;
                     }
                 }
-                tempdict[playnm] = rolenm;
+                let eachdict = {"long": rolenm, "class": factionstr};
+                tempdict[playnm] = eachdict;
             }
             return tempdict;
         },
@@ -839,7 +843,7 @@ var gamresult = new Vue ({
             if (this.shared.state.gamestate.winside === 1) {
                 return {
                     text: "Good Faction Win",
-                    color: "silver",
+                    color: "green",
                 };
             } else if (this.shared.state.gamestate.winside === 2) {
                 return {
