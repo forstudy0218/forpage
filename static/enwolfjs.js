@@ -8,6 +8,7 @@ let gbv = {
             phase: 0,
             voteset: 1,
             winside: 0,
+            // put everything should not be reset on Stage Change here.
             playstage: 0,
             nightcount: 0,
             lasthang: "",
@@ -412,69 +413,21 @@ var gamesetting = new Vue({
 // vue component for role info.
 // ft, ht, md, ww, ve, sf, mm
 // use props for v-if in component templates
-Vue.component('info-ft', {
-    template: '#ftinfo',
-    props: {
+let shortlist = ['ft', 'ht', 'md', 'ww', 've', 'sf', 'mm'];
+for (let i = 0; i < shortlist.length; i++) {
+    let component_id = 'info-' + shortlist[i];
+    let template_id = '#' + shortlist[i] + 'info';
+    let props_dict = {
         stage0: {
             type: Boolean,
             default: false,
         }
-    },
-});
-Vue.component('info-ht', {
-    template: '#htinfo',
-    props: {
-        stage0: {
-            type: Boolean,
-            default: false,
-        }
-    },
-});
-Vue.component('info-md', {
-    template: '#mdinfo',
-    props: {
-        stage0: {
-            type: Boolean,
-            default: false,
-        }
-    },
-});
-Vue.component('info-ww', {
-    template: '#wwinfo',
-    props: {
-        stage0: {
-            type: Boolean,
-            default: false,
-        }
-    },
-});
-Vue.component('info-ve', {
-    template: '#veinfo',
-    props: {
-        stage0: {
-            type: Boolean,
-            default: false,
-        }
-    },
-});
-Vue.component('info-sf', {
-    template: '#sfinfo',
-    props: {
-        stage0: {
-            type: Boolean,
-            default: false,
-        }
-    },
-});
-Vue.component('info-mm', {
-    template: '#mminfo',
-    props: {
-        stage0: {
-            type: Boolean,
-            default: false,
-        }
-    },
-});
+    };
+    Vue.component(component_id, {
+        template: template_id,
+        props: props_dict,
+    });
+}
 
 var controlcentre = new Vue({
     el: '#maincontrol',
@@ -517,18 +470,18 @@ var controlcentre = new Vue({
             this.toggled = false;
             this.idConfirmed = true;
             this.isChecking = true;
-            if (this.shared.state.gamestate.playstage === 1) {
+            if (this.playstageCheck === 1) {
                 this.nightInfo(this.playrole);
-            } else if (this.shared.state.gamestate.playstage === 2) {
+            } else if (this.playstageCheck === 2) {
                 this.voteInfo(this.playername);
             }
         },
         confirmRole: function() {
-            if (this.shared.state.gamestate.playstage === 0) {
+            if (this.playstageCheck === 0) {
                 popmodal.showmessage(this.playername, "Confirmed", "If stage not end, next player please.", "Green");
-            } else if (this.shared.state.gamestate.playstage === 1) {
+            } else if (this.playstageCheck === 1) {
                 this.nightAct(this.playrole);
-            } else if (this.shared.state.gamestate.playstage === 2) {
+            } else if (this.playstageCheck === 2) {
                 this.pushSave("dayvotelist", this.actTarget);
                 popmodal.showmessage("You voted.", "Below is who you voted.", this.actTarget, "Green");
                 this.actTarget = "";
@@ -541,7 +494,7 @@ var controlcentre = new Vue({
                 let alivelist = this.shared.state.players.filter(el => el.alive === 1);
                 if (this.saved.checkedList.length === alivelist.length) {
                     this.changeSave("isStageEnd", true);
-                    if (this.shared.state.gamestate.playstage === 2) {
+                    if (this.playstageCheck === 2) {
                         this.calVote();
                     }
                 }
@@ -549,11 +502,11 @@ var controlcentre = new Vue({
         },
         endButton: function() {
             this.changeSave("isStageEnd", false);
-            if (this.shared.state.gamestate.playstage === 0) {
+            if (this.playstageCheck === 0) {
                 this.checkEnd();
-            } else if (this.shared.state.gamestate.playstage === 1) {
+            } else if (this.playstageCheck === 1) {
                 this.nightEnd();
-            } else if (this.shared.state.gamestate.playstage === 2) {
+            } else if (this.playstageCheck === 2) {
                 this.dayEnd();
             }
             this.resetData();
@@ -765,11 +718,11 @@ var controlcentre = new Vue({
         },
         Val: function(namestr) {
             let thisdata = this.shared.state.players.filter(el => el.playname === namestr)[0];
-            let longcon = ((this.shared.state.gamestate.playstage !== 0) && (this.saved.checkedList.includes(thisdata.playname)));
+            let longcon = ((this.playstageCheck !== 0) && (this.saved.checkedList.includes(thisdata.playname)));
             return ((thisdata.alive === 0) || (this.isChecking) || (this.saved.isStageEnd) || longcon);
         },
         getCls: function(namestr) {
-            if ((this.shared.state.gamestate.playstage === 0) && (this.saved.checkedList.includes(namestr))) {
+            if ((this.playstageCheck === 0) && (this.saved.checkedList.includes(namestr))) {
                 return "btn btn-success";
             } else {
             return "btn btn-warning";
@@ -812,7 +765,6 @@ var controlcentre = new Vue({
         },
         getBackColor: function() {
             // background color
-            // this function should define first
             let backcolorstr;
             let fontcolorstr;
             if (gbv.state.gamestate.playstage === 0) {
@@ -835,9 +787,15 @@ var controlcentre = new Vue({
             let res = this.shared.state.players.filter(el => el.role === "ww");
             return res;
         },
-        wwAlive : function() {
+        wwAlive: function() {
             let wwalive = this.shared.state.players.filter(el => ((el.role === "ww") && (el.alive === 1)));
-            return (wwalive.length > 1);
+            return ((wwalive.length > 1) && (this.shared.state.gamestate.nightcount !== 0));
+        },
+        validConfirm: function() {
+            return ((this.playstageCheck !== 0) && (this.actTarget === ''));
+        },
+        playstageCheck: function() {
+            return this.shared.state.gamestate.playstage;
         }
     },
     mounted() {

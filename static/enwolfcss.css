@@ -1,6 +1,6 @@
 body {
-  font-family: 'Indie Flower', cursive;
-}
+  font-family: 'Indie Flower', cursive; }
+
 body.home {
   background-color: lightgrey; }
 
@@ -239,6 +239,9 @@ em {
 
 .gegrid {
   margin: 3px; }
+
+.endali, .enddie {
+  margin-bottom: 20px; }
 
 .endali {
   border: double Gold;

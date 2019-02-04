@@ -275,13 +275,18 @@ em {
 .gegrid {
   margin: 3px;
 }
+%endgamelist {
+  margin-bottom: 20px;
+}
 .endali {
+  @extend %endgamelist;
   border: double Gold;
   background-color: black;
   font-weight: bold;
   color: yellow;
 }
 .enddie {
+  @extend %endgamelist;
   border: solid silver;
   background-color: lightgray;
   font-style: italic;

@@ -140,22 +140,22 @@
           <div id="controlpage" :style="getBackColor">
             <template v-if="toggled">
               <h1>{% raw -%}{{ playername }}</h1>
-              <template v-if="shared.state.gamestate.playstage === 2">
+              <template v-if="playstageCheck === 2">
                 <h4>Show My Role</h4>
                 <button class="btn btn-info" @click="popThisRole">Press to show</button>
                 <br><br>
               </template>
-              <h4 v-if="shared.state.gamestate.playstage === 0">Please confirm your role.</h4>
-              <h4 v-else-if="shared.state.gamestate.playstage === 1">Night</h4>
-              <h4 v-else-if="shared.state.gamestate.playstage === 2">Daytime Vote</h4>
+              <h4 v-if="playstageCheck === 0">Please confirm your role.</h4>
+              <h4 v-else-if="playstageCheck === 1">Night</h4>
+              <h4 v-else-if="playstageCheck === 2">Daytime Vote</h4>
               <button class="btn btn-primary" @click="confirmId">I am {{ playername }}{%- endraw %}</button>
             </template>
             <template v-if="idConfirmed">
-              <component v-if="shared.state.gamestate.playstage === 0" :is="findRoleTab" class="animated" stage0></component>
-              <component v-else-if="shared.state.gamestate.playstage === 1" :is="findRoleTab"></component>
+              <component v-if="playstageCheck === 0" :is="findRoleTab" class="animated" stage0></component>
+              <component v-else-if="playstageCheck === 1" :is="findRoleTab"></component>
               <br>
               <h3>{% raw -%}{{ playername }}{%- endraw %}</h3>
-              <template v-if="shared.state.gamestate.playstage === 1">
+              <template v-if="playstageCheck === 1">
                 <h4>{% raw -%}{{ firstnotice }}{%- endraw %}</h4>
                 <template v-if="playrole === 'ww'">
                   <button @click="wwRule" class="btn btn-info" id="wwrule" v-if="wwAlive">RULE</button>
@@ -167,18 +167,17 @@
                 </template>
                 <h4>{% raw -%}{{ rolenotice }}{%- endraw %}</h4>
               </template>
-              <h1 style="color: Red;" v-if="shared.state.gamestate.playstage === 2">Choose the one you want to exile</h1>
-              <template v-if="shared.state.gamestate.playstage !== 0">
+              <h1 style="color: Red;" v-if="playstageCheck === 2">Choose the one you want to exile</h1>
+              <template v-if="playstageCheck !== 0">
                 <select v-model="actTarget">
                   <option selected disabled :value="null">Please choose</option>
                   <option v-for="name in targetList">{% raw -%}{{ name }} {%- endraw %}</option>
                 </select>
                 <br><br>
               </template>
-              <button class="btn btn-success" @click="confirmRole"
-              :disabled="((shared.state.gamestate.playstage !== 0) && (actTarget === ''))">Confirm</button>
+              <button class="btn btn-success" @click="confirmRole" :disabled="validConfirm">Confirm</button>
             </template>
-            <template v-if="((saved.isStageEnd) && (shared.state.gamestate.playstage === 2))">
+            <template v-if="((saved.isStageEnd) && (playstageCheck === 2))">
               <h3>Vote Result</h3>
               <ul style="list-style: none;">
                 <li v-for="(value, key) in saved.voteresultdict">{% raw -%}{{ key }}: {{ value }}{%- endraw %}</li>
@@ -199,13 +198,13 @@
         <span class="getext">Players alive</span>
         <div class="container" style="padding: 3px;">
             <div class="row justify-content-center gegrid" id="alivegg">
-              <div class="endali col-5 col-lg-3" v-for="(value, key) in getAlive">{{ key }} ({{ value }})</div>
+              <div class="endali col-7 col-lg-3" v-for="(value, key) in getAlive">{{ key }} ({{ value }})</div>
             </div>
         </div>
         <span class="getext">Players dead</span>
         <div class="container" style="padding: 3px;">
             <div class="row justify-content-center gegrid" id="deadgg">
-              <div class="enddie col-5 col-lg-3" v-for="(value, key) in getDie">{{ key }} ({{ value }})</div>
+              <div class="enddie col-7 col-lg-3" v-for="(value, key) in getDie">{{ key }} ({{ value }})</div>
             </div>
         </div>
         {%- endraw %}
