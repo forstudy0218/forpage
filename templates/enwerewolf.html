@@ -143,6 +143,7 @@
               <template v-if="shared.state.gamestate.playstage === 2">
                 <h4>Show My Role</h4>
                 <button class="btn btn-info" @click="popThisRole">Press to show</button>
+                <br><br>
               </template>
               <h4 v-if="shared.state.gamestate.playstage === 0">Please confirm your role.</h4>
               <h4 v-else-if="shared.state.gamestate.playstage === 1">Night</h4>
@@ -165,13 +166,9 @@
                   </ul>
                 </template>
                 <h4>{% raw -%}{{ rolenotice }}{%- endraw %}</h4>
-                <select v-model="actTarget">
-                  <option selected disabled :value="null">Please choose</option>
-                  <option v-for="name in targetList">{% raw -%}{{ name }} {%- endraw %}</option>
-                </select>
               </template>
-              <template v-else-if="shared.state.gamestate.playstage === 2">
-                <h1 style="color: Red;">Choose the one you want to exile</h1>
+              <h1 style="color: Red;" v-if="shared.state.gamestate.playstage === 2">Choose the one you want to exile</h1>
+              <template v-if="shared.state.gamestate.playstage !== 0">
                 <select v-model="actTarget">
                   <option selected disabled :value="null">Please choose</option>
                   <option v-for="name in targetList">{% raw -%}{{ name }} {%- endraw %}</option>

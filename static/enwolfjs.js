@@ -871,7 +871,7 @@ var gamresult = new Vue ({
                         break;
                     }
                 }
-                tempdict[playnm] = rolenm
+                tempdict[playnm] = rolenm;
             }
             return tempdict;
         },
