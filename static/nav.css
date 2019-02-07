@@ -113,6 +113,7 @@ hide-div-element-when-screen-size-is-smaller-than-a-specific-size */
 #pasted {
   width: 90vw;
   height: 90vh;
+  margin-left: -10vw;
 }
 
 /* from ps://v4-alpha.getbootstrap.com/examples/sticky-footer-navbar/sticky-footer-navbar.css*/
