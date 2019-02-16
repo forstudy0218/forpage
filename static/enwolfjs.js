@@ -1,6 +1,6 @@
 // global variables
 let gbv = {
-    debug: true,
+    debug: false,
     state: {
         players: [], // players
         // game state
