@@ -417,7 +417,7 @@ function calrec(difficulty, minute) {
         recstorage = "normrec"
     } else if (difficulty === 50) {
         // hard
-        recstorage = "hardrec" + i;
+        recstorage = "hardrec";
     } else if (difficulty > 50) {
         // ex
         recstorage = "exrec";

@@ -1,6 +1,6 @@
 // global variables
 let gbv = {
-    debug: false,
+    debug: true,
     state: {
         players: [], // players
         // game state
@@ -723,10 +723,7 @@ var controlcentre = new Vue({
             // calcute vote and execcute
             // https://stackoverflow.com/questions/5667888
             this.saved.dayvotelist.sort();
-            for (let i = 0; i < this.saved.dayvotelist.length; i++) {
-                let vtname = this.saved.dayvotelist[i];
-                this.dictSave("voteresultdict", vtname);
-            }
+            this.dictSave(this.saved.dayvotelist);
             let alivelist = this.shared.state.players.filter(el => el.alive === 1);
             let targetnm;
             if ( this.shared.state.gamestate.voteset === 0) {
@@ -809,9 +806,13 @@ var controlcentre = new Vue({
             this.saved[listname].push(newValue);
             this.saveData();
         },
-        dictSave: function(dictname, keyname) {
-            if (this.shared.debug) console.log(dictname, keyname, "plus 1.");
-            this.saved[dictname][keyname] = (this.saved[dictname][keyname] || 0) + 1;//
+        dictSave: function(listname) {
+            // using .reduce() 15/2/2019
+            if (this.shared.debug) console.log("Counting ", listname);
+            this.saved.voteresultdict = listname.reduce(function(allName, name) {
+                allName[name] = (allName[name] || 0) + 1;
+                return allName;
+            }, {});
             this.saveData();
         },
         saveData: function() {
