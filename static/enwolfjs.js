@@ -1,6 +1,6 @@
 // global variables
 let gbv = {
-    debug: false,
+    debug: true,
     state: {
         players: [], // players
         // game state
@@ -121,66 +121,33 @@ function shuffle(array) {
   return array;
 }
 
-// vote count; return most vote name in a possible list
-// same vote random kill
-function countvoteran(votelist, poslist) {
-    let countlist = [];
-    for (let i = 0; i < poslist.length; i++) {
-        let votename = poslist[i]["playname"];
-        let icount = 0;
-        for (let j = 0; j < votelist.length; j++) {
-            if (votelist[j] === votename) {
-                icount++;
-            }
-        }
-        countlist.push(icount);
+// vote count; return most vote name
+// dict ver.
+function countdict(votedict, randomExe) {
+    const keys = Object.keys(votedict); // get all name
+    let countlist = []; // list for max
+    let curMax = 0;
+    for (let i = 0; i < keys.length; i++) {
+		const key = keys[i];
+		if (votedict[key] > curMax) {
+		    curMax = votedict[key];
+		    countlist = [key];
+		} else if (votedict[key] === curMax) {
+		    countlist.push(key);
+		}
     }
-    let mostpos = [];
-    let votecount = 0;
-    for (let k = 0; k < countlist.length; k++) {
-        if (countlist[k] > votecount) {
-            mostpos = [];
-            votecount = countlist[k];
-            mostpos.push(k);
-        } else if (countlist[k] === votecount) {
-            mostpos.push(k);
+    if (countlist.length === 1) {
+        return countlist[0];
+    } else if (countlist.length > 1) { // most vote more than one
+        if (randomExe === 0) { // no exe
+            return "";
+        } else if (randomExe === 1) { // random exe
+            countlist = shuffle(countlist);
+            return countlist[0];
+        } else {
+            // sanity check
+            alert("Code broken.");
         }
-    }
-    mostpos = shuffle(mostpos);
-    votepos = mostpos[0];
-    let ttname = poslist[votepos]["playname"];
-    return ttname;
-}
-// same vote no kill
-function countvotenk(votelist, poslist) {
-    let countlist = [];
-    for (let i = 0; i < poslist.length; i++) {
-        let votename = poslist[i]["playname"];
-        let icount = 0;
-        for (let j = 0; j < votelist.length; j++) {
-            if (votelist[j] === votename) {
-                icount++;
-            }
-        }
-        countlist.push(icount);
-    }
-    let mostpos = [];
-    let votecount = 0;
-    for (let k = 0; k < countlist.length; k++) {
-        if (countlist[k] > votecount) {
-            mostpos = [];
-            votecount = countlist[k];
-            mostpos.push(k);
-        } else if (countlist[k] === votecount) {
-            mostpos.push(k);
-        }
-    }
-    if (mostpos.length === 1) {
-        votepos = mostpos[0];
-        let ttname = poslist[votepos]["playname"];
-        return ttname;
-    } else if (mostpos.length > 1) {
-        return "";
     } else {
         // sanity check
         alert("Code broken.");
@@ -668,7 +635,11 @@ var controlcentre = new Vue({
             if (this.saved.nightww.length > 0) {
                 let possible = this.shared.state.players.filter(el => el.role !== "ww");
                 possible = possible.filter(el => el.alive === 1);
-                let deadbite = countvoteran(this.saved.nightww, possible);
+                let wwdict = this.saved.nightww.reduce(function(allName, name) {
+                    allName[name] = (allName[name] || 0) + 1;
+                    return allName;
+                }, {});
+                let deadbite = countdict(wwdict, 1);
                 // check hunter protection and deadbite role
                 let bitedata = possible.filter(el => el.playname === deadbite);
                 let biterole = bitedata[0]["role"];
@@ -724,19 +695,8 @@ var controlcentre = new Vue({
             // https://stackoverflow.com/questions/5667888
             this.saved.dayvotelist.sort();
             this.dictSave(this.saved.dayvotelist);
-            let alivelist = this.shared.state.players.filter(el => el.alive === 1);
-            let targetnm;
-            if ( this.shared.state.gamestate.voteset === 0) {
-                targetnm = countvotenk(this.saved.dayvotelist, alivelist);
-                this.changeSave("vtexile", targetnm);
-            } else if (this.shared.state.gamestate.voteset === 1) {
-                targetnm = countvoteran(this.saved.dayvotelist, alivelist);
-                this.changeSave("vtexile", targetnm);
-            } else {
-                alert("Game error. Restart now.");
-                gbv.resetGame ();
-                return;
-            }
+            let targetnm = countdict(this.saved.voteresultdict, this.shared.state.gamestate.voteset);
+            this.changeSave("vtexile", targetnm);
             let newhang = "";
             this.changeSave("exilecolor", "Red");
             if (this.saved.vtexile === "") {
