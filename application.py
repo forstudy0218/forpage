@@ -117,6 +117,15 @@ def movdec(numstr):
         raise ValueError
         return numstr
 
+@app.before_request
+def get_redirect():
+    if not request.is_secure and \
+       not request.headers.get('X-Forwarded-Proto', 'http') == 'https' and \
+       request.method == 'GET' and request.url.startswith('http://'):
+        url = request.url.replace('http://', 'https://', 1)
+        r = redirect(url, code=301)
+        return r
+
 @app.after_request
 def after_request(response):
     """Disable caching"""
