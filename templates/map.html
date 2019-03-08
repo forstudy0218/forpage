@@ -1,11 +1,26 @@
 <!-- jinja2 -->
 {% extends "layout.html" %}
 
+{% block framework %}
+    <!-- production vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.min.js"></script>
+{% endblock %}
+
 {% block title %}
     MAP
 {% endblock %}
 
 {% block main %}
-    <iframe src="https://www.google.com/maps/d/embed?mid=1mpwTdMyfeIxW-hPIuxNJWBvEhmbLpO8T" width="640" height="480">
-    </iframe>
+    <div id="drmap">
+        <template v-for="(link, index) in mapLinks">
+            <button class="btn btn-primary" @click="showMap(index)">{% raw -%}Map ({{ index + 1 }}){%- endraw %}</button>
+        </template>
+        <button class="btn btn-dark" @click="toggleMap()">HIDE</button>
+        <br>
+        <template v-if="toggle">
+            <iframe :src="mapsrc" width="640" height="480"></iframe>
+        </template>
+    </div>
+    <!-- javascript -->
+    <script src="/static/dorumap.js"></script>
 {% endblock %}

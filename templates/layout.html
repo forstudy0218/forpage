@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- little jinja2 here-->
     <title>{% block title %}{% endblock %}</title>
+    {% block framework %}{% endblock %}
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <!-- Bootstrap -->
@@ -46,7 +47,7 @@
                     <a class="btn btn-primary" href="/sudoku">Sudoku</a>
                     <a class="btn btn-primary" href="/enwerewolf" title="Japanese Style">JP Werewolf</a>
                     <a class="btn btn-secondary disabled" href="#" aria-disabled="true">Disabled</a>
-                    <a class="btn btn-dark" href="/werewolf" title="Japanese Style">JP Werewolf(old)</a>
+                    <a class="btn btn-dark" href="/werewolf" title="Japanese Style">JP Werewolf (old)</a>
                 </div>
             </div>
         </div>
