@@ -138,6 +138,10 @@ def after_request(response):
 def index():
     return render_template("index.html")
 
+@app.route("/map_for_test")
+def testing_map():
+    return render_template("map.html")
+
 # converter
 @app.route("/convert", methods=["GET", "POST"])
 # https://stackoverflow.com/questions/2356925/how-to-check-whether-string-might-be-type-cast-to-float-in-python
