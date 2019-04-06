@@ -16,6 +16,8 @@
     border: 3px solid skyblue;
     font-weight: bold;
     margin: 0 auto;
+    width: 98vw;
+    height: 98vw;
 }
 .tds {
     border: 1px solid lightgrey;
