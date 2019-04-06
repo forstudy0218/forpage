@@ -22,9 +22,7 @@
   </head>
   <body id="subody">
     <header id="infohead"><span id="sudodiff"></span><span id="sudorec"></span><span id="sudotime"></span></header>
-    <div class="container">
-        <table id="sudokuraw"></table>
-    </div>
+    <table id="sudokuraw"></table>
     <div class="row justify-content-center btnsec">
         <button class="btn btn-primary snumpad btn-sm" id="sudo1" onclick="sudosolnum(1)">1</button>
         <button class="btn btn-primary snumpad btn-sm" id="sudo2" onclick="sudosolnum(2)">2</button>
@@ -35,9 +33,6 @@
         <button class="btn btn-primary snumpad btn-sm" id="sudo7" onclick="sudosolnum(7)">7</button>
         <button class="btn btn-primary snumpad btn-sm" id="sudo8" onclick="sudosolnum(8)">8</button>
         <button class="btn btn-primary snumpad btn-sm" id="sudo9" onclick="sudosolnum(9)">9</button>
-    </div>
-    <div style="position: absolute; bottom: 0px;">
-        <button class="btn btn-danger" onclick="end()" id="newsdk">NEW GAME</button>
     </div>
     <div id="newrec" class="container rknm">
         <h1 class="rknm">New Record</h1>
@@ -65,6 +60,9 @@
                 <ol id="exrkli"></ol>
             </div>
         </div>
+    </div>
+    <div style="margin-top: 50px;">
+        <button class="btn btn-danger" onclick="end()" id="newsdk">NEW GAME</button>
     </div>
     <dialog id="askdiff">
         <form method="dialog">

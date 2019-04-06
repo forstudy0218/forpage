@@ -325,36 +325,34 @@ function timerlk(num) {
 function sudosolnum(digitstr) {
     let lastse = $(".cellselected");
     // work with select
-    if (lastse != null) {
-        if (lastse.hasClass("tosolve")) {
-            if (!lastse.hasClass("solvednum")) {
-                let numinput = Number(digitstr);
-                let mytrpos = (lastse.parent().prevAll().length);
-                let mytdpos = (lastse.prevAll().length);
-                let ansnum = ansgrid[mytrpos][mytdpos];
-                if (numinput === ansnum) {
-                    // right
-                    lastse[0].innerHTML = numinput;
-                    lastse.addClass("solvednum");
-                    solvedct += 1;
-                    let dictinfo = {"sx": mytrpos, "sy": mytdpos, "numinput": numinput};
-                    soldict.push(dictinfo);
-                    localStorage.setItem('solvedct', solvedct);
-                    localStorage.setItem('soldict', JSON.stringify(soldict));
-                    if (solvedct === zeroed) {
-                        win();
-                    } else {
-                        checkisnine(numinput);
-                    }
-                } else {
-                    // wrong
-                    lastse.css("background-color", "Red");
-                    setTimeout(() => {
-                        lastse.css("background-color", "");
-                    }, 500);
-                }
+    if ( (lastse != null) && (lastse.hasClass("tosolve")) && (!lastse.hasClass("solvednum")) ) {
+        let numinput = Number(digitstr);
+        let mytrpos = (lastse.parent().prevAll().length);
+        let mytdpos = (lastse.prevAll().length);
+        let ansnum = ansgrid[mytrpos][mytdpos];
+        if (numinput === ansnum) {
+            // right
+            lastse[0].innerHTML = numinput;
+            lastse.addClass("solvednum");
+            solvedct += 1;
+            let dictinfo = {"sx": mytrpos, "sy": mytdpos, "numinput": numinput};
+            soldict.push(dictinfo);
+            localStorage.setItem('solvedct', solvedct);
+            localStorage.setItem('soldict', JSON.stringify(soldict));
+            if (solvedct === zeroed) {
+                win();
+            } else {
+                checkisnine(numinput);
             }
+        } else {
+            // wrong
+            lastse.css("background-color", "Red");
+            setTimeout(() => {
+                lastse.css("background-color", "");
+            }, 500);
         }
+    } else {
+        console.log("no action");
     }
 }
 
@@ -502,6 +500,7 @@ function playclean() {
 // rank name form
 function nameform(timerck, diff) {
     playclean();
+    $("#sudokuraw").css("display", "none");
     $("#rknmbx")[0].value = "";
     $("#rknmbtn")[0].onclick = () => {
         let playname = $("#rknmbx")[0].value;
@@ -545,6 +544,7 @@ function rankname(playname, timerck, diff) {
 }
 // show rank
 function sdkrk() {
+    $("#sudokuraw").css("display", "none");
     $(".rkli").detach();
     printlist("#easyrkli", 0);
     printlist("#normrkli", 1);
@@ -577,6 +577,7 @@ function end() {
 // reset game
 function resetgame(){
     playclean();
+    $("#sudokuraw").css("display", "");
     $(".snumpad").attr("disabled", false);
     zeroed = 0;
     dchoice = null;
