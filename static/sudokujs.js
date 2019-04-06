@@ -351,8 +351,6 @@ function sudosolnum(digitstr) {
                 lastse.css("background-color", "");
             }, 500);
         }
-    } else {
-        console.log("no action");
     }
 }
 
