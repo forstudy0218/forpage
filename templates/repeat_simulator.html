@@ -1,0 +1,68 @@
+<!-- jinja2 -->
+{% extends "layout.html" %}
+
+{% block framework %}
+    <!-- production vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.min.js"></script>
+{% endblock %}
+
+{% block title %}
+    Repeat Simulator
+{% endblock %}
+
+{% block main %}
+    <h3>Farming Rate Calculator<br>周回效率計算</h3>
+    <span>=======</span><br>
+    <div id="data_form">
+        <div>
+            <button class="btn btn-success" @click="add_case()" style="margin: 5px">+</button>
+            <button class="btn btn-danger" @click="delete_case()" style="margin: 5px">-</button>
+        </div>
+        <template v-for="data_nm in data_list">
+            <h5>Case {% raw -%}{{ data_nm }}{%- endraw %}</h5>
+            <span>Cost</span>
+            <input autocomplete="off" :id="data_nm + '_stamina'" type="number" step="1" min="0"><br>
+            <span>Normal Exp</span>
+            <input autocomplete="off" :id="data_nm + '_norm_exp'" type="number" step="1" min="0"><br>
+            <span>Secpical 1 Chance</span>
+            <input autocomplete="off" :id="data_nm + '_sp_prob'" type="number" step="1" min="0" max="100">% &nbsp;
+            <span>Secpical 1 Exp</span>
+            <input autocomplete="off" :id="data_nm + '_sp_exp'" type="number" step="1" min="0"><br>
+            <span>Secpical 2 Chance</span>
+            <input autocomplete="off" :id="data_nm + '_fox_prob'" type="number" step="1" min="0" max="100">% &nbsp;
+            <span>Secpical 2 Exp</span>
+            <input autocomplete="off" :id="data_nm + '_fox_exp'" type="number" step="1" min="0"><br>
+            <span>-----------------------------------</span><br>
+        </template>
+        <button class="btn btn-primary" @click="start_simulate()" style="margin: 5px">Compare</button><br>
+        <div v-if="show_error">
+            <span style="color: red">{% raw -%}{{ error_msg }}{%- endraw %}</span>
+        </div>
+        <div v-if="show_result">
+            <h4>Result</h4>
+            <h5>Total Trial: 100</h5>
+            <span>=======</span><br>
+            <template v-for="data_nm in data_list">
+                <h5>
+                    <span>Average EXP for 100 times in case {% raw -%}{{ data_nm }}{%- endraw %} :</span>
+                    <span style="color: blue">{% raw -%}{{ avg_dict[data_nm] }}{%- endraw %}</span>
+                </h5>
+                <h5>
+                    <span>Stamina for 100 times in case {% raw -%}{{ data_nm }}{%- endraw %} :</span>
+                    <span style="color: green">{% raw -%}{{ st_dict[data_nm] }}{%- endraw %}</span>
+                </h5>
+                <h5>
+                    <span>Count for case {% raw -%}{{ data_nm }}{%- endraw %} win :</span>
+                    <span style="color: red">{% raw -%}{{ win_dict[data_nm] }}{%- endraw %}</span>
+                </h5>
+                <span>----------------</span><br>
+            </template>
+            <h5>
+                <span>Count for draw :</span>
+                <span style="color: yellow">{% raw -%}{{ draw_count }}{%- endraw %}</span>
+            </h5>
+        </div>
+    </div>
+    <!-- javascript -->
+    <script src="/static/simulation.js"></script>
+{% endblock %}

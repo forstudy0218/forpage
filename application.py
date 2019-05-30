@@ -142,6 +142,10 @@ def index():
 def testing_map():
     return render_template("map.html")
 
+@app.route("/repeat_simulator")
+def repeat_simulator():
+    return render_template("repeat_simulator.html")
+
 # converter
 @app.route("/convert", methods=["GET", "POST"])
 # https://stackoverflow.com/questions/2356925/how-to-check-whether-string-might-be-type-cast-to-float-in-python
