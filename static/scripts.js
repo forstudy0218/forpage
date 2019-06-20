@@ -5,6 +5,7 @@ $(document).ready(function(){
 function init(){
     renew();
     navsearch();
+    showmapbtn();
 }
 // https://www.w3schools.com/js/tryit.asp?filename=tryjs_timing_clock
 function renew() {
@@ -43,4 +44,25 @@ function navsubmit () {
         $('#navquery').attr("placeholder", "Google it!");
         $('#navsearchbox')[0].reset();
     }, 500);
+}
+
+// secret map button
+let togglecount = 0;
+function clickedmenu () {
+    togglecount++;
+    if (togglecount === 7) {
+        // create button
+        // https://stackoverflow.com/questions/4772774/
+        let a_for_map = document.createElement('a');
+        var linkText = document.createTextNode("Map");
+        a_for_map.appendChild(linkText);
+        a_for_map.className = "btn btn-primary";
+        a_for_map.href = "/map_for_test";
+        const btnZone = document.getElementById("btn_zone");
+        btnZone.appendChild(a_for_map);
+    }
+}
+function showmapbtn () {
+    const menutotoggle = document.getElementById("menubtn");
+    menutotoggle.addEventListener("click",clickedmenu,false);
 }

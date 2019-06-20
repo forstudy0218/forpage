@@ -21,7 +21,7 @@
   <body style="background-color:lightgray">
         <nav class="navbar navbar-toggleable-xl navbar-dark bg-dark">
             <!-- to do -->
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation" id="menubtn">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <!-- add a search box. Code from: www.google.com -->
@@ -39,7 +39,7 @@
         </nav>
         <div class="pos-f-b">
             <div class="collapse" id="navbarToggleExternalContent">
-                <div class="bg-dark" style="padding-left: 4px;">
+                <div class="bg-dark" style="padding-left: 4px;" id="btn_zone">
                     <a class="btn btn-primary" href="/">Home</a>
                     <a class="btn btn-primary" href="/convert">Currency Converter</a>
                     <a class="btn btn-primary" href="/decimal">Long Division(Decimal)</a>
@@ -47,6 +47,7 @@
                     <a class="btn btn-primary" href="/sudoku">Sudoku</a>
                     <a class="btn btn-primary" href="/enwerewolf" title="Japanese Style">JP Werewolf</a>
                     <a class="btn btn-primary" href="/repeat_simulator">Repeater</a>
+                    <!-- disabled means not produce event -->
                     <a class="btn btn-secondary disabled" href="#" aria-disabled="true">Disabled</a>
                     <a class="btn btn-dark" href="/werewolf" title="Japanese Style">JP Werewolf (old)</a>
                 </div>
