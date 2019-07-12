@@ -1,0 +1,30 @@
+<!-- jinja2 -->
+{% extends "layout.html" %}
+
+{% block framework %}
+    <!-- production vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.min.js"></script>
+{% endblock %}
+
+{% block title %}
+    DOWNLOAD
+{% endblock %}
+
+{% block main %}
+    <div id="DLframe">
+        <template v-for="(link, index) in apkLinks">
+            <div :style="'background-color: ' + color_name[index % 2]">
+                <a 
+                    class="btn btn-success" 
+                    :href="link" 
+                    :download="info[index].file_name" 
+                    style="margin: 5px" 
+                >Download</a>
+                <div>{% raw -%}{{ info[index].app_name }}{%- endraw %}</div>
+                <br>
+            </div>
+        </template>
+    </div>
+    <!-- javascript -->
+    <script src="/static/download_setting.js"></script>
+{% endblock %}

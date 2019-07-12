@@ -119,6 +119,8 @@ def movdec(numstr):
 
 @app.before_request
 def get_redirect():
+    if "cs50.xyz" in request.url:
+        return
     if not request.is_secure and \
        not request.headers.get('X-Forwarded-Proto', 'http') == 'https' and \
        request.method == 'GET' and request.url.startswith('http://'):
@@ -145,6 +147,10 @@ def testing_map():
 @app.route("/repeat_simulator")
 def repeat_simulator():
     return render_template("repeat_simulator.html")
+    
+@app.route("/download_page")
+def download_page():
+    return render_template("download_page.html")
 
 # converter
 @app.route("/convert", methods=["GET", "POST"])
