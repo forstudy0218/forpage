@@ -1,7 +1,7 @@
 // Ready translated locale messages
 const messages = {
   en: {
-    fontPage: {
+    frontPage: {
       header: '~ Objective ~',
       topic: 'One-Night Werewolf',
       villagers: 'For Good side <br> Execute werewolf if any. No execution if no werewolf',
@@ -17,9 +17,20 @@ const messages = {
       title: 'Paused',
       removal: 'New Game',
     },
+    roles: {
+      // "ww", "ft", "tf", "ve"
+      ww: "Werewolf",
+      ft: "Fortune Teller",
+      tf: "Phantom Thief",
+      ve: "Village",
+    },
+    naming: {
+      rolesAre: "Roles in this game: ",
+      placeholder: "Your Name",
+    },
   },
   "zh-Hant":{
-    fontPage: {
+    frontPage: {
       header: '~ 遊戲目標 ~',
       topic: '一夜狼人',
       villagers: '村民陣營 <br> 處決狼人，如有。　如村中無狼，不要處決任何人。',
@@ -35,9 +46,20 @@ const messages = {
       title: '暫停中',
       removal: '結束遊戲',
     },
+    roles: {
+      // "ww", "ft", "tf", "ve"
+      ww: "狼人",
+      ft: "占卜師",
+      tf: "怪盜",
+      ve: "村民",
+    },
+    naming: {
+      rolesAre: "這次的角色： ",
+      placeholder: "輸入名字",
+    },
   },
   ja: {
-    fontPage: {
+    frontPage: {
       header: '~ ルール ~',
       topic: 'ワンナイト狼人',
       amount: 'プレイヤー人数を決めよう:（3 から 7 まで）',
@@ -49,6 +71,17 @@ const messages = {
       returnGame: '再開',
       title: '一時停止中',
       removal: 'ゲームをやめる',
+    },
+    roles: {
+      // "ww", "ft", "tf", "ve"
+      ww: "狼人",
+      ft: "占い師",
+      tf: "怪盗",
+      ve: "村人",
+    },
+    naming: {
+      rolesAre: "役職： ",
+      placeholder: "名前",
     },
   }
 };
@@ -117,6 +150,7 @@ new Vue({
     players_amount: 0,
     // role list
     roles: ["ww", "ww", "ft", "tf", "ve", "ve", "ve", "ve"],
+    playerNames: [],
     // use for pause
     temp_stage: 0,
   },
@@ -177,11 +211,14 @@ new Vue({
     // removal
     removeGame: function() {
       if (this.debug) console.log("Game removed");
+      // make data to default
+      // actually can set data to function
       this.presisted = {
         stage: 0,
         players: [],
         remain: [],
       };
+      this.role = ["ww", "ww", "ft", "tf", "ve", "ve", "ve", "ve"];
       localStorage.removeItem('onwdata');
     },
     // toggle debug

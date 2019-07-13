@@ -81,3 +81,42 @@ html, body {
     left: 0;
     position: absolute;
 }
+.naming_role_ww {
+    color: red;
+}
+.naming_role_ft {
+    color: purple;
+}
+.naming_role_tf {
+    color: skyblue;
+}
+.naming_role_ve {
+    color: green;
+}
+.stage_container {
+    display: flex;
+    align-Items: center;
+    margin: 5%;
+    margin-top: 0;
+}
+.container {
+    height: 100%;
+}
+.roles_banner {
+    border: thin solid white;
+    background-color: grey;
+    text-align: center;
+    display: inline-block;
+    margin: auto;
+    margin-top: 5%;
+    font-size: xx-large;
+}
+#from_table {
+    background-color: white;
+    border: thin solid grey;
+    margin: 10%;
+    margin-top: 20%;
+}
+.player_form {
+    margin: 5px;
+}

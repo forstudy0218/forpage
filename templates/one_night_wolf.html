@@ -24,21 +24,37 @@
         </div>
         <!-- front page -->
         <template v-if="presisted.stage === 0">
-          <h1 class="game_title_text">{{ $t("fontPage.topic") }}</h1>
+          <h1 class="game_title_text">{{ $t("frontPage.topic") }}</h1>
           <div class="obj_container">
-            <h3 class="obj_title">{{ $t("fontPage.header") }}</h3>
-            <p class="good_text" v-html='$t("fontPage.villagers")'></p>
-            <p class="ww_text" v-html='$t("fontPage.werewolve")'></p>
-            <h6 class="vote_text">{{ $t("fontPage.vote") }}</h6>
+            <h3 class="obj_title">{{ $t("frontPage.header") }}</h3>
+            <p class="good_text" v-html='$t("frontPage.villagers")'></p>
+            <p class="ww_text" v-html='$t("frontPage.werewolve")'></p>
+            <h6 class="vote_text">{{ $t("frontPage.vote") }}</h6>
           </div>
           <div class="amount_container">
-            <div class="amount_text">{{ $t("fontPage.amount") }}</div>
+            <div class="amount_text">{{ $t("frontPage.amount") }}</div>
             <select v-model="players_amount" style="padding: 5%;">
               <option v-for="i in 5" :key="`${i}`" :value="i + 2">{{ i + 2 }}</option>
             </select>
-            <button class="btn btn-primary amountBtn" @click="start">{{ $t("fontPage.startBtn") }}</button>
+            <button class="btn btn-primary amountBtn" @click="start">{{ $t("frontPage.startBtn") }}</button>
           </div>
-          <div class="exit_area"><a class="btn btn-danger" href="/">{{ $t("fontPage.exitBtn") }}</a></div>
+          <div class="exit_area"><a class="btn btn-danger" href="/">{{ $t("frontPage.exitBtn") }}</a></div>
+        </template>
+        <!-- naming page -->
+        <template v-if="presisted.stage === 1">
+          <div class="container">
+            <!-- list of roles -->
+            <div class="row roles_banner">
+              <span>{{ $t("naming.rolesAre") }}</span>
+              <span v-for="(roleStr) in roles" :class="'naming_role_' + roleStr">{{ $t("roles." + roleStr) + ", " }}</span>
+            </div>
+            <!-- bootstrap table -->
+            <div id="from_table" class="row justify-content-center">
+              <div class="col-5 col-lg-3 player_form" v-for="(player, i) in presisted.players">
+                <input v-model="playerNames[i]" :placeholder="$t('naming.placeholder')" class="name_input">
+              </div>
+            </div>
+          </div>
         </template>
         <!-- pause area -->
         <template v-if="presisted.stage === 99">
