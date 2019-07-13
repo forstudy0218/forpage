@@ -2,36 +2,54 @@
 const messages = {
   en: {
     fontPage: {
-        header: '~ Objective ~',
-        topic: 'One-Night Werewolf',
-        villagers: 'For Good side <br> Execute werewolf if any. No execution if no werewolf',
-        werewolve: 'For Werewolf side <br> No werewolf executed',
-        vote: 'No execution if there is a tie',
-        amount: 'Select numbers of players: (3 to 7)',
-        startBtn: 'Confirm',
-        exitBtn: 'To Home',
-    }
+      header: '~ Objective ~',
+      topic: 'One-Night Werewolf',
+      villagers: 'For Good side <br> Execute werewolf if any. No execution if no werewolf',
+      werewolve: 'For Werewolf side <br> No werewolf executed',
+      vote: 'No execution if there is a tie',
+      amount: 'Select numbers of players: (3 to 7)',
+      startBtn: 'Confirm',
+      exitBtn: 'To Home',
+    },
+    pauseControl: {
+      toPause: 'Pause',
+      returnGame: 'Resume',
+      title: 'Paused',
+      removal: 'New Game',
+    },
   },
   "zh-Hant":{
     fontPage: {
-        header: '~ 遊戲目標 ~',
-        topic: '一夜狼人',
-        villagers: '村民陣營 <br> 處決狼人，如有。　如村中無狼，不要處決任何人。',
-        werewolve: '狼人陣營 <br> 沒有狼人被處決。',
-        vote: '如最高票者多於一人，不會處決。',
-        amount: '請選擇玩家人數: (3 至 7)',
-        startBtn: '確認',
-        exitBtn: '回首頁',
-    }
+      header: '~ 遊戲目標 ~',
+      topic: '一夜狼人',
+      villagers: '村民陣營 <br> 處決狼人，如有。　如村中無狼，不要處決任何人。',
+      werewolve: '狼人陣營 <br> 沒有狼人被處決。',
+      vote: '如最高票者多於一人，不會處決。',
+      amount: '請選擇玩家人數: (3 至 7)',
+      startBtn: '確認',
+      exitBtn: '回首頁',
+    },
+    pauseControl: {
+      toPause: '暫停',
+      returnGame: '返回遊戲',
+      title: '暫停中',
+      removal: '結束遊戲',
+    },
   },
   ja: {
     fontPage: {
-        header: '~ ルール ~',
-        topic: 'ワンナイト狼人',
-        amount: 'プレイヤー人数を決めよう:（3 から 7 まで）',
-        startBtn: '確認',
-        exitBtn: 'ホームページヘ',
-    }
+      header: '~ ルール ~',
+      topic: 'ワンナイト狼人',
+      amount: 'プレイヤー人数を決めよう:（3 から 7 まで）',
+      startBtn: '確認',
+      exitBtn: 'ホームページヘ',
+    },
+    pauseControl: {
+      toPause: '一時停止',
+      returnGame: '再開',
+      title: '一時停止中',
+      removal: 'ゲームをやめる',
+    },
   }
 };
 
@@ -99,6 +117,8 @@ new Vue({
     players_amount: 0,
     // role list
     roles: ["ww", "ww", "ft", "tf", "ve", "ve", "ve", "ve"],
+    // use for pause
+    temp_stage: 0,
   },
   methods: {
     // on lang change
@@ -142,13 +162,43 @@ new Vue({
       // for check
       if (this.debug) console.log(this.presisted);
     },
+    // pause fuction
+    togglePause: function() {
+      if (this.presisted.stage !== 99) {
+        if (this.debug) console.log("Paused");
+        this.temp_stage = this.presisted.stage;
+        this.presisted.stage = 99;
+      }
+      else {
+        if (this.debug) console.log("Resumed");
+        this.presisted.stage = this.temp_stage;
+      }
+    },
+    // removal
+    removeGame: function() {
+      if (this.debug) console.log("Game removed");
+      this.presisted = {
+        stage: 0,
+        players: [],
+        remain: [],
+      };
+      localStorage.removeItem('onwdata');
+    },
+    // toggle debug
+    debugMode: function(){
+      console.log(this.debug? "debug off" : "debug on");
+      this.debug = !this.debug;
+    }
   },
-  computed: {},
+  computed: {
+
+  },
   mounted() {
     // should load if any
     const payload = load_save();
     // check if save existed
     if (payload) {
+      if (this.debug) console.log("Save found.");
       // adapt
       try {
         this.presisted = payload
@@ -158,7 +208,7 @@ new Vue({
         load_save();
       }
     };
-    console.log("Successfully Mounted.");
+    if (this.debug) console.log("Successfully Mounted.");
   },
 }).$mount('#app');
 

@@ -40,6 +40,25 @@
           </div>
           <div class="exit_area"><a class="btn btn-danger" href="/">{{ $t("fontPage.exitBtn") }}</a></div>
         </template>
+        <!-- pause area -->
+        <template v-if="presisted.stage === 99">
+          <div class="pausePage">
+            <h1 class="pauseTitle">{{ $t("pauseControl.title") }}</h1>
+            <button class="btn btn-danger removeBtn" @click="removeGame">{{ $t("pauseControl.removal") }}</button>
+            <!-- debug mode button -->
+            <button class="btn btn-dark debugBtn" @click="debugMode"></button>
+          </div>
+        </template>
+        <!-- universal(sort of) button -->
+        <template v-if="(presisted.stage !== 0)">
+          <div class="bottomBtn">
+            <button class="btn btn-warning" @click="togglePause">
+              <!-- use v-show coz toggle might be offen -->
+              <span v-show="presisted.stage !== 99">{{ $t("pauseControl.toPause") }}</span>
+              <span v-show="presisted.stage === 99">{{ $t("pauseControl.returnGame") }}</span>
+            </button>
+          </div>
+        </template>
     </div>
     <!-- style -->
     <link href="/static/onwcss.css" rel="stylesheet">

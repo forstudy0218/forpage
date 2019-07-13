@@ -55,3 +55,29 @@ html, body {
 .amountBtn {
     margin-top: 5%;
 }
+.bottomBtn {
+    bottom: 0;
+    position: absolute;
+    margin-left: 43%;
+}
+.pausePage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: grey;
+    height: 100%;
+}
+.pauseTitle {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+}
+.removeBtn {
+    margin-top: 30%;
+}
+.debugBtn {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+}
