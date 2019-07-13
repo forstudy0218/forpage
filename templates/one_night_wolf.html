@@ -7,7 +7,7 @@
     <title>ONE NIGHT</title>
     <!-- Try vue.js with i18n this time -->
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
-    <!-- MIT License --> 
+    <!-- MIT License -->
     <script src="https://unpkg.com/vue-i18n/dist/vue-i18n.js"></script>
     <!-- Bootstrap -->
     <!-- https://getbootstrap.com/docs/4.0/components/navbar/ -->
@@ -16,8 +16,30 @@
   <body>
     {% raw -%}
     <div id="app">
-        <h1 class="game_title_text">{{ $t("message.topic") }}</h1>
-        <p>{{ $t("message.hello") }}</p>
+        <!-- for lang change -->
+        <div class="lang-changer">
+          <select v-model="$i18n.locale" @change="onLocaleChange()">
+            <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">{{ lang }}</option>
+          </select>
+        </div>
+        <!-- front page -->
+        <template v-if="presisted.stage === 0">
+          <h1 class="game_title_text">{{ $t("fontPage.topic") }}</h1>
+          <div class="obj_container">
+            <h3 class="obj_title">{{ $t("fontPage.header") }}</h3>
+            <p class="good_text" v-html='$t("fontPage.villagers")'></p>
+            <p class="ww_text" v-html='$t("fontPage.werewolve")'></p>
+            <h6 class="vote_text">{{ $t("fontPage.vote") }}</h6>
+          </div>
+          <div class="amount_container">
+            <div class="amount_text">{{ $t("fontPage.amount") }}</div>
+            <select v-model="players_amount" style="padding: 5%;">
+              <option v-for="i in 5" :key="`${i}`" :value="i + 2">{{ i + 2 }}</option>
+            </select>
+            <button class="btn btn-primary amountBtn" @click="start">{{ $t("fontPage.startBtn") }}</button>
+          </div>
+          <div class="exit_area"><a class="btn btn-danger" href="/">{{ $t("fontPage.exitBtn") }}</a></div>
+        </template>
     </div>
     <!-- style -->
     <link href="/static/onwcss.css" rel="stylesheet">

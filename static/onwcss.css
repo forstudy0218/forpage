@@ -1,4 +1,57 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+#app {
+    height: 100%;
+    background-color: #303030;
+}
 .game_title_text {
     color: yellow;
-    background-color: black; 
+    background-color: black;
+    font-weight: bold;
+    text-align: center;
+}
+.lang-changer {
+    bottom: 0;
+    right: 0;
+    position: absolute;
+}
+.obj_container {
+    display: block;
+    border: medium dashed red;
+    background-color: gray;
+    margin: 50px;
+}
+.obj_title {
+    color: gold;
+    font-weight: bold;
+    text-align: center;
+}
+.good_text {
+    color: lightgreen;
+}
+.ww_text {
+    color: pink;
+}
+.vote_text {
+    text-align: center;
+}
+.amount_container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    border: thick double white;
+    background-color: lightblue;
+    margin: 15%;
+    justify-content: center;
+    align-items: center;
+}
+.exit_area {
+    margin: 30%;
+    justify-content: center;
+    display: flex;
+}
+.amountBtn {
+    margin-top: 5%;
 }
