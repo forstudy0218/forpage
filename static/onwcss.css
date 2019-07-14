@@ -133,6 +133,9 @@ html, body {
 .startBtn {
     margin: 0 auto;
 }
+.day_container {
+    background-color: skyblue;
+}
 .name_btn_container {
     border: thick solid red;
 }
@@ -153,6 +156,22 @@ html, body {
 .simple_center {
     margin: 0 auto;
 }
+.memory_caution {
+    font-weight: bold;
+    color: red;
+}
 .ability_text {
     text-align: center;
+}
+.ft_roles, .tf_roles, .ww_names {
+    text-align: center;
+    font-weight: bold;
+    font-style: italic;
+}
+.tf_to_ww {
+    text-align: center;
+    color: red;
+}
+.ww_names {
+    color: red;
 }
