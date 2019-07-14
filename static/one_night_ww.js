@@ -141,7 +141,11 @@ new Vue({
     // debug mode
     debug: true,
     // for lang change
-    langs: ['en', 'zh-Hant', 'ja'],
+    langs: [
+      {value: 'en', name: 'English'},
+      {value: 'zh-Hant', name: '中文'},
+      {value: 'ja', name: '日本語'}
+    ],
     // game persisted data
     presisted : {
       stage: 0,

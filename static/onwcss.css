@@ -111,7 +111,7 @@ html, body {
     display: inline-block;
     margin: auto;
     margin-top: 5%;
-    font-size: xx-large;
+    font-size: larger;
 }
 #from_table {
     background-color: white;

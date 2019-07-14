@@ -19,7 +19,7 @@
         <!-- for lang change -->
         <div class="lang-changer">
           <select v-model="$i18n.locale" @change="onLocaleChange()">
-            <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">{{ lang }}</option>
+            <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang.value">{{ lang.name }}</option>
           </select>
         </div>
         <!-- front page -->
@@ -56,7 +56,7 @@
             </div>
             <!-- start button -->
             <div id="start_area" class="row">
-              <button class="btn btn-success" @click="gameStart" class="startBtn">{{ $t("naming.startBtn") }}</button>
+              <button class="btn btn-success startBtn" @click="gameStart">{{ $t("naming.startBtn") }}</button>
             </div>
           </div>
         </template>
