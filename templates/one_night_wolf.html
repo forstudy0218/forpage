@@ -60,6 +60,67 @@
             </div>
           </div>
         </template>
+        <!-- night page -->
+        <template v-if="presisted.stage === 2 || presisted.stage === 3">
+          <!-- wrap whole page -->
+          <div class="page_container">
+            <!-- wrap name button -->
+            <div class="name_btn_container">
+              <template v-for="player in presisted.players">
+                <button :class="getCls(player.name)" @click="toggleInfo(player.name)" :disabled="toggleNameButton(player.name)">
+                  {{ player.name }}
+                </button>
+              </template>
+            </div>
+            <!-- wrap console -->
+            <div class="console_container">
+              <!-- button clicked -->
+              <template v-if="player_toggle">
+                <!-- player confirmed -->
+                <template v-if="is_checking">
+                  <!-- player want to see -->
+                  <template v-if="show_role && presisted.stage === 2">
+                    <h1 :class=" user_role + '_header' ">{{ $t("console.YouAre") + $t("roles." + user_role) }}</h1>
+                    <p class="ability_text">{{ $t("console.st_" + user_role) }}</p>
+                    <p class="ability_text">{{ $t("console.nd_" + user_role) }}</p>
+                    <select></select>
+                    <p class="ability_text">{{ $t("console.rd_" + user_role) }}</p>
+                    <button class="btn btn-warning" @click="useAbility(user_role)">{{ $t("frontPage.startBtn") }}</button>
+                  </template>
+                  <!-- ability result -->
+                  <template v-else-if="night_result && presisted.stage === 2">
+                    <p class="ability_text"></p>
+                    <button class="btn btn-warning" @click="endPlayerConsole(user_name)">{{ $t("frontPage.startBtn") }}</button>
+                  </template>
+                  <!-- ask player to see -->
+                  <template v-else-if="presisted.stage === 2">
+                    <h1 class="user_header">{{ user_name }}</hi>
+                    <button class="btn btn-danger simple_center" @click="roleShow">{{ $t("console.showMyRole") }}</button>
+                  </template>
+                </template>
+                <!-- player yet confirm -->
+                <template v-else>
+                  <h1 class="user_header">{{ $t("console.askIfPlayer") + user_name + " ?"}}</h1>
+                  <button class="btn btn-danger simple_center" @click="playerConfirmeSelf">{{ $t("console.IAm") + user_name }}</button>
+                </template>
+              </template>
+              <!-- plain stage description -->
+              <template v-else-if="!stage_end">
+                <!-- night description -->
+                <h1 v-if="presisted.stage === 2" class="stage_header" v-html='$t("console.night")'></h1>
+                <h1 v-else class="stage_header" v-html='$t("console.day")'></h1>
+                <p class="ask_player_text">{{ $t("console.askForPlayer") }}</p>
+              </template>
+              <!-- next stage alert -->
+              <template v-else>
+                <h1 class="stage_header">{{ $t("console.stageEnd") }}</h1>
+                <button class="btn btn-success simple_center" @click="presisted.stage += 1">{{ $t("console.nextStage") }}</button>
+              </template>
+            </div>
+          </div>
+        </template>
+        <!-- global error message -->
+        <div v-if="toggle_error && presisted.stage !== 99" class="error_message">{{ $t("errorType."+ err_type) }}</div>
         <!-- pause area -->
         <template v-if="presisted.stage === 99">
           <div class="pausePage">

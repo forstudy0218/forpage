@@ -83,6 +83,11 @@ html, body {
     left: 0;
     position: absolute;
 }
+.error_message {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+}
 .naming_role_ww {
     color: red;
 }
@@ -100,9 +105,6 @@ html, body {
     align-Items: center;
     margin: 5%;
     margin-top: 0;
-}
-.container {
-    height: 100%;
 }
 .roles_banner {
     border: thin solid white;
@@ -130,4 +132,27 @@ html, body {
 }
 .startBtn {
     margin: 0 auto;
+}
+.name_btn_container {
+    border: thick solid red;
+}
+.console_container {
+    border: thick solid red;
+    background-color: grey;
+}
+.stage_header {
+    text-align: center;
+}
+.ask_player_text {
+    text-align: center;
+    font-weight: bold;
+}
+.user_header {
+    text-align: center;
+}
+.simple_center {
+    margin: 0 auto;
+}
+.ability_text {
+    text-align: center;
 }
