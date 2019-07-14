@@ -27,6 +27,7 @@ const messages = {
     naming: {
       rolesAre: "Roles in this game: ",
       placeholder: "Your Name",
+      startBtn: 'Start',
     },
   },
   "zh-Hant":{
@@ -56,6 +57,7 @@ const messages = {
     naming: {
       rolesAre: "這次的角色： ",
       placeholder: "輸入名字",
+      startBtn: '開始遊戲',
     },
   },
   ja: {
@@ -82,6 +84,7 @@ const messages = {
     naming: {
       rolesAre: "役職： ",
       placeholder: "名前",
+      startBtn: 'スタート',
     },
   }
 };
@@ -169,17 +172,17 @@ new Vue({
     },
     // save stage value
     saveStage: function(newStage) {
-      if (this.debug) console.log('players changed to', newStage);
+      if (this.debug) console.log('stage changed to', newStage);
       this.presisted.stage = newStage;
       localStorage.setItem("onwdata", JSON.stringify(this.presisted));
     },
     saveRemain: function(newList) {
-      if (this.debug) console.log('players changed to', newList);
+      if (this.debug) console.log('remain changed to', newList);
       this.presisted.remain = newList;
       localStorage.setItem("onwdata", JSON.stringify(this.presisted));
     },
-    // start from front page
-    start: function() {
+    // to naming page from front page
+    goToName: function() {
       const amount_selected = this.players_amount;
       this.roles.splice(amount_selected + 2);
       const temp_arr = [...this.roles];
@@ -195,6 +198,12 @@ new Vue({
       this.presisted.stage = 1;
       // for check
       if (this.debug) console.log(this.presisted);
+    },
+    // start the game
+    gameStart: function() {
+      if (this.debug) console.log('game starting');
+      this.saveRemain(this.presisted.remain);
+      this.saveStage(2);
     },
     // pause fuction
     togglePause: function() {

@@ -48,7 +48,9 @@ html, body {
     align-items: center;
 }
 .exit_area {
-    margin: 30%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
     justify-content: center;
     display: flex;
 }
@@ -119,4 +121,13 @@ html, body {
 }
 .player_form {
     margin: 5px;
+}
+.name_input {
+    width: 100%;
+}
+#start_area {
+    margin: auto;
+}
+.startBtn {
+    margin: 0 auto;
 }
