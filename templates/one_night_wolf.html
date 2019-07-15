@@ -202,6 +202,34 @@
         <!-- time to win -->
         <template v-else-if="presisted.stage === 5">
           <!-- decide win side -->
+          <!-- wrap whole page -->
+          <div class="win_container">
+            <h1 class="game_title_text">{{ $t("frontPage.topic") }}</h1>
+            <!-- players data or side win -->
+            <template v-if="toggleList">
+              <!-- contain what rendered -->
+                <div class="content_container">
+                  <!-- render players data -->
+                  <template v-for="data in presisted.players">
+                    <!-- for each data, show name, role, if executed, if win. Considering to add origin -->
+                    <div :class="( executedList.includes(data.name) )? 'dead_data' : 'alive_data' ">
+                      <span v-if="(winControl === 'ww' && data.role === 'ww') || (winControl !== 'ww' && data.role !== 'ww')">
+                        <span style="color: gold">{{ $t("sidePage.winner") }}</span>
+                      </span>
+                      <span :class=" 'player_data name_' + data.role ">{{ data.name }} ( {{ $t("roles." + data.role) }} )</span>
+                    </div>
+                  </template>
+                  <button class="btn btn-success" @click="toggleWin">{{ $t("sidePage.showSide") }}</button>
+                </div>
+            </template>
+            <template v-else>
+              <!-- render win side -->
+              <div class="content_container">
+                <h1 :class="winControl + '_banner'">{{ $t("sidePage.banner_" + winControl) }}</h1>
+                <button class="btn btn-success" @click="toggleWin">{{ $t("sidePage.showList") }}</button>
+              </div>
+            </template>
+          </div>
         </template>
         <!-- global error message -->
         <div v-if="toggle_error && presisted.stage !== 99" class="error_message">{{ $t("errorType."+ err_type) }}</div>

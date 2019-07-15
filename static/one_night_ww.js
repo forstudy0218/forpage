@@ -21,7 +21,7 @@ const messages = {
       noName: 'Name(s) Missing',
       dupName: 'Same Name existed',
       noTarget: 'Plase select valid option',
-      dataMissing: 'Players data not found',
+      winDataMissing: 'Triumph not found',
     },
     roles: {
       // "ww", "ft", "tf", "ve"
@@ -79,6 +79,13 @@ const messages = {
       execution: "Player(s) Executed:",
       noExecution: "No player executed",
     },
+    sidePage: {
+      banner_ww: " Werewolf Side Win ",
+      banner_ve: " Good Side Win ",
+      showList: "See who win",
+      showSide: "See which side win",
+      winner: "Winner  "
+    }
   },
   "zh-Hant":{
     frontPage: {
@@ -101,7 +108,7 @@ const messages = {
       noName: '玩家必須擁有名字',
       dupName: '玩家名稱不能重覆',
       noTarget: '請選擇有效的選項',
-      dataMissing: '玩家資料無效',
+      winDataMissing: '不能判定勝利',
     },
     roles: {
       // "ww", "ft", "tf", "ve"
@@ -116,8 +123,8 @@ const messages = {
       startBtn: '開始遊戲',
     },
     console: {
-      night: '到晚上了<br>確認玩家身份<br>發動應有的能力。',
-      day: '到早上了<br>討論大家的身份<br>準備好就投票。',
+      night: '到晚上了<br>確認玩家身份<br>發動應有的能力',
+      day: '到早上了<br>討論占卜和怪盜的結果<br>考慮哪些意見可信',
       askForPlayer: '請按上方的玩家名字繼續遊戲',
       askIfPlayer: '你是否 ',
       IAm: '我是 ',
@@ -139,7 +146,33 @@ const messages = {
       rd_ve: "請按下確認",
       defaultSelect: "請選擇",
       notInGame: "未分配身份",
+      yourTargetIs: "你的目標是 ",
+      ftRole: "目標身份:",
+      memoryCaution: "請牢記頁面上的資料，只會顯示一次",
+      tfSelfChoice: "你選擇了自己，因此你繼續是怪盜",
+      tfNow: "你已變成:",
+      wwName: "all Werewolf's name(s) shown below:",
+      noAction: "You have no ability.",
+      resultViewed: "Press Confirm to continue",
+      lonewolf: "You are the only Werewolf",
+      tfwwSwap: "You are NOW new Werewolf and your target WON'T know it has changed!",
+      wantToVote: "I want to vote",
+      voteToOne: "Choose the one you vote for",
+      voteChoosing: "Vote for: {name}",
+      ruleBtn: "Voting Rule"
     },
+    vote: {
+      result: "Vote result:",
+      execution: "Player(s) Executed:",
+      noExecution: "No player executed",
+    },
+    sidePage: {
+      banner_ww: " Werewolf Side Win ",
+      banner_ve: " Good Side Win ",
+      showList: "See who win",
+      showSide: "See which side win",
+      winner: "Winner  "
+    }
   },
   ja: {
     frontPage: {
@@ -270,6 +303,8 @@ new Vue({
     toVoteList: [],
     // handle vote result
     executedList: [],
+    // handle win data toggle
+    toggleList: false,
     // use for pause
     temp_stage: 0,
     // use for error handle
@@ -479,18 +514,24 @@ new Vue({
     // confirm vote
     voteAction: function() {
       let target = this.actTarget;
-      // copy presisted.players
-      const obj_to_save = JSON.parse(JSON.stringify(this.presisted.players));
-      const target_data = obj_to_save.filter(el => el.name === target)[0];
-      const user_data = obj_to_save.filter(el => el.name === this.user_name)[0];
-      target_data.vote += 1;
-      user_data.voted = true;
-      this.ballot_toggle = false;
-      this.is_checking = false;
-      this.player_toggle = false;
-      this.actTarget = "";
-      this.savePlayers(obj_to_save);
-      this.checkStageEnd(this.presisted.stage);
+      if (target) {
+        // copy presisted.players
+        const obj_to_save = JSON.parse(JSON.stringify(this.presisted.players));
+        const target_data = obj_to_save.filter(el => el.name === target)[0];
+        const user_data = obj_to_save.filter(el => el.name === this.user_name)[0];
+        target_data.vote += 1;
+        user_data.voted = true;
+        this.ballot_toggle = false;
+        this.is_checking = false;
+        this.player_toggle = false;
+        this.actTarget = "";
+        this.savePlayers(obj_to_save);
+        this.checkStageEnd(this.presisted.stage);
+      } else {
+        this.err_type = "noTarget";
+        this.toggle_error = true;
+        return;
+      }
     },
     // handle vote result
     voteResult: function() {
@@ -509,11 +550,17 @@ new Vue({
           }
         });
       }
+      if (this.debug) console.log(this.executedList);
     },
     // checked vote
     voteChecked: function() {
+      this.toggleList = false;
       this.saveStage(this.presisted.stage + 1);
       this.executedList = [];
+    },
+    // toggle data shown
+    toggleWin: function() {
+      this.toggleList = !this.toggleList;
     },
     // pause fuction
     togglePause: function() {
@@ -576,16 +623,26 @@ new Vue({
     // win decide
     winControl: function() {
       try {
-        if ( this.presisted.players.every(el => el.voted) ) {
-          if (this.debug) console.log("Game should end.");
-          return;
+        let win_side;
+        if (this.executedList.length === 0) {
+          // no execution
+          // check if ww in game
+          let ww_data = this.presisted.players.filter(el => el.role === "ww");
+          win_side = (ww_data.length === 0)? "ve" : "ww";
         } else {
-          if (this.debug) console.log("Game should not end.");
-          return;
+          let executed_role = [];
+          // check executed role
+          this.executedList.forEach(name => {
+            let executed_data = this.presisted.players.filter(el => el.name === name)[0];
+            executed_role.push(executed_data.role);
+          });
+          win_side = (executed_role.includes("ww"))? "ve" : "ww";
         }
+        return win_side;
       } catch(e) {
-        this.err_type = "dataMissing";
+        this.err_type = "winDataMissing";
         this.toggle_error = true;
+        return "";
       }
     },
   },
@@ -604,7 +661,7 @@ new Vue({
         load_save();
       }
       // check stage
-      if (this.presisted.stage === 4) this.voteResult();
+      if (this.presisted.stage === 4 || this.presisted.stage === 5) this.voteResult();
       this.checkStageEnd(this.presisted.stage);
     }
     if (this.debug) console.log("Successfully Mounted.");

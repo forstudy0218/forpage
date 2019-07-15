@@ -178,3 +178,52 @@ html, body {
 .result_container {
     background-color: beige;
 }
+.win_container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+}
+.content_container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: auto;
+}
+.ww_banner {
+    background-color: black;
+    border: thin solid red;
+    color: red;
+}
+.ve_banner {
+    background-color: skyblue;
+    border: thin solid green;
+    color: green;
+}
+.alive_data, .dead_data {
+    padding: 5px;
+    margin: 2px;
+}
+.dead_data {
+    background-color: lightgrey;
+    border: medium solid grey;
+}
+.alive_data {
+    background-color: black;
+    border: medium solid snow;
+}
+.dead_data > .player_data {
+    text-decoration: line-through black;
+}
+.name_ww {
+    color: red;
+}
+.name_ve {
+    color: green;
+}
+.name_ft {
+    color: deeppink;
+}
+.name_tf {
+    color: blue;
+}
