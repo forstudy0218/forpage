@@ -21,7 +21,7 @@ html, body {
     display: block;
     border: medium dashed red;
     background-color: gray;
-    margin: 50px;
+    margin: 0 5%;
 }
 .obj_title {
     color: gold;
@@ -174,4 +174,7 @@ html, body {
 }
 .ww_names {
     color: red;
+}
+.result_container {
+    background-color: beige;
 }

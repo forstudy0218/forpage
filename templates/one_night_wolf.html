@@ -24,24 +24,28 @@
         </div>
         <!-- front page -->
         <template v-if="presisted.stage === 0">
-          <h1 class="game_title_text">{{ $t("frontPage.topic") }}</h1>
-          <div class="obj_container">
-            <h3 class="obj_title">{{ $t("frontPage.header") }}</h3>
-            <p class="good_text" v-html='$t("frontPage.villagers")'></p>
-            <p class="ww_text" v-html='$t("frontPage.werewolve")'></p>
-            <h6 class="vote_text">{{ $t("frontPage.vote") }}</h6>
+          <!-- wrap whole page -->
+          <div class="container">
+            <h1 class="game_title_text">{{ $t("frontPage.topic") }}</h1>
+            <div class="obj_container">
+              <h3 class="obj_title">{{ $t("frontPage.header") }}</h3>
+              <p class="good_text" v-html='$t("frontPage.villagers")'></p>
+              <p class="ww_text" v-html='$t("frontPage.werewolve")'></p>
+              <h6 class="vote_text">{{ $t("frontPage.vote") }}</h6>
+            </div>
+            <div class="amount_container">
+              <div class="amount_text">{{ $t("frontPage.amount") }}</div>
+              <select v-model="players_amount" style="padding: 5%;">
+                <option v-for="i in 5" :key="`${i}`" :value="i + 2">{{ i + 2 }}</option>
+              </select>
+              <button class="btn btn-primary amountBtn" @click="goToName">{{ $t("frontPage.startBtn") }}</button>
+            </div>
+            <div class="exit_area"><a class="btn btn-danger" href="/">{{ $t("frontPage.exitBtn") }}</a></div>
           </div>
-          <div class="amount_container">
-            <div class="amount_text">{{ $t("frontPage.amount") }}</div>
-            <select v-model="players_amount" style="padding: 5%;">
-              <option v-for="i in 5" :key="`${i}`" :value="i + 2">{{ i + 2 }}</option>
-            </select>
-            <button class="btn btn-primary amountBtn" @click="goToName">{{ $t("frontPage.startBtn") }}</button>
-          </div>
-          <div class="exit_area"><a class="btn btn-danger" href="/">{{ $t("frontPage.exitBtn") }}</a></div>
         </template>
         <!-- naming page -->
         <template v-if="presisted.stage === 1">
+          <!-- wrap whole page -->
           <div class="container">
             <!-- list of roles -->
             <div class="row roles_banner">
@@ -108,7 +112,7 @@
                     <!-- phantom result -->
                     <template v-else-if="user_role === 'tf'">
                        <!-- check if self-choose -->
-                      <template v-if="tfRole === 'tf'">
+                      <template v-if="actTarget === user_name">
                         <p class="ability_text">{{ $t("console.tfSelfChoice") }}</p>
                       </template>
                       <template v-else>
@@ -154,7 +158,7 @@
                     <button class="btn btn-warning" @click="voteAction">{{ $t("frontPage.startBtn") }}</button>
                   </template>
                   <!-- ask player to vote -->
-                  <template v-else>
+                  <template v-else-if="presisted.stage === 3">
                     <h1 class="user_header">{{ user_name }}</h1>
                     <button class="btn btn-danger simple_center" @click="ballotQuery">{{ $t("console.wantToVote") }}</button>
                   </template>
@@ -171,6 +175,7 @@
                 <h1 v-if="presisted.stage === 2" class="stage_header" v-html='$t("console.night")'></h1>
                 <h1 v-else class="stage_header" v-html='$t("console.day")'></h1>
                 <p class="ask_player_text">{{ $t("console.askForPlayer") }}</p>
+                <button v-if="presisted.stage === 3" class="btn btn-info">{{ $t("console.ruleBtn") }}</button>
               </template>
               <!-- next stage alert -->
               <template v-else>
@@ -179,6 +184,24 @@
               </template>
             </div>
           </div>
+        </template>
+        <!-- game finish show vote result -->
+        <template v-else-if="presisted.stage === 4">
+          <!-- wrap whole page -->
+          <div class="result_container">
+            <h3 class="ability_text">{{ $t("vote.result") }}</h3>
+            <ul style="list-style: none;">
+              <li v-for="data in presisted.players">{{ data.name }}: {{ data.vote }}</li>
+            </ul>
+            <h2 class="ability_text">{{ $t("vote.execution") }}</h2>
+            <h1 style="color: red" v-for="name in executedList">{{ name }}</h1>
+            <h1 v-if="executedList.length === 0">{{ $t("vote.noExecution") }}</h1>
+            <button class="btn btn-danger simple_center" @click="voteChecked">{{ $t("frontPage.startBtn") }}</button>
+          </div>
+        </template>
+        <!-- time to win -->
+        <template v-else-if="presisted.stage === 5">
+          <!-- decide win side -->
         </template>
         <!-- global error message -->
         <div v-if="toggle_error && presisted.stage !== 99" class="error_message">{{ $t("errorType."+ err_type) }}</div>

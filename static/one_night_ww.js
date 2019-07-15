@@ -6,7 +6,7 @@ const messages = {
       topic: 'One-Night Werewolf',
       villagers: 'For Good side <br> Execute werewolf if any. No execution if no werewolf',
       werewolve: 'For Werewolf side <br> No werewolf executed',
-      vote: 'No execution if there is a tie',
+      vote: 'No execution if all players get one vote',
       amount: 'Select numbers of players: (3 to 7)',
       startBtn: 'Confirm',
       exitBtn: 'To Home',
@@ -21,6 +21,7 @@ const messages = {
       noName: 'Name(s) Missing',
       dupName: 'Same Name existed',
       noTarget: 'Plase select valid option',
+      dataMissing: 'Players data not found',
     },
     roles: {
       // "ww", "ft", "tf", "ve"
@@ -71,15 +72,21 @@ const messages = {
       wantToVote: "I want to vote",
       voteToOne: "Choose the one you vote for",
       voteChoosing: "Vote for: {name}",
+      ruleBtn: "Voting Rule"
+    },
+    vote: {
+      result: "Vote result:",
+      execution: "Player(s) Executed:",
+      noExecution: "No player executed",
     },
   },
   "zh-Hant":{
     frontPage: {
       header: '~ 遊戲目標 ~',
       topic: '一夜狼人',
-      villagers: '村民陣營 <br> 處決狼人，如有。　如村中無狼，不要處決任何人。',
+      villagers: '村民陣營 <br> 處決任一狼人，如有。　如村中無狼，不要處決任何人。',
       werewolve: '狼人陣營 <br> 沒有狼人被處決。',
-      vote: '如最高票者多於一人，不會處決。',
+      vote: '如每位玩家各得一票，則不會處決。',
       amount: '請選擇玩家人數: (3 至 7)',
       startBtn: '確認',
       exitBtn: '回首頁',
@@ -94,6 +101,7 @@ const messages = {
       noName: '玩家必須擁有名字',
       dupName: '玩家名稱不能重覆',
       noTarget: '請選擇有效的選項',
+      dataMissing: '玩家資料無效',
     },
     roles: {
       // "ww", "ft", "tf", "ve"
@@ -260,6 +268,8 @@ new Vue({
     tfRole: "",
     // handle vote action
     toVoteList: [],
+    // handle vote result
+    executedList: [],
     // use for pause
     temp_stage: 0,
     // use for error handle
@@ -414,7 +424,6 @@ new Vue({
         this.night_result = true;
         this.toggle_error = false;
         this.show_role = false;
-        this.actTarget = "";
       } else {
         this.err_type = "noTarget";
         this.toggle_error = true;
@@ -434,6 +443,7 @@ new Vue({
       thisdata[stageStr] = true;
       this.savePlayers(obj_to_save);
       this.checkStageEnd(this.presisted.stage);
+      this.actTarget = "";
       this.night_result = false;
       this.is_checking = false;
       this.player_toggle = false;
@@ -447,6 +457,9 @@ new Vue({
       if (stageNum === 3 ) stageStr = "voted";
       if ( this.presisted.players.every(el => el[stageStr]) ) {
         if (this.debug) console.log("should end");
+        if (stageNum === 3 ) {
+          this.voteResult();
+        }
         this.stage_end = true;
       }
     },
@@ -472,12 +485,35 @@ new Vue({
       const user_data = obj_to_save.filter(el => el.name === this.user_name)[0];
       target_data.vote += 1;
       user_data.voted = true;
-      this.checkStageEnd(this.presisted.stage);
       this.ballot_toggle = false;
       this.is_checking = false;
       this.player_toggle = false;
       this.actTarget = "";
       this.savePlayers(obj_to_save);
+      this.checkStageEnd(this.presisted.stage);
+    },
+    // handle vote result
+    voteResult: function() {
+      const players_data = this.presisted.players;
+      let vote_list = [];
+      players_data.forEach(data => { vote_list.push(data.vote) });
+      let most_vote = vote_list.reduce( (a, b) => Math.max(a, b) );
+      if (this.debug) console.log("max vote is", most_vote);
+      if (most_vote === 1) {
+        // no execution
+        this.executedList = [];
+      } else {
+        vote_list.forEach( (count, index) => {
+          if (count === most_vote) {
+            this.executedList.push(players_data[index].name);
+          }
+        });
+      }
+    },
+    // checked vote
+    voteChecked: function() {
+      this.saveStage(this.presisted.stage + 1);
+      this.executedList = [];
     },
     // pause fuction
     togglePause: function() {
@@ -515,6 +551,7 @@ new Vue({
       this.ftList = [];
       this.tfRole = "";
       this.toVoteList = [];
+      this.executedList = [];
       this.toggle_error = false;
       // delete save
       localStorage.removeItem('onwdata');
@@ -536,6 +573,21 @@ new Vue({
     containerClass: function() {
       return (this.presisted.stage === 3)? "day_container page_container" : "page_container";
     },
+    // win decide
+    winControl: function() {
+      try {
+        if ( this.presisted.players.every(el => el.voted) ) {
+          if (this.debug) console.log("Game should end.");
+          return;
+        } else {
+          if (this.debug) console.log("Game should not end.");
+          return;
+        }
+      } catch(e) {
+        this.err_type = "dataMissing";
+        this.toggle_error = true;
+      }
+    },
   },
   mounted() {
     // should load if any
@@ -551,6 +603,8 @@ new Vue({
         localStorage.removeItem('onwdata');
         load_save();
       }
+      // check stage
+      if (this.presisted.stage === 4) this.voteResult();
       this.checkStageEnd(this.presisted.stage);
     }
     if (this.debug) console.log("Successfully Mounted.");
