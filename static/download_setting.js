@@ -7,7 +7,7 @@ var download_page = new Vue ({
         info: [
             {
                 app_name: "Sudoku",
-                file_name: "sudoku0218",
+                file_name: "sudoku0218 (android 5 up)",
             },
         ],
         color_name: ["white", "#968c8c"],

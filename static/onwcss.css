@@ -62,6 +62,7 @@ html, body {
 .obj_title,
 .asking_player_text,
 .ask_player_text,
+.bold_text,
 .memory_caution {
     font-weight: bold;
 }
@@ -216,6 +217,16 @@ html, body {
     text-align: center;
     font-weight: bold;
     font-style: italic;
+}
+.same_vote {
+    background-color: blue;
+}
+.ww_most, .many_most {
+    background-color: lightgrey;
+    color: forestgreen;
+}
+.other_most, .vote_all_one {
+    background-color: white;
 }
 .result_container {
     background-color: beige;

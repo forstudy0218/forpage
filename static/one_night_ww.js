@@ -72,9 +72,15 @@ const messages = {
       wantToVote: "I want to vote",
       voteToOne: "Choose the one you vote for",
       voteChoosing: "Vote for: {name}",
-      ruleBtn: "Voting Rule"
+      ruleBtn: "Voting Rule",
+      backFromRuleBtn: "Back",
     },
     vote: {
+      sameVote: "The player(s) with most votes is executed.",
+      wwMost: "Werewolf executed:<br>Good Side Win",
+      otherMost: "No Werewolf executed:<br>Werewolf Side Win",
+      manyMost: "More than one player executed:<br>At least one Werewolf executed, Good Side Win<br>Else, Werewolf Side Win",
+      allVoteOne: "Each player get one vote:<br>At least one player is Werewolf, Werewolf Side Win",
       result: "Vote result:",
       execution: "Player(s) Executed:",
       noExecution: "No player executed",
@@ -123,8 +129,8 @@ const messages = {
       startBtn: '開始遊戲',
     },
     console: {
-      night: '到晚上了<br>確認玩家身份<br>發動應有的能力',
-      day: '到早上了<br>討論占卜和怪盜的結果<br>考慮哪些意見可信',
+      night: '現在是晚上<br>確認玩家身份<br>發動應有的能力',
+      day: '現在是早上<br>討論占卜和怪盜的結果<br>思考哪些意見可信',
       askForPlayer: '請按上方的玩家名字繼續遊戲',
       askIfPlayer: '你是否 ',
       IAm: '我是 ',
@@ -159,9 +165,15 @@ const messages = {
       wantToVote: "I want to vote",
       voteToOne: "Choose the one you vote for",
       voteChoosing: "Vote for: {name}",
-      ruleBtn: "Voting Rule"
+      ruleBtn: "Voting Rule",
+      backFromRuleBtn: "Back",
     },
     vote: {
+      sameVote: "The player(s) with most votes is executed.",
+      wwMost: "Werewolf executed:<br>Good Side Win",
+      otherMost: "No Werewolf executed:<br>Werewolf Side Win",
+      manyMost: "More than one player executed:<br>At least one Werewolf executed, Good Side Win<br>Else, Werewolf Side Win",
+      allVoteOne: "Each player get one vote:<br>At least one player is Werewolf, Werewolf Side Win",
       result: "Vote result:",
       execution: "Player(s) Executed:",
       noExecution: "No player executed",
@@ -215,6 +227,7 @@ const i18n = new VueI18n({
   locale: 'en', // set locale
   fallbackLocale: 'en',
   messages, // set locale book
+  silentFallbackWarn: true,
 });
 
 // control save
@@ -300,6 +313,8 @@ new Vue({
     targetList: [],
     ftList: [],
     tfRole: "",
+    // toggle vote rule
+    toggleRule: false,
     // handle vote action
     toVoteList: [],
     // handle win data toggle
@@ -499,6 +514,10 @@ new Vue({
       this.stage_end = false;
       this.saveStage(this.presisted.stage + 1);
     },
+    // toggle vote rule
+    toggleVotingRule: function() {
+      this.toggleRule = !this.toggleRule;
+    },
     // player to vote
     ballotQuery: function() {
       let new_list = [];
@@ -520,6 +539,7 @@ new Vue({
         this.ballot_toggle = false;
         this.is_checking = false;
         this.player_toggle = false;
+        this.toggleRule = false;
         this.actTarget = "";
         this.savePlayers(obj_to_save);
         this.checkStageEnd(this.presisted.stage);
@@ -567,6 +587,7 @@ new Vue({
       this.show_role = false;
       this.night_result = false;
       this.ballot_toggle = false;
+      this.toggleRule = false;
       this.user_name = "";
       this.user_role = "";
       this.actTarget = "";
