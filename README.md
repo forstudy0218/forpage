@@ -1,5 +1,4 @@
 TODO
 
-1. ONW front page
-2. ONW player creation page
-3. ONW game logic
+1. ONW PNG
+2. ONW SSR
