@@ -483,25 +483,24 @@ new Vue({
     // handle player night result
     endPlayerConsole: function() {
       let namestr = this.user_name;
-      // check stage and player role
-      if (this.presisted.stage === 2 && this.user_role === "tf" && this.tfRole !== "tf") {
-        // save tf result
-        // copy presisted.players
-        const for_tf_save = JSON.parse(JSON.stringify(this.presisted.players));
-        const user_data = for_tf_save.filter(el => el.name === this.user_name)[0];
-        const target_data = for_tf_save.filter(el => el.name === this.actTarget)[0];
-        user_data.role = target_data.origin;
-        target_data.role = user_data.origin;
-        this.savePlayers(for_tf_save);
-        if (this.debug) console.log('Thief exchange saved');
-      }
+      // check stage
       let stageStr;
       if (this.presisted.stage === 2) stageStr = "night";
       if (this.presisted.stage === 3) stageStr = "voted";
       // copy presisted.players
       const obj_to_save = JSON.parse(JSON.stringify(this.presisted.players));
-      const thisdata = obj_to_save.filter(el => el.name === namestr)[0];
-      thisdata[stageStr] = true;
+      const user_data = obj_to_save.filter(el => el.name === namestr)[0];
+      user_data[stageStr] = true;
+      // handle tf result
+      if (this.presisted.stage === 2 && this.user_role === "tf" && this.tfRole !== "tf") {
+        // save tf result
+        // get target data
+        const target_data = obj_to_save.filter(el => el.name === this.actTarget)[0];
+        // exchage
+        user_data.role = target_data.origin;
+        target_data.role = user_data.origin;
+        if (this.debug) console.log('Thief exchange performed');
+      }
       this.savePlayers(obj_to_save);
       this.checkStageEnd(this.presisted.stage);
       this.actTarget = "";
