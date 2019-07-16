@@ -44,7 +44,7 @@ const messages = {
       showMyRole: 'Show My Role',
       stageEnd: 'All players finished their action. Press Confirm to continue.',
       nextStage: 'Next',
-      YouAre: '. You are ',
+      YouAre: 'You are ',
       st_ww: "You can see the name(s) of all Werewolf player(s).",
       nd_ww: "Choose any player. Nothing will happen.",
       rd_ww: "Press confirm to see who's Werewolf!",
@@ -131,13 +131,13 @@ const messages = {
       showMyRole: '決定我的角色',
       stageEnd: '所有玩家都完成行動，請按下繼續',
       nextStage: '繼續',
-      YouAre: '  你是 ',
+      YouAre: '你是 ',
       st_ww: "你一會可以看到所有狼人的名字.",
       nd_ww: "但你什麼都做不了，請隨便選一位玩家名字",
       rd_ww: "請按下確認，你將會看到狼人的名字",
       st_ft: "你查看一名玩家的身份，或查看所有未被分配的身份",
       nd_ft: "選擇目標的名字，或，選擇「未分配身份」",
-      rd_ft: "請按下確認，你將會看到對像的身份",
+      rd_ft: "請按下確認，你將會看到目標的身份",
       st_tf: "你可與一名玩家交換身份，而對方是不會知道身份已被交換",
       nd_tf: "選擇目標的名字。如果不想交換，請選擇自己的名字",
       rd_tf: "請按下確認，將會顯示你交換後的角色",
@@ -281,7 +281,7 @@ new Vue({
     },
     // game logic data
     // player count
-    players_amount: 0,
+    players_amount: 3,
     // role list
     roles: ["ww", "ww", "ft", "tf", "ve", "ve", "ve", "ve"],
     playerNames: [],
@@ -397,9 +397,9 @@ new Vue({
     getCls: function(namestr) {
       let thisdata = this.presisted.players.filter(el => el.name === namestr)[0];
       if ( (this.presisted.stage === 2 && thisdata.night) || (thisdata.voted && this.presisted.stage === 3) ) {
-          return "btn btn-success";
+          return "btn btn-success name_btn";
       } else {
-      return "btn btn-warning";
+      return "btn btn-warning name_btn";
       }
     },
     // handle player selected
@@ -585,15 +585,16 @@ new Vue({
     }
   },
   computed: {
+    // app background color
+    appBgColor: function() {
+      return (this.presisted.stage === 3)? "day_background" : "dark_background"
+    },
     // for Werewolf night
     wwNameList: function() {
       const ww_data = this.presisted.players.filter(el => el.origin === "ww");
       const ww_names = [];
       ww_data.forEach(data => { ww_names.push(data.name) });
       return ww_names;
-    },
-    containerClass: function() {
-      return (this.presisted.stage === 3)? "day_container page_container" : "page_container";
     },
     // handle vote result
     // consider to make it computed
@@ -619,6 +620,7 @@ new Vue({
     // win decide
     winControl: function() {
       try {
+        if (this.debug) console.log("looking for win side");
         let win_side;
         if (this.voteResult.length === 0) {
           // no execution

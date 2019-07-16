@@ -15,7 +15,7 @@
   </head>
   <body>
     {% raw -%}
-    <div id="app">
+    <div id="app" :class="appBgColor">
         <!-- for lang change -->
         <div class="lang-changer">
           <select v-model="$i18n.locale" @change="onLocaleChange()">
@@ -31,7 +31,7 @@
               <h3 class="obj_title">{{ $t("frontPage.header") }}</h3>
               <p class="good_text" v-html='$t("frontPage.villagers")'></p>
               <p class="ww_text" v-html='$t("frontPage.werewolve")'></p>
-              <h6 class="vote_text">{{ $t("frontPage.vote") }}</h6>
+              <h6 class="center_text">{{ $t("frontPage.vote") }}</h6>
             </div>
             <div class="amount_container">
               <div class="amount_text">{{ $t("frontPage.amount") }}</div>
@@ -67,7 +67,7 @@
         <!-- gaming page -->
         <template v-if="presisted.stage === 2 || presisted.stage === 3">
           <!-- wrap whole page -->
-          <div :class="containerClass">
+          <div class="page_container">
             <!-- wrap name button -->
             <div class="name_btn_container">
               <template v-for="player in presisted.players">
@@ -80,32 +80,34 @@
             <div class="console_container">
               <!-- button clicked -->
               <template v-if="player_toggle">
+                <!-- player name title -->
+                <h1 class="user_header">{{ user_name }}</h1>
                 <!-- player confirmed -->
                 <template v-if="is_checking">
                   <!-- player want to see -->
                   <template v-if="show_role && presisted.stage === 2">
-                    <h1 :class=" user_role + '_header' ">{{ user_name + $t("console.YouAre") + $t("roles." + user_role) }}</h1>
+                    <h1 :class=" user_role + '_header' ">{{ $t("roles." + user_role) }}</h1>
                     <h6 class="memory_caution">{{ $t("console.memoryCaution") }}</h6>
-                    <p class="ability_text">{{ $t("console.st_" + user_role) }}</p>
-                    <p class="ability_text">{{ $t("console.nd_" + user_role) }}</p>
-                    <select v-model="actTarget">
+                    <p class="center_text">{{ $t("console.st_" + user_role) }}</p>
+                    <p class="center_text">{{ $t("console.nd_" + user_role) }}</p>
+                    <select v-model="actTarget" style="margin: 0 auto;">
                       <option selected disabled :value="null">{{ $t("console.defaultSelect") }}</option>
                       <option v-for="name in targetList">{{ name }}</option>
                       <option v-if="user_role === 'ft'" :value="'ft_see_two'">{{ $t("console.notInGame") }}</option>
                     </select>
-                    <p class="ability_text">{{ $t("console.rd_" + user_role) }}</p>
-                    <button class="btn btn-warning" @click="useAbility">{{ $t("frontPage.startBtn") }}</button>
+                    <p class="center_text">{{ $t("console.rd_" + user_role) }}</p>
+                    <button class="btn btn-warning simple_center" @click="useAbility">{{ $t("frontPage.startBtn") }}</button>
                   </template>
                   <!-- ability result -->
                   <template v-else-if="night_result && presisted.stage === 2">
                     <!-- fortune result -->
                     <template v-if="user_role === 'ft'">
-                      <p class="ability_text">
+                      <p class="center_text">
                         <span>{{ $t("console.yourTargetIs") }}</span>
                         <span v-if="actTarget === 'ft_see_two'">{{ $t("console.notInGame") }}</span>
                         <span v-else>{{ actTarget }}</span>
                       </p>
-                      <p class="ability_text">{{ $t("console.ftRole") }}</p>
+                      <p class="center_text">{{ $t("console.ftRole") }}</p>
                       <h1 class="ft_roles" v-for="roleCode in ftList">{{ $t("roles." + roleCode) }}</h1>
                       <h6 class="memory_caution">{{ $t("console.memoryCaution") }}</h6>
                     </template>
@@ -113,14 +115,14 @@
                     <template v-else-if="user_role === 'tf'">
                        <!-- check if self-choose -->
                       <template v-if="actTarget === user_name">
-                        <p class="ability_text">{{ $t("console.tfSelfChoice") }}</p>
+                        <p class="center_text">{{ $t("console.tfSelfChoice") }}</p>
                       </template>
                       <template v-else>
-                        <p class="ability_text">
+                        <p class="center_text">
                           <span>{{ $t("console.yourTargetIs") }}</span>
                           <span>{{ actTarget }}</span>
                         </p>
-                        <p class="ability_text">{{ $t("console.tfNow") }}</p>
+                        <p class="center_text">{{ $t("console.tfNow") }}</p>
                         <h1 class="tf_roles">{{ $t("roles." + tfRole) }}</h1>
                         <p class="tf_to_ww" v-if="tfRole === 'ww'">{{ $t("console.tfwwSwap") }}</p>
                         <h6 class="memory_caution">{{ $t("console.memoryCaution") }}</h6>
@@ -128,58 +130,55 @@
                     </template>
                     <!-- werewolf result -->
                     <template v-else-if="user_role === 'ww'">
-                      <p class="ability_text">{{ $t("console.wwName") }}</p>
+                      <p class="center_text">{{ $t("console.wwName") }}</p>
                       <h1 class="ww_names" v-for="name in wwNameList">{{ name }}</h1>
-                      <h3 class="ability_text" v-if="wwNameList.length === 1">{{ $t("console.lonewolf") }}</h1>
+                      <h3 class="center_text" v-if="wwNameList.length === 1">{{ $t("console.lonewolf") }}</h1>
                       <h6 class="memory_caution">{{ $t("console.memoryCaution") }}</h6>
                     </template>
                     <!-- village result -->
                     <template v-else-if="user_role === 've'">
-                      <p class="ability_text">{{ $t("console.noAction") }}</p>
+                      <p class="center_text">{{ $t("console.noAction") }}</p>
                     </template>
-                    <p class="ability_text">{{ $t("console.resultViewed") }}</p>
-                    <button class="btn btn-warning" @click="endPlayerConsole">{{ $t("frontPage.startBtn") }}</button>
+                    <p class="center_text">{{ $t("console.resultViewed") }}</p>
+                    <button class="btn btn-warning simple_center" @click="endPlayerConsole">{{ $t("frontPage.startBtn") }}</button>
                   </template>
                   <!-- ask player to see -->
                   <template v-else-if="presisted.stage === 2">
-                    <h1 class="user_header">{{ user_name }}</h1>
-                    <button class="btn btn-danger simple_center" @click="roleShow">{{ $t("console.showMyRole") }}</button>
+                    <button class="btn btn-danger true_center" @click="roleShow">{{ $t("console.showMyRole") }}</button>
                   </template>
                    <!-- player want to vote -->
                   <template v-else-if="ballot_toggle && presisted.stage === 3">
-                    <h1 class="user_header">{{ user_name }}</h1>
-                    <p class="ability_text">{{ $t("console.voteToOne") }}</p>
+                    <p class="center_text">{{ $t("console.voteToOne") }}</p>
                     <!-- render toVoteList -->
-                    <select v-model="actTarget">
+                    <select v-model="actTarget" style="margin: 0 auto;">
                       <option selected disabled :value="null">{{ $t("console.defaultSelect") }}</option>
                       <option v-for="name in toVoteList">{{ name }}</option>
                     </select>
-                    <p class="ability_text">{{ $t("console.voteChoosing", {name: actTarget}) }}</p>
-                    <button class="btn btn-warning" @click="voteAction">{{ $t("frontPage.startBtn") }}</button>
+                    <p class="center_text to_bottom">{{ $t("console.voteChoosing", {name: actTarget}) }}</p>
+                    <button class="btn btn-warning simple_center" @click="voteAction">{{ $t("frontPage.startBtn") }}</button>
                   </template>
                   <!-- ask player to vote -->
                   <template v-else-if="presisted.stage === 3">
-                    <h1 class="user_header">{{ user_name }}</h1>
-                    <button class="btn btn-danger simple_center" @click="ballotQuery">{{ $t("console.wantToVote") }}</button>
+                    <button class="btn btn-danger true_center" @click="ballotQuery">{{ $t("console.wantToVote") }}</button>
                   </template>
                 </template>
                 <!-- player yet confirm -->
                 <template v-else>
-                  <h1 class="user_header">{{ $t("console.askIfPlayer") + user_name + " ?"}}</h1>
+                  <h1 class="asking_player_text">{{ $t("console.askIfPlayer") + user_name + " ?"}}</h1>
                   <button class="btn btn-danger simple_center" @click="playerConfirmeSelf">{{ $t("console.IAm") + user_name }}</button>
                 </template>
               </template>
               <!-- plain stage description -->
               <template v-else-if="!stage_end">
                 <!-- night description -->
-                <h1 v-if="presisted.stage === 2" class="stage_header" v-html='$t("console.night")'></h1>
-                <h1 v-else class="stage_header" v-html='$t("console.day")'></h1>
+                <h1 v-if="presisted.stage === 2" class="center_text" v-html='$t("console.night")'></h1>
+                <h1 v-else class="center_text" v-html='$t("console.day")'></h1>
                 <p class="ask_player_text">{{ $t("console.askForPlayer") }}</p>
-                <button v-if="presisted.stage === 3" class="btn btn-info">{{ $t("console.ruleBtn") }}</button>
+                <button v-if="presisted.stage === 3" class="btn btn-info simple_center">{{ $t("console.ruleBtn") }}</button>
               </template>
               <!-- next stage alert -->
               <template v-else>
-                <h1 class="stage_header">{{ $t("console.stageEnd") }}</h1>
+                <h1 class="center_text">{{ $t("console.stageEnd") }}</h1>
                 <button class="btn btn-success simple_center" @click="ToNextStage">{{ $t("console.nextStage") }}</button>
               </template>
             </div>
@@ -189,13 +188,13 @@
         <template v-else-if="presisted.stage === 4">
           <!-- wrap whole page -->
           <div class="result_container">
-            <h3 class="ability_text">{{ $t("vote.result") }}</h3>
-            <ul style="list-style: none;">
+            <h3 class="center_text">{{ $t("vote.result") }}</h3>
+            <ul class="center_list">
               <li v-for="data in presisted.players">{{ data.name }}: {{ data.vote }}</li>
             </ul>
-            <h2 class="ability_text">{{ $t("vote.execution") }}</h2>
-            <h1 style="color: red" v-for="name in voteResult">{{ name }}</h1>
-            <h1 v-if="voteResult.length === 0">{{ $t("vote.noExecution") }}</h1>
+            <h2 class="center_text">{{ $t("vote.execution") }}</h2>
+            <h1 class="red_text center_text" v-for="name in voteResult">{{ name }}</h1>
+            <h1 v-if="voteResult.length === 0" class="simple_center">{{ $t("vote.noExecution") }}</h1>
             <button class="btn btn-danger simple_center" @click="voteChecked">{{ $t("frontPage.startBtn") }}</button>
           </div>
         </template>
@@ -237,7 +236,7 @@
         <template v-if="presisted.stage === 99">
           <div class="pausePage">
             <h1 class="pauseTitle">{{ $t("pauseControl.title") }}</h1>
-            <button class="btn btn-danger removeBtn" @click="removeGame">{{ $t("pauseControl.removal") }}</button>
+            <button class="btn btn-warning" @click="removeGame">{{ $t("pauseControl.removal") }}</button>
             <!-- debug mode button -->
             <button class="btn btn-dark debugBtn" @click="debugMode"></button>
           </div>
@@ -245,7 +244,7 @@
         <!-- universal(sort of) button -->
         <template v-if="(presisted.stage !== 0)">
           <div class="bottomBtn">
-            <button class="btn btn-warning" @click="togglePause">
+            <button class="btn btn-danger" @click="togglePause">
               <!-- use v-show coz toggle might be offen -->
               <span v-show="presisted.stage !== 99">{{ $t("pauseControl.toPause") }}</span>
               <span v-show="presisted.stage === 99">{{ $t("pauseControl.returnGame") }}</span>

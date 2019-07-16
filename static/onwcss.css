@@ -1,16 +1,19 @@
 html, body {
-    height: 100%;
     margin: 0;
 }
 #app {
-    height: 100%;
+    height: 100vh;
+    overflow: auto;
+}
+.dark_background {
     background-color: #303030;
+}
+.day_background {
+    background-color: skyblue;
 }
 .game_title_text {
     color: yellow;
     background-color: black;
-    font-weight: bold;
-    text-align: center;
 }
 .lang-changer {
     bottom: 0;
@@ -23,22 +26,46 @@ html, body {
     background-color: gray;
     margin: 0 5%;
 }
-.obj_title {
-    color: gold;
-    font-weight: bold;
-    text-align: center;
-}
 .good_text {
     color: lightgreen;
 }
 .ww_text {
     color: pink;
 }
-.vote_text {
+.obj_title, .tf_header, .asking_player_text {
+    color: gold;
+}
+.center_text,
+.game_title_text,
+.obj_title,
+.amount_container,
+.pauseTitle,
+.roles_banner,
+.error_message,
+.user_header,
+.ask_player_text,
+.asking_player_text,
+.tf_to_ww {
     text-align: center;
 }
+.naming_role_ww,
+.name_ww,
+.ww_names,
+.tf_to_ww,
+.memory_caution,
+.ww_header,
+.ww_banner,
+.red_text {
+    color: red;
+}
+.game_title_text,
+.obj_title,
+.asking_player_text,
+.ask_player_text,
+.memory_caution {
+    font-weight: bold;
+}
 .amount_container {
-    text-align: center;
     display: flex;
     flex-direction: column;
     border: thick double white;
@@ -58,38 +85,27 @@ html, body {
     margin-top: 5%;
 }
 .bottomBtn {
-    bottom: 0;
-    position: absolute;
-    margin-left: 43%;
+    margin: 15px;
+    justify-content: center;
+    display: flex;
 }
 .pausePage {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    align-items: flex-end;
     background-color: grey;
-    height: 100%;
-}
-.pauseTitle {
-    color: red;
-    font-weight: bold;
-    text-align: center;
-}
-.removeBtn {
-    margin-top: 30%;
 }
 .debugBtn {
     bottom: 0;
     left: 0;
     position: absolute;
 }
-.error_message {
+.error_message, .pauseTitle {
     color: red;
     font-weight: bold;
-    text-align: center;
 }
-.naming_role_ww {
-    color: red;
+.pauseTitle {
+    width: 100%;
 }
 .naming_role_ft {
     color: purple;
@@ -109,7 +125,6 @@ html, body {
 .roles_banner {
     border: thin solid white;
     background-color: grey;
-    text-align: center;
     display: inline-block;
     margin: auto;
     margin-top: 5%;
@@ -133,56 +148,90 @@ html, body {
 .startBtn {
     margin: 0 auto;
 }
-.day_container {
-    background-color: skyblue;
-}
 .name_btn_container {
-    border: thick solid red;
+    border: thin solid grey;
+    background-color: azure;
+    display: flex;
+    justify-content: center;
+    min-width: 60vw;
+    flex-wrap: wrap;
+    border-radius: 8px;
+    margin: 10px auto;
+    width: 100vw;
+}
+.name_btn {
+    margin: 10px 10px;
+}
+.page_container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 .console_container {
     border: thick solid red;
     background-color: grey;
-}
-.stage_header {
-    text-align: center;
-}
-.ask_player_text {
-    text-align: center;
-    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    margin: auto 5%;
+    min-width: 80vw;
+    min-height: 50vh;
+    padding-bottom: 5%;
 }
 .user_header {
+    background-color: lightblue;
+}
+.ww_header, .ft_header, .tf_header, .ve_header {
     text-align: center;
+    margin: 0 auto;
+}
+.ww_header {
+    background-color: black;
+    border: medium double red;
+
+}
+.tf_header {
+    background-color: green;
+    border: medium double blue;
+}
+.ft_header {
+    color: purple;
+    background-color: green;
+    border: medium double pink;
+}
+.ve_header {
+    color: silver;
+    background-color: green;
+    border: medium double black;
+}
+.true_center {
+    margin: auto;
 }
 .simple_center {
     margin: 0 auto;
 }
-.memory_caution {
-    font-weight: bold;
-    color: red;
-}
-.ability_text {
-    text-align: center;
+.to_bottom {
+    margin-top: auto;
 }
 .ft_roles, .tf_roles, .ww_names {
     text-align: center;
     font-weight: bold;
     font-style: italic;
 }
-.tf_to_ww {
-    text-align: center;
-    color: red;
-}
-.ww_names {
-    color: red;
-}
 .result_container {
     background-color: beige;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.center_list {
+    list-style: none;
+    margin: 0 30vw;
 }
 .win_container {
     display: flex;
     align-items: center;
     flex-direction: column;
-    height: 100%;
+    height: 100vh;
 }
 .content_container {
     display: flex;
@@ -193,7 +242,6 @@ html, body {
 .ww_banner {
     background-color: black;
     border: thin solid red;
-    color: red;
 }
 .ve_banner {
     background-color: skyblue;
@@ -214,9 +262,6 @@ html, body {
 }
 .dead_data > .player_data {
     text-decoration: line-through black;
-}
-.name_ww {
-    color: red;
 }
 .name_ve {
     color: green;
