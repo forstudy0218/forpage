@@ -286,7 +286,7 @@ new Vue({
   i18n,
   data: {
     // debug mode
-    debug: true,
+    debug: false,
     // for lang change
     langs: [
       {value: 'en', name: 'English'},
