@@ -144,6 +144,7 @@
                   </template>
                   <!-- ask player to see -->
                   <template v-else-if="presisted.stage === 2">
+                    <img :src="'./static/img/onwpng/' + rarityGacha" />
                     <button class="btn btn-danger true_center" @click="roleShow">{{ $t("console.showMyRole") }}</button>
                   </template>
                    <!-- player want to vote -->

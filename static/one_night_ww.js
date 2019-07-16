@@ -622,6 +622,22 @@ new Vue({
     appBgColor: function() {
       return (this.presisted.stage === 3)? "day_background" : "dark_background"
     },
+    // img for roles
+    rarityGacha: function() {
+      if (this.debug) console.log("Gacha!");
+      switch (this.user_role) {
+        case "ww":
+          return "r_ww.png";
+        case "ve":
+          return "n_ve.png";
+        case "tf":
+          return (Math.floor(Math.random() * 100) >= 90)? "ssr_tf.png" : "sr_tf.png";
+        case "ft":
+          return (Math.floor(Math.random() * 100) >= 90)? "ssr_ft.png" : "sr_ft.png";
+        default:
+          return "ssr_layer.png";
+      }
+    },
     // for Werewolf night
     wwNameList: function() {
       const ww_data = this.presisted.players.filter(el => el.origin === "ww");
