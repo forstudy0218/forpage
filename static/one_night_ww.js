@@ -19,7 +19,7 @@ const messages = {
     },
     errorType: {
       noName: 'Name(s) Missing',
-      dupName: 'Same Name existed',
+      dupName: 'Name Duplicated',
       noTarget: 'Plase select valid option',
       winDataMissing: 'Triumph not found',
     },
@@ -42,21 +42,21 @@ const messages = {
       askIfPlayer: 'Are You ',
       IAm: 'I am ',
       showMyRole: 'Show My Role',
-      stageEnd: 'All players finished their action. Press Confirm to continue.',
+      stageEnd: 'All players finished their action. Press @:console.nextStage to continue.',
       nextStage: 'Next',
       YouAre: 'You are ',
       st_ww: "You can see the name(s) of all Werewolf player(s).",
       nd_ww: "Choose any player. Nothing will happen.",
-      rd_ww: "Press confirm to see who's Werewolf!",
+      rd_ww: "Press @:frontPage.startBtn to see who's Werewolf!",
       st_ft: "You can see the role of one player, or all the role(s) that not in the game.",
       nd_ft: "Choose one of players to see, or choose 'Roles Not In Game'.",
-      rd_ft: "Press confirm to see the role(s)!",
+      rd_ft: "Press @:frontPage.startBtn to see the role(s)!",
       st_tf: "You may exchange role with one player. You will know what role you become.",
       nd_tf: "Choose your own name if don't want to exchange. Else, choose your target's name.",
-      rd_tf: "Press confirm to exchange. Your target won't know if the role is exchanged!",
+      rd_tf: "Press @:frontPage.startBtn to exchange. Your target won't know if the role is exchanged!",
       st_ve: "You do nothing at night.",
       nd_ve: "Choose any player. Nothing will happen.",
-      rd_ve: "Press confirm.",
+      rd_ve: "Press @:frontPage.startBtn to continue.",
       defaultSelect: "Please Choose",
       notInGame: "Roles Not In Game",
       yourTargetIs: "Your target is ",
@@ -66,7 +66,7 @@ const messages = {
       tfNow: "Your role NOW:",
       wwName: "all Werewolf's name(s) shown below:",
       noAction: "You have no ability.",
-      resultViewed: "Press Confirm to continue",
+      resultViewed: "Press @:frontPage.startBtn to continue",
       lonewolf: "You are the only Werewolf",
       tfwwSwap: "You are NOW new Werewolf and your target WON'T know it has changed!",
       wantToVote: "I want to vote",
@@ -135,21 +135,21 @@ const messages = {
       askIfPlayer: '你是否 ',
       IAm: '我是 ',
       showMyRole: '決定我的角色',
-      stageEnd: '所有玩家都完成行動，請按下繼續',
+      stageEnd: '所有玩家均已行動，請按下「 @:console.nextStage 」',
       nextStage: '繼續',
       YouAre: '你是 ',
       st_ww: "你一會可以看到所有狼人的名字.",
       nd_ww: "但你什麼都做不了，請隨便選一位玩家名字",
-      rd_ww: "請按下確認，你將會看到狼人的名字",
+      rd_ww: "請按下「 @:frontPage.startBtn 」，你將會看到狼人的名字",
       st_ft: "你查看一名玩家的身份，或查看所有未被分配的身份",
       nd_ft: "選擇目標的名字，或，選擇「未分配身份」",
-      rd_ft: "請按下確認，你將會看到目標的身份",
+      rd_ft: "請按下「 @:frontPage.startBtn 」，你將會看到目標的身份",
       st_tf: "你可與一名玩家交換身份，而對方是不會知道身份已被交換",
       nd_tf: "選擇目標的名字。如果不想交換，請選擇自己的名字",
-      rd_tf: "請按下確認，將會顯示你交換後的角色",
+      rd_tf: "請按下「 @:frontPage.startBtn 」，將會顯示你交換後的角色",
       st_ve: "你沒有特殊能力",
       nd_ve: "所以你什麼都不能做，請隨便選一位玩家名字",
-      rd_ve: "請按下確認",
+      rd_ve: "請按下「 @:frontPage.startBtn 」繼續",
       defaultSelect: "請選擇",
       notInGame: "未分配身份",
       yourTargetIs: "你的目標是 ",
@@ -157,33 +157,33 @@ const messages = {
       memoryCaution: "請牢記頁面上的資料，只會顯示一次",
       tfSelfChoice: "你選擇了自己，因此你繼續是怪盜",
       tfNow: "你已變成:",
-      wwName: "all Werewolf's name(s) shown below:",
-      noAction: "You have no ability.",
-      resultViewed: "Press Confirm to continue",
-      lonewolf: "You are the only Werewolf",
-      tfwwSwap: "You are NOW new Werewolf and your target WON'T know it has changed!",
-      wantToVote: "I want to vote",
-      voteToOne: "Choose the one you vote for",
-      voteChoosing: "Vote for: {name}",
-      ruleBtn: "Voting Rule",
-      backFromRuleBtn: "Back",
+      wwName: "以下是所有狼人:",
+      noAction: "你沒有特殊能力",
+      resultViewed: "請按「 @:frontPage.startBtn 」繼續",
+      lonewolf: "只有你一個狼人",
+      tfwwSwap: "你和目標的勝利條件亦隨之改變，但你的目標 不會 知道已被交換",
+      wantToVote: "我要投票",
+      voteToOne: "選擇你想處決的人",
+      voteChoosing: "你想處決的是: {name}",
+      ruleBtn: "投票規則",
+      backFromRuleBtn: "返回",
     },
     vote: {
-      sameVote: "The player(s) with most votes is executed.",
-      wwMost: "Werewolf executed:<br>Good Side Win",
-      otherMost: "No Werewolf executed:<br>Werewolf Side Win",
-      manyMost: "More than one player executed:<br>At least one Werewolf executed, Good Side Win<br>Else, Werewolf Side Win",
-      allVoteOne: "Each player get one vote:<br>At least one player is Werewolf, Werewolf Side Win",
-      result: "Vote result:",
-      execution: "Player(s) Executed:",
-      noExecution: "No player executed",
+      sameVote: "得票最高的所有玩家將會被處決",
+      wwMost: "得票最高的是 狼人：<br>村民陣營勝利",
+      otherMost: "得票最高的不是 狼人：<br>狼人陣營勝利",
+      manyMost: "得票最高者多於一人：<br>若其中至少一位是狼人，村民陣營勝利<br>若其中沒有狼人, 狼人陣營勝利",
+      allVoteOne: "若所有玩家都得一票：<br>不會處決；若玩家當中有狼人，狼人陣營勝利",
+      result: "投票結果",
+      execution: "被處決的的玩家：",
+      noExecution: "沒有任何人被處決",
     },
     sidePage: {
-      banner_ww: " Werewolf Side Win ",
-      banner_ve: " Good Side Win ",
-      showList: "See who win",
-      showSide: "See which side win",
-      winner: "Winner  "
+      banner_ww: " 狼人把所有人都吃光了 ",
+      banner_ve: " 村莊成功驅逐狼人 ",
+      showList: "查看身份",
+      showSide: "查看結果",
+      winner: "勝利  "
     }
   },
   ja: {
@@ -218,6 +218,13 @@ const messages = {
       placeholder: "名前",
       startBtn: 'スタート',
     },
+    sidePage: {
+      banner_ww: " 狼人、全ての人間を食べました ",
+      banner_ve: " 村、平和になりました ",
+      showList: "役職を見ろ",
+      showSide: "結果を見ろ",
+      winner: "勝者  "
+    }
   }
 };
 
@@ -448,7 +455,7 @@ new Vue({
     // big function incoming
     useAbility: function() {
       let target = this.actTarget;
-      if (this.actTarget) {
+      if (target) {
         let role = this.user_role;
         // "ww", "ft", "tf", "ve"
         if (role === "ft") {
@@ -457,18 +464,12 @@ new Vue({
           if (target === 'ft_see_two') {
             this.ftList = this.presisted.remain;
           } else {
-            let target_data = this.presisted.players.filter(el => el.name === target)[0];
+            const target_data = this.presisted.players.filter(el => el.name === target)[0];
             this.ftList.push(target_data.origin);
           }
         } else if (role === "tf") {
-          // copy presisted.players
-          const obj_to_save = JSON.parse(JSON.stringify(this.presisted.players));
-          const user_data = obj_to_save.filter(el => el.name === this.user_name)[0];
-          const target_data = obj_to_save.filter(el => el.name === this.actTarget)[0];
-          user_data.role = target_data.origin;
-          target_data.role = user_data.origin;
-          this.savePlayers(obj_to_save);
-          this.tfRole = user_data.role;
+          const target_data = this.presisted.players.filter(el => el.name === target)[0];
+          this.tfRole = target_data.origin;
         }
         this.night_result = true;
         this.toggle_error = false;
@@ -482,10 +483,21 @@ new Vue({
     // handle player night result
     endPlayerConsole: function() {
       let namestr = this.user_name;
-      // check stage
+      // check stage and player role
+      if (this.presisted.stage === 2 && this.user_role === "tf" && this.tfRole !== "tf") {
+        // save tf result
+        // copy presisted.players
+        const for_tf_save = JSON.parse(JSON.stringify(this.presisted.players));
+        const user_data = for_tf_save.filter(el => el.name === this.user_name)[0];
+        const target_data = for_tf_save.filter(el => el.name === this.actTarget)[0];
+        user_data.role = target_data.origin;
+        target_data.role = user_data.origin;
+        this.savePlayers(for_tf_save);
+        if (this.debug) console.log('Thief exchange saved');
+      }
       let stageStr;
-      if (this.presisted.stage === 2 ) stageStr = "night";
-      if (this.presisted.stage === 3 ) stageStr = "voted";
+      if (this.presisted.stage === 2) stageStr = "night";
+      if (this.presisted.stage === 3) stageStr = "voted";
       // copy presisted.players
       const obj_to_save = JSON.parse(JSON.stringify(this.presisted.players));
       const thisdata = obj_to_save.filter(el => el.name === namestr)[0];
@@ -540,6 +552,7 @@ new Vue({
         this.is_checking = false;
         this.player_toggle = false;
         this.toggleRule = false;
+        this.toggle_error = false;
         this.actTarget = "";
         this.savePlayers(obj_to_save);
         this.checkStageEnd(this.presisted.stage);

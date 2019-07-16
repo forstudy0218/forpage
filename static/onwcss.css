@@ -32,7 +32,7 @@ html, body {
 .ww_text {
     color: pink;
 }
-.obj_title, .tf_header, .asking_player_text {
+.obj_title, .tf_header, .asking_player_text, .tf_to_ww {
     color: gold;
 }
 .center_text,
@@ -51,7 +51,6 @@ html, body {
 .naming_role_ww,
 .name_ww,
 .ww_names,
-.tf_to_ww,
 .memory_caution,
 .ww_header,
 .ww_banner,
@@ -169,7 +168,7 @@ html, body {
     flex-direction: column;
 }
 .console_container {
-    border: thick solid red;
+    border: thick double white;
     background-color: grey;
     display: flex;
     flex-direction: column;
@@ -177,6 +176,7 @@ html, body {
     min-width: 80vw;
     min-height: 50vh;
     padding-bottom: 5%;
+    border-radius: 8px;
 }
 .user_header {
     background-color: lightblue;
