@@ -194,8 +194,8 @@
               <li v-for="data in presisted.players">{{ data.name }}: {{ data.vote }}</li>
             </ul>
             <h2 class="ability_text">{{ $t("vote.execution") }}</h2>
-            <h1 style="color: red" v-for="name in executedList">{{ name }}</h1>
-            <h1 v-if="executedList.length === 0">{{ $t("vote.noExecution") }}</h1>
+            <h1 style="color: red" v-for="name in voteResult">{{ name }}</h1>
+            <h1 v-if="voteResult.length === 0">{{ $t("vote.noExecution") }}</h1>
             <button class="btn btn-danger simple_center" @click="voteChecked">{{ $t("frontPage.startBtn") }}</button>
           </div>
         </template>
@@ -212,7 +212,7 @@
                   <!-- render players data -->
                   <template v-for="data in presisted.players">
                     <!-- for each data, show name, role, if executed, if win. Considering to add origin -->
-                    <div :class="( executedList.includes(data.name) )? 'dead_data' : 'alive_data' ">
+                    <div :class="( voteResult.includes(data.name) )? 'dead_data' : 'alive_data' ">
                       <span v-if="(winControl === 'ww' && data.role === 'ww') || (winControl !== 'ww' && data.role !== 'ww')">
                         <span style="color: gold">{{ $t("sidePage.winner") }}</span>
                       </span>

@@ -192,6 +192,7 @@ const messages = {
       noName: '名前がいない',
       dupName: '名前の重複を避ける',
       noTarget: '選択肢は無効',
+      winDataMissing: 'データがない',
     },
     roles: {
       // "ww", "ft", "tf", "ve"
@@ -301,8 +302,6 @@ new Vue({
     tfRole: "",
     // handle vote action
     toVoteList: [],
-    // handle vote result
-    executedList: [],
     // handle win data toggle
     toggleList: false,
     // use for pause
@@ -492,9 +491,6 @@ new Vue({
       if (stageNum === 3 ) stageStr = "voted";
       if ( this.presisted.players.every(el => el[stageStr]) ) {
         if (this.debug) console.log("should end");
-        if (stageNum === 3 ) {
-          this.voteResult();
-        }
         this.stage_end = true;
       }
     },
@@ -533,30 +529,10 @@ new Vue({
         return;
       }
     },
-    // handle vote result
-    voteResult: function() {
-      const players_data = this.presisted.players;
-      let vote_list = [];
-      players_data.forEach(data => { vote_list.push(data.vote) });
-      let most_vote = vote_list.reduce( (a, b) => Math.max(a, b) );
-      if (this.debug) console.log("max vote is", most_vote);
-      if (most_vote === 1) {
-        // no execution
-        this.executedList = [];
-      } else {
-        vote_list.forEach( (count, index) => {
-          if (count === most_vote) {
-            this.executedList.push(players_data[index].name);
-          }
-        });
-      }
-      if (this.debug) console.log(this.executedList);
-    },
     // checked vote
     voteChecked: function() {
       this.toggleList = false;
       this.saveStage(this.presisted.stage + 1);
-      this.executedList = [];
     },
     // toggle data shown
     toggleWin: function() {
@@ -598,7 +574,6 @@ new Vue({
       this.ftList = [];
       this.tfRole = "";
       this.toVoteList = [];
-      this.executedList = [];
       this.toggle_error = false;
       // delete save
       localStorage.removeItem('onwdata');
@@ -620,11 +595,32 @@ new Vue({
     containerClass: function() {
       return (this.presisted.stage === 3)? "day_container page_container" : "page_container";
     },
+    // handle vote result
+    // consider to make it computed
+    voteResult: function() {
+      // default
+      const list_needed = [];
+      if (this.debug) console.log("calculting vote");
+      const players_data = this.presisted.players;
+      let vote_list = [];
+      players_data.forEach(data => { vote_list.push(data.vote) });
+      let most_vote = vote_list.reduce( (a, b) => Math.max(a, b), 0 );
+      if (this.debug) console.log("max vote is", most_vote);
+      // don't change if no execution
+      if (most_vote > 1) {
+        vote_list.forEach( (count, index) => {
+          if (count === most_vote) {
+            list_needed.push(players_data[index].name);
+          }
+        });
+      }
+      return list_needed;
+    },
     // win decide
     winControl: function() {
       try {
         let win_side;
-        if (this.executedList.length === 0) {
+        if (this.voteResult.length === 0) {
           // no execution
           // check if ww in game
           let ww_data = this.presisted.players.filter(el => el.role === "ww");
@@ -632,7 +628,7 @@ new Vue({
         } else {
           let executed_role = [];
           // check executed role
-          this.executedList.forEach(name => {
+          this.voteResult.forEach(name => {
             let executed_data = this.presisted.players.filter(el => el.name === name)[0];
             executed_role.push(executed_data.role);
           });
@@ -661,7 +657,6 @@ new Vue({
         load_save();
       }
       // check stage
-      if (this.presisted.stage === 4 || this.presisted.stage === 5) this.voteResult();
       this.checkStageEnd(this.presisted.stage);
     }
     if (this.debug) console.log("Successfully Mounted.");
