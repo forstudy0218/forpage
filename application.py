@@ -147,11 +147,11 @@ def testing_map():
 @app.route("/repeat_simulator")
 def repeat_simulator():
     return render_template("repeat_simulator.html")
-    
+
 @app.route("/download_page")
 def download_page():
     return render_template("download_page.html")
-    
+
 @app.route("/onw")
 def one_night():
     return render_template("one_night_wolf.html")

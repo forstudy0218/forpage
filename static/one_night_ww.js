@@ -281,6 +281,22 @@ function isUnique(array) {
   return array.every((item, index, self) => self.indexOf(item) === index);
 }
 
+// cache image
+const images = [
+  'ssr_layer',
+  'n_ve',
+  'r_ww',
+  'sr_tf',
+  'sr_ft',
+  'ssr_tf',
+  'ssr_ft',
+];
+for (let i = 0; i < images.length; i++) {
+  const image = document.createElement('div');
+  image.className = images[i];
+  document.body.appendChild(image);
+}
+
 // Create a Vue instance with `i18n` option
 new Vue({
   i18n,
@@ -313,6 +329,7 @@ new Vue({
     show_role: false,
     night_result: false,
     ballot_toggle: false,
+    showUserRole: false,
     user_name: "",
     user_role: "",
     // handle night action
@@ -435,6 +452,10 @@ new Vue({
     playerConfirmeSelf: function() {
       this.is_checking = true;
     },
+    // Gacha
+    roleGacha: function() {
+      this.showUserRole = true;
+    },
     // handle player want to see
     roleShow: function() {
       // print target list
@@ -449,6 +470,7 @@ new Vue({
         this.presisted.players.forEach(el => { new_list.push(el.name) });
       }
       this.targetList = new_list;
+      this.showUserRole = false;
       this.show_role = true;
     },
     // handle role ability
@@ -600,6 +622,7 @@ new Vue({
       this.night_result = false;
       this.ballot_toggle = false;
       this.toggleRule = false;
+      this.showUserRole = false;
       this.user_name = "";
       this.user_role = "";
       this.actTarget = "";
@@ -620,22 +643,23 @@ new Vue({
   computed: {
     // app background color
     appBgColor: function() {
-      return (this.presisted.stage === 3)? "day_background" : "dark_background"
+      return (this.presisted.stage === 3)? "day_background" : "dark_background";
     },
     // img for roles
     rarityGacha: function() {
+      // return componet id
       if (this.debug) console.log("Gacha!");
       switch (this.user_role) {
         case "ww":
-          return "r_ww.png";
+          return "r_ww";
         case "ve":
-          return "n_ve.png";
+          return "n_ve";
         case "tf":
-          return (Math.floor(Math.random() * 100) >= 90)? "ssr_tf.png" : "sr_tf.png";
+          return (Math.floor(Math.random() * 100) >= 90)? "ssr_tf" : "sr_tf";
         case "ft":
-          return (Math.floor(Math.random() * 100) >= 90)? "ssr_ft.png" : "sr_ft.png";
+          return (Math.floor(Math.random() * 100) >= 90)? "ssr_ft" : "sr_ft";
         default:
-          return "ssr_layer.png";
+          return "ssr_layer";
       }
     },
     // for Werewolf night

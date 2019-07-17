@@ -283,3 +283,47 @@ html, body {
 .name_tf {
     color: blue;
 }
+/* animation for image */
+.bounce-enter-active {
+  animation: bounce-in 1s;
+}
+.bounce-leave-active {
+  animation: bounce-in 1s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/* cache image */
+.n_ve {
+    background-image: url("./img/onwpng/n_ve.png");
+}
+.r_ww {
+    background-image: url("./img/onwpng/r_ww.png");
+}
+.sr_ft {
+    background-image: url("./img/onwpng/sr_ft.png");
+}
+.sr_tf {
+    background-image: url("./img/onwpng/sr_tf.png");
+}
+.ssr_ft {
+    background-image: url("./img/onwpng/ssr_ft.png");
+}
+.ssr_tf {
+    background-image: url("./img/onwpng/ssr_tf.png");
+}
+.ssr_layer {
+    background-image: url("./img/onwpng/ssr_layer.png");
+}
+.role_img {
+    min-width: 256px;
+    min-height: 256px;
+}

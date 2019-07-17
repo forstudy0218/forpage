@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>ONE NIGHT</title>
     <!-- Try vue.js with i18n this time -->
-    <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <!-- MIT License -->
     <script src="https://unpkg.com/vue-i18n/dist/vue-i18n.min.js"></script>
     <!-- Bootstrap -->
@@ -144,8 +144,13 @@
                   </template>
                   <!-- ask player to see -->
                   <template v-else-if="presisted.stage === 2">
-                    <img :src="'./static/img/onwpng/' + rarityGacha" />
-                    <button class="btn btn-danger true_center" @click="roleShow">{{ $t("console.showMyRole") }}</button>
+                    <!-- show image-->
+                    <transition name="bounce" id="gacha_image">
+                      <div v-show="showUserRole" :class="rarityGacha + ' role_img'" class="true_center"></div>
+                    </transition>
+                    <!-- ask if show image -->
+                    <button v-if="showUserRole" class="btn btn-danger simple_center" @click="roleShow">{{ $t("frontPage.startBtn") }}</button>
+                    <button v-else class="btn btn-danger true_center" @click="roleGacha">{{ $t("console.showMyRole") }}</button>
                   </template>
                    <!-- player want to vote -->
                   <template v-else-if="ballot_toggle && presisted.stage === 3">
