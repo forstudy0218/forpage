@@ -1,4 +1,3 @@
 TODO
 
-1. ONW PNG
-2. ONW SSR
+1. Testing ONW
