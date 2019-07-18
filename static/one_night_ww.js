@@ -294,6 +294,7 @@ const images = [
 for (let i = 0; i < images.length; i++) {
   const image = document.createElement('div');
   image.className = images[i];
+  image.style.display = 'none';
   document.body.appendChild(image);
 }
 
