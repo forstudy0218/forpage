@@ -290,6 +290,8 @@ const images = [
   'sr_ft',
   'ssr_tf',
   'ssr_ft',
+  'ssr_ww',
+  'ssr_ve',
 ];
 for (let i = 0; i < images.length; i++) {
   const image = document.createElement('div');
@@ -652,9 +654,9 @@ new Vue({
       if (this.debug) console.log("Gacha!");
       switch (this.user_role) {
         case "ww":
-          return "r_ww";
+          return (Math.floor(Math.random() * 100) >= 90)? "ssr_ww" : "r_ww";
         case "ve":
-          return "n_ve";
+          return (Math.floor(Math.random() * 100) >= 90)? "ssr_ve" : "n_ve";
         case "tf":
           return (Math.floor(Math.random() * 100) >= 90)? "ssr_tf" : "sr_tf";
         case "ft":

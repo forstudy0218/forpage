@@ -320,6 +320,12 @@ html, body {
 .ssr_tf {
     background-image: url("./img/onwpng/ssr_tf.png");
 }
+.ssr_ww {
+    background-image: url("./img/onwpng/ssr_ww.png");
+}
+.ssr_ve {
+    background-image: url("./img/onwpng/ssr_ve.png");
+}
 .ssr_layer {
     background-image: url("./img/onwpng/ssr_layer.png");
 }
