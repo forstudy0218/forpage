@@ -156,6 +156,10 @@ def download_page():
 def one_night():
     return render_template("one_night_wolf.html")
 
+@app.route("/todofuken_gacha")
+def todofuken_gacha():
+    return render_template("todofuken.html")
+
 # converter
 @app.route("/convert", methods=["GET", "POST"])
 # https://stackoverflow.com/questions/2356925/how-to-check-whether-string-might-be-type-cast-to-float-in-python
