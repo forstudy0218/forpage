@@ -285,9 +285,9 @@ const todofukenColor = [
 
 const rarity =[];
 for (let i = 0; i < 100; i++) {
-    if (i < 70) {
+    if (i < 73) {
         rarity.push(0);
-    } else if (i < 90) {
+    } else if (i < 93) {
         rarity.push(1);
     } else {
         rarity.push(2);
@@ -295,6 +295,8 @@ for (let i = 0; i < 100; i++) {
 }
 
 const rarityStr = ["N", "R", "UR"];
+
+let count = 0;
 
 function noneAll() {
     const iframe = document.getElementById('japan_svg').contentDocument;
@@ -309,6 +311,7 @@ function noneAll() {
 }
 
 function renew() {
+    count = 0;
     todofukenColor.forEach( dict => {
         dict.rarity = -1;
     });
@@ -323,6 +326,8 @@ function renew() {
 }
 
 function goGacha() {
+    let done = false;
+    count += 1;
     const result_div = document.getElementById('recent_result');
     while (result_div.firstChild) {
         result_div.removeChild(result_div.firstChild);
@@ -361,10 +366,18 @@ function goGacha() {
                 const btn = document.getElementById('gacha');
                 btn.innerHTML = "Restart";
                 btn.onclick = renew;
+                done = true;
             }
         }
         newSpan.innerHTML = " || " + rarityStr[result[i].rarity] + " " + saveData.jp + " || ";
         result_div.appendChild(newSpan);
+    }
+    if (done) {
+        const totalCount = document.createElement('p');
+        totalCount.innerHTML = "Total Gacha: " + count;
+        totalCount.style.color = 'red';
+        result_div.appendChild(totalCount);
+        done = false;
     }
 }
 
@@ -373,12 +386,15 @@ function collection() {
     while (result_div.firstChild) {
         result_div.removeChild(result_div.firstChild);
     }
-    const collection = {};
     todofukenColor.forEach( dict => {
         const newP = document.createElement('p');
         newP.innerHTML = (dict.rarity >= 0)? dict.jp + ": " + rarityStr[dict.rarity] : dict.jp + ": " + "none";
         result_div.appendChild(newP);
     });
+    const newCount = document.createElement('p');
+    newCount.innerHTML = "Total Gacha: " + count;
+    newCount.style.color = 'red';
+    result_div.appendChild(newCount);
 }
 
 window.onload = noneAll;
