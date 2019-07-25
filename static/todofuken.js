@@ -313,8 +313,9 @@ function renew() {
         dict.rarity = 0;
     });
     const result_div = document.getElementById('recent_result');
-    const newBlank = document.createElement('span');
-    result_div.replaceChild(newBlank, result_div.firstChild);
+    while (result_div.firstChild) {
+        result_div.removeChild(result_div.firstChild);
+    }
     const btn = document.getElementById('gacha');
     btn.innerHTML = "Gacha !";
     btn.onclick = goGacha;
@@ -322,6 +323,10 @@ function renew() {
 }
 
 function goGacha() {
+    const result_div = document.getElementById('recent_result');
+    while (result_div.firstChild) {
+        result_div.removeChild(result_div.firstChild);
+    }
     const result = [];
     for (let i = 0; i < 10; i++) {
         const resDict = {
@@ -330,7 +335,6 @@ function goGacha() {
         };
         result.push(resDict);
     }
-    let resultStr = "";
     for (let i = 0; i < 10; i++) {
         const saveData = todofukenColor.filter(el => el.name === result[i].name)[0];
         saveData["rarity"] = saveData["rarity"] || 0;
@@ -353,25 +357,28 @@ function goGacha() {
         for (let i = 0; i < todofukenData.length; i++) {
             todofukenData[i].setAttribute("fill", color);
         }
-        resultStr += rarityStr[result[i].rarity] + " " + saveData.jp + " || ";
+        const newSpan = document.createElement('span');
+        if (result[i].rarity === 1) {
+            newSpan.style.color = 'green';
+        } else if (result[i].rarity === 2) {
+            newSpan.style.color = 'red';
+        }
+        newSpan.innerHTML = " || " + rarityStr[result[i].rarity] + " " + saveData.jp + " || ";
+        result_div.appendChild(newSpan);
     }
-    const newResult = document.createTextNode(resultStr);
-    const result_div = document.getElementById('recent_result');
-    result_div.replaceChild(newResult, result_div.firstChild);
 }
 
 function collection() {
+    const result_div = document.getElementById('recent_result');
+    while (result_div.firstChild) {
+        result_div.removeChild(result_div.firstChild);
+    }
     const collection = {};
     todofukenColor.forEach( dict => {
-        if (dict.rarity) {
-            collection[dict.jp] = rarityStr[dict.rarity];
-        } else {
-            collection[dict.jp] = "none";
-        }
+        const newP = document.createElement('p');
+        newP.innerHTML = (dict.rarity)? dict.jp + ": " + rarityStr[dict.rarity] : dict.jp + ": " + "none";
+        result_div.appendChild(newP);
     });
-    const newCollection = document.createTextNode(JSON.stringify(collection));
-    const result_div = document.getElementById('recent_result');
-    result_div.replaceChild(newCollection, result_div.firstChild);
 }
 
 window.onload = noneAll;
