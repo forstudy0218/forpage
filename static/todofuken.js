@@ -310,7 +310,7 @@ function noneAll() {
 
 function renew() {
     todofukenColor.forEach( dict => {
-        dict.rarity = 0;
+        dict.rarity = -1;
     });
     const result_div = document.getElementById('recent_result');
     while (result_div.firstChild) {
@@ -337,20 +337,15 @@ function goGacha() {
     }
     for (let i = 0; i < 10; i++) {
         const saveData = todofukenColor.filter(el => el.name === result[i].name)[0];
-        saveData["rarity"] = saveData["rarity"] || 0;
+        saveData["rarity"] = saveData["rarity"] || -1;
         if (saveData["rarity"] < result[i].rarity) saveData["rarity"] = result[i].rarity;
         let color;
         if (saveData["rarity"] === 0) {
             color = "#ffffff";
         } else if (saveData["rarity"] === 1) {
             color = "green";
-        } else {
+        } else if (saveData["rarity"] === 2) {
             color = saveData.color;
-            if (todofukenColor.every( (data) => data.rarity === 2 )) {
-                const btn = document.getElementById('gacha');
-                btn.innerHTML = "Restart";
-                btn.onclick = renew;
-            }
         }
         const iframe = document.getElementById('japan_svg').contentDocument;
         const todofukenData = iframe.getElementsByClassName(result[i].name);
@@ -362,6 +357,11 @@ function goGacha() {
             newSpan.style.color = 'green';
         } else if (result[i].rarity === 2) {
             newSpan.style.color = 'red';
+            if (todofukenColor.every( (data) => data.rarity === 2 )) {
+                const btn = document.getElementById('gacha');
+                btn.innerHTML = "Restart";
+                btn.onclick = renew;
+            }
         }
         newSpan.innerHTML = " || " + rarityStr[result[i].rarity] + " " + saveData.jp + " || ";
         result_div.appendChild(newSpan);
@@ -376,7 +376,7 @@ function collection() {
     const collection = {};
     todofukenColor.forEach( dict => {
         const newP = document.createElement('p');
-        newP.innerHTML = (typeof dict.rarity === "number")? dict.jp + ": " + rarityStr[dict.rarity] : dict.jp + ": " + "none";
+        newP.innerHTML = (dict.rarity >= 0)? dict.jp + ": " + rarityStr[dict.rarity] : dict.jp + ": " + "none";
         result_div.appendChild(newP);
     });
 }
