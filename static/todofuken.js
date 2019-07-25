@@ -376,7 +376,7 @@ function collection() {
     const collection = {};
     todofukenColor.forEach( dict => {
         const newP = document.createElement('p');
-        newP.innerHTML = (dict.rarity)? dict.jp + ": " + rarityStr[dict.rarity] : dict.jp + ": " + "none";
+        newP.innerHTML = (typeof dict.rarity === "number")? dict.jp + ": " + rarityStr[dict.rarity] : dict.jp + ": " + "none";
         result_div.appendChild(newP);
     });
 }
