@@ -297,6 +297,8 @@ for (let i = 0; i < 100; i++) {
 const rarityStr = ["N", "R", "UR"];
 
 let count = 0;
+let coin = 300;
+document.getElementById('coin').innerHTML = coin;
 
 function noneAll() {
     const iframe = document.getElementById('japan_svg').contentDocument;
@@ -312,6 +314,8 @@ function noneAll() {
 
 function renew() {
     count = 0;
+    coin = 300;
+    document.getElementById('coin').innerHTML = coin;
     todofukenColor.forEach( dict => {
         dict.rarity = -1;
     });
@@ -328,6 +332,8 @@ function renew() {
 function goGacha() {
     let done = false;
     count += 1;
+    coin -= 1;
+    document.getElementById('coin').innerHTML = coin;
     const result_div = document.getElementById('recent_result');
     while (result_div.firstChild) {
         result_div.removeChild(result_div.firstChild);
@@ -346,7 +352,7 @@ function goGacha() {
         if (saveData["rarity"] < result[i].rarity) saveData["rarity"] = result[i].rarity;
         let color;
         if (saveData["rarity"] === 0) {
-            color = "#ffffff";
+            color = "grey";
         } else if (saveData["rarity"] === 1) {
             color = "green";
         } else if (saveData["rarity"] === 2) {
@@ -374,10 +380,14 @@ function goGacha() {
     }
     if (done) {
         const totalCount = document.createElement('p');
-        totalCount.innerHTML = "Total Gacha: " + count;
+        totalCount.innerHTML = "Coin used: " + count;
         totalCount.style.color = 'red';
         result_div.appendChild(totalCount);
         done = false;
+    } else if (coin <= 0) {
+        const btn = document.getElementById('gacha');
+        btn.innerHTML = "Restart";
+        btn.onclick = renew;
     }
 }
 
@@ -392,7 +402,7 @@ function collection() {
         result_div.appendChild(newP);
     });
     const newCount = document.createElement('p');
-    newCount.innerHTML = "Total Gacha: " + count;
+    newCount.innerHTML = "Coin used: " + count;
     newCount.style.color = 'red';
     result_div.appendChild(newCount);
 }
