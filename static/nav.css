@@ -155,7 +155,7 @@ body > .container {
 .aheader {
   border: thick double grey;
   background-color: black;
-  display: inline-block;
+  display: block;
   margin-bottom: 10px;
   padding: 10px 50px;
   color: white;

@@ -16,4 +16,4 @@ function archive () {
     })
 }
 
-window.onload = acrhive;
+window.onload = archive;
