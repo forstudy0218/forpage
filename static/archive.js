@@ -1,7 +1,7 @@
 // archive form render
 function archive () {
     // html name (*.html)
-    const all_archive = ["werewolf"]
+    const all_archive = ["werewolf", "test"]
     const form = document.getElementById("archive_form")
     all_archive.forEach(function(e) {
         const newButton = document.createElement('input')
@@ -10,6 +10,8 @@ function archive () {
         newButton.type = "submit"
         newButton.name = "achieve_name"
         newButton.value = e
+        newButton.style.textAlign = "center"
+        newButton.style.margin = "10px"
         form.appendChild(newButton)
     })
 }

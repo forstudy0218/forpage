@@ -156,5 +156,8 @@ body > .container {
   border: thick double grey;
   background-color: black;
   display: inline-block;
-  margin: 0px auto;
+  margin-bottom: 10px;
+  padding: 10px 50px;
+  color: white;
+  text-align: center;
 }
