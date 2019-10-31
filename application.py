@@ -115,7 +115,6 @@ def movdec(numstr):
         return numstr
     else:
         raise ValueError
-        return numstr
 
 @app.before_request
 def get_redirect():
@@ -159,6 +158,14 @@ def one_night():
 @app.route("/todofuken_gacha")
 def todofuken_gacha():
     return render_template("todofuken.html")
+
+@app.route("/archive", methods=["GET", "POST"])
+def archieve():
+    if request.method == "GET":
+        return render_template("archive.html")
+    if request.method == "POST":
+        page = request.form.get("achieve_name") + ".html"
+        return render_template(page)
 
 # converter
 @app.route("/convert", methods=["GET", "POST"])

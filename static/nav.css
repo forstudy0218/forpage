@@ -150,3 +150,11 @@ body > .container {
   padding-right: 15px;
   padding-left: 15px;
 }
+
+/* archive section */
+.aheader {
+  border: thick double grey;
+  background-color: black;
+  display: inline-block;
+  margin: 0px auto;
+}

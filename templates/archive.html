@@ -1,0 +1,17 @@
+<!-- jinja2 -->
+{% extends "layout.html" %}
+
+{% block title %}
+    Archive
+{% endblock %}
+
+{% block main %}
+    <div class="aheader">Archive</div>
+    <div>
+        <form action="/archive" method="post" id="archive_form">
+            <!-- https://stackoverflow.com/questions/16036041 -->
+            <input type="submit" name="achieve_name" value="werewolf" />
+        </form>
+    </div>
+    <script src="/static/archieve.js"></script>
+{% endblock %}
