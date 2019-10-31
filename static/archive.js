@@ -12,6 +12,9 @@ function archive () {
         newButton.value = e
         newButton.style.textAlign = "center"
         newButton.style.margin = "10px"
+        if (e === "test") {
+            newButton.disabled = true
+        }
         form.appendChild(newButton)
     })
 }
