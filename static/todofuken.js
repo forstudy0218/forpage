@@ -380,7 +380,7 @@ function goGacha() {
         newImg.height = 128;
         newImg.width = 128;
         newImg.alt = saveData.jp + " " + rarityStr[result[i].rarity];
-        newImg.src = "./img/todofuken/" + saveData.name + "/" + rarityStr[result[i].rarity] + ".png";
+        newImg.src = "static/img/todofuken/" + saveData.name + "/" + rarityStr[result[i].rarity] + ".png";
         if (saveData.name === "hokkaidou" || saveData.name === "nagasaki") {
             result_div.appendChild(newImg);
         } else {
