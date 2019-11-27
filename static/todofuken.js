@@ -333,6 +333,9 @@ function renew() {
 }
 
 function goGacha() {
+    if (coin < 10) {
+        return;
+    }
     let done = false;
     count += 10;
     coin -= 10;
