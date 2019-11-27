@@ -1,7 +1,7 @@
 // archive form render
 function archive () {
     // html name (*.html)
-    const all_archive = ["werewolf", "test"]
+    const all_archive = ["werewolf", "wwnext", "test"]
     const form = document.getElementById("archive_form")
     all_archive.forEach(function(e) {
         const newButton = document.createElement('input')

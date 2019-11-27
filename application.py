@@ -159,6 +159,10 @@ def one_night():
 def todofuken_gacha():
     return render_template("todofuken.html")
 
+@app.route("/setww")
+def setww():
+    return render_template("wwnext.html")
+
 @app.route("/archive", methods=["GET", "POST"])
 def archieve():
     if request.method == "GET":

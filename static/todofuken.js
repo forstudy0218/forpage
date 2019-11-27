@@ -376,7 +376,16 @@ function goGacha() {
             }
         }
         newSpan.innerHTML = " || " + rarityStr[result[i].rarity] + " " + saveData.jp + " || ";
-        result_div.appendChild(newSpan);
+        const newImg = document.createElement('img');
+        newImg.height = 128;
+        newImg.width = 128;
+        newImg.alt = saveData.jp + " " + rarityStr[result[i].rarity];
+        newImg.src = "./img/todofuken/" + saveData.name + "/" + rarityStr[result[i].rarity] + ".png";
+        if (saveData.name === "hokkaidou" || saveData.name === "nagasaki") {
+            result_div.appendChild(newImg);
+        } else {
+            result_div.appendChild(newSpan);
+        }
     }
     if (done) {
         const totalCount = document.createElement('p');
