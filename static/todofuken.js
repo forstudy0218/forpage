@@ -372,8 +372,8 @@ function goGacha() {
             }
         }
         const newImg = document.createElement('img');
-        newImg.height = 100;
-        newImg.width = 100;
+        newImg.height = 64;
+        newImg.width = 64;
         newImg.alt = saveData.jp + " " + rarityStr[result[i].rarity];
         newImg.src = "static/img/todofuken/" + saveData.name + "/" + rarityStr[result[i].rarity] + ".png";
         result_div.appendChild(newImg);
