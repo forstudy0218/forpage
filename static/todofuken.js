@@ -301,7 +301,7 @@ let coin = 0;
 function coinFunc(c) {
     c += 1;
     document.getElementById('coin').innerHTML = c;
-    setTimeout(coinFunc(c), 1000);
+    let t = setTimeout(coinFunc(c), 1000);
 }
 
 
