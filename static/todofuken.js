@@ -315,6 +315,7 @@ function noneAll() {
         }
     });
     document.querySelector('html').setAttribute('lang', 'ja');
+    if (coin === 0) coinFunc(coin);
 }
 
 function renew() {
