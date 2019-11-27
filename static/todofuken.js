@@ -374,8 +374,9 @@ function goGacha() {
         const newImg = document.createElement('img');
         newImg.height = 64;
         newImg.width = 64;
+        const test_png = (i % 2 === 0)? "nagasaki" : "hokkaidou";
         newImg.alt = saveData.jp + " " + rarityStr[result[i].rarity];
-        newImg.src = "static/img/todofuken/" + saveData.name + "/" + rarityStr[result[i].rarity] + ".png";
+        newImg.src = "static/img/todofuken/" + test_png + "/" + rarityStr[result[i].rarity] + ".png";
         result_div.appendChild(newImg);
     }
     if (done) {
