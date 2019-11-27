@@ -402,10 +402,12 @@ function collection() {
     }
     todofukenColor.forEach( dict => {
         const newP = document.createElement('p');
+        newP.width = "-webkit-fill-available";
         newP.innerHTML = (dict.rarity >= 0)? dict.jp + ": " + rarityStr[dict.rarity] : dict.jp + ": " + "none";
         result_div.appendChild(newP);
     });
     const newCount = document.createElement('p');
+    newCount.width = "-webkit-fill-available";
     newCount.innerHTML = "Coin used: " + count;
     newCount.style.color = 'red';
     result_div.appendChild(newCount);
