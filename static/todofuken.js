@@ -298,10 +298,12 @@ const rarityStr = ["N", "R", "UR"];
 
 let count = 0;
 let coin = 0;
+let timeoutID;
 function coinFunc() {
+    clearTimeout(timeoutID);
     coin += 1;
     document.getElementById('coin').innerHTML = coin;
-    setTimeout(coinFunc, 1000);
+    timeoutID = setTimeout(coinFunc, 1000);
 }
 
 
