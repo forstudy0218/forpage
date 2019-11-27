@@ -363,11 +363,7 @@ function goGacha() {
         for (let i = 0; i < todofukenData.length; i++) {
             todofukenData[i].setAttribute("fill", color);
         }
-        const newSpan = document.createElement('span');
-        if (result[i].rarity === 1) {
-            newSpan.style.color = 'green';
-        } else if (result[i].rarity === 2) {
-            newSpan.style.color = 'red';
+        if (result[i].rarity === 2) {
             if (todofukenColor.every( (data) => data.rarity === 2 )) {
                 const btn = document.getElementById('gacha');
                 btn.innerHTML = "Restart";
@@ -375,17 +371,12 @@ function goGacha() {
                 done = true;
             }
         }
-        newSpan.innerHTML = " || " + rarityStr[result[i].rarity] + " " + saveData.jp + " || ";
         const newImg = document.createElement('img');
         newImg.height = 128;
         newImg.width = 128;
         newImg.alt = saveData.jp + " " + rarityStr[result[i].rarity];
         newImg.src = "static/img/todofuken/" + saveData.name + "/" + rarityStr[result[i].rarity] + ".png";
-        if (saveData.name === "hokkaidou" || saveData.name === "nagasaki") {
-            result_div.appendChild(newImg);
-        } else {
-            result_div.appendChild(newSpan);
-        }
+        result_div.appendChild(newImg);
     }
     if (done) {
         const totalCount = document.createElement('p');
