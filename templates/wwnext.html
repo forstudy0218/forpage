@@ -64,10 +64,10 @@
     </div>
     <!-- universe pause button -->
     <div id="unipause">
-      <a v-show="paused" href="/" class="btn btn-primary" id="tohome">{{ $t(pauseDiv.toHome) }}</a>
-      <button class="btn btn-warning" id="pausebtn" @click="togglePause">{{ $t(pauseDiv.theSwitch) }}</button>
+      <a v-show="paused" href="/" class="btn btn-primary" id="tohome">{{ $t("pauseDiv.toHome") }}</a>
+      <button class="btn btn-warning" id="pausebtn" @click="togglePause">{{ $t("pauseDiv.theSwitch") }}</button>
       <button class="btn btn-dark" id="debugbtn" @click="toggleDebbug" v-show="paused"></button>
-      <button v-show="paused" class="btn btn-danger" id="tostart" @click="restartGame" :disabled="!paused">{{ $t(pauseDiv.toRestart) }}</button>
+      <button v-show="paused" class="btn btn-danger" id="tostart" @click="restartGame" :disabled="!paused">{{ $t("pauseDiv.toRestart") }}</button>
     </div>
     <!-- for lang change -->
     <div id="lang-changer">

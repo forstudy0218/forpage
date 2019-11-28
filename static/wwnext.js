@@ -318,9 +318,9 @@ let popmodal = new Vue ({
   },
   methods: {
     showmessage: function(header, body, footer, headcolor) {
-      this.header = this.$t(modal[header]);
-      this.body = this.$t(modal[body]);
-      if (footer !== "") this.footer = this.$t(modal[footer]);
+      this.header = this.$t("modal." + header );
+      this.body = this.$t("modal." + body);
+      if (footer !== "") this.footer = this.$t("modal." + footer);
       this.headerColor = headcolor;
       this.showModal = true;
     }
@@ -364,7 +364,7 @@ new Vue ({
         this.paused = true;
         this.savedphase = Number(gbv.state.gameState.phase);
         gbv.state.gameState.phase = -1;
-        popmodal.showmessage("notice", "paused.", "", "Blue");
+        popmodal.showmessage("notice", "paused", "", "Blue");
       }
     },
     restartGame: function() {
