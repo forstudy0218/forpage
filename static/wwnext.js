@@ -207,7 +207,7 @@ if (!localStorage.getItem("nextwwdata")) {
         "exilecolor",
     ];
     if ( arrayCompare(dataKeys, gameStateKeys) ) {
-        changebody();
+        console.log("save safe");
     } else {
         createNewSave();
     }
