@@ -263,4 +263,9 @@ em {
 .Spirit-Fox_end {
   color: #9d33ac; }
 
+#lang-changer {
+  bottom: 0;
+  right: 0;
+  position: absolute; }
+
 /*# sourceMappingURL=wwnext.css.map */
