@@ -384,7 +384,7 @@ function goGacha() {
         newImg.height = 64;
         newImg.width = 64;
         let test_png;
-        const imgset = ["akita", "aomori", "iwate", "miyagi", "nagasaki", "hokkaidou",];
+        const imgset = ["akita", "aomori", "iwate", "miyagi", "nagasaki", "hokkaidou", "fukushima", "gunma", "ibaraki", "saitama", "tochigi", "yamagata",];
         if (imgset.includes(saveData.name)) {
             test_png = saveData.name;
         } else {
