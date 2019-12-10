@@ -384,11 +384,11 @@ function goGacha() {
         newImg.height = 64;
         newImg.width = 64;
         let test_png;
-        const imgset = ["akita", "aomori", "iwate", "miyagi", "nagasaki", "hokkaidou", "fukushima", "gunma", "ibaraki", "saitama", "tochigi", "yamagata",];
-        if (imgset.includes(saveData.name)) {
-            test_png = saveData.name;
-        } else {
+        const noimg = ["tokushima", "kagawa", "ehime", "fukuoka", "kouchi", "saga", "kumamoto", "ooita", "miyazaki", "kagoshima", "okinawa",];
+        if (noimg.includes(saveData.name)) {
             test_png = (i % 2 === 0)? "nagasaki" : "hokkaidou";
+        } else {
+            test_png = saveData.name;
         }
         newImg.alt = saveData.jp + " " + rarityStr[result[i].rarity];
         newImg.src = "static/img/todofuken/" + test_png + "/" + rarityStr[result[i].rarity] + ".png";
