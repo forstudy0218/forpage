@@ -384,9 +384,9 @@ function goGacha() {
         newImg.height = 64;
         newImg.width = 64;
         let test_png;
-        const noimg = ["tokushima", "kagawa", "ehime", "fukuoka", "kouchi", "saga", "kumamoto", "ooita", "miyazaki", "kagoshima", "okinawa",];
+        const noimg = ["tokushima", "kagawa", "ehime", "fukuoka", "kouchi", "saga", "kumamoto", "miyazaki", "kagoshima", "okinawa",];
         if (noimg.includes(saveData.name)) {
-            test_png = (i % 2 === 0)? "nagasaki" : "hokkaidou";
+            test_png = (i % 2 === 0)? "nagasaki" : "ooita";
         } else {
             test_png = saveData.name;
         }
