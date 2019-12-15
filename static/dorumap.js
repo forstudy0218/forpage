@@ -10,6 +10,7 @@ var dorumap = new Vue ({
             "https://www.google.com/maps/d/embed?mid=12xv4jP4h8iRRRfkB8oPlU-qSbpDunv_b",
             "https://www.google.com/maps/d/embed?mid=18mZEhPVCaSgM8EZCqbCBXQOzGcFMym0C",
             "https://www.google.com/maps/d/embed?mid=158MLhntpH-KdlpcR4w5DsWPfog49Ckjs",
+            "https://www.google.com/maps/d/embed?mid=1eGIMvMeHd3Qmt4lPDgMq54if2os9_A23",
         ],
         mapsrc: "",
     },
