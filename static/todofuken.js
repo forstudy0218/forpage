@@ -285,9 +285,9 @@ const todofukenColor = [
 
 const rarity =[];
 for (let i = 0; i < 100; i++) {
-    if (i < 65) {
+    if (i < 70) {
         rarity.push(0);
-    } else if (i < 88) {
+    } else if (i < 93) {
         rarity.push(1);
     } else {
         rarity.push(2);
@@ -330,7 +330,7 @@ function renew() {
         result_div.removeChild(result_div.firstChild);
     }
     const btn = document.getElementById('gacha');
-    btn.innerHTML = "Gacha ! (double chance now)";
+    btn.innerHTML = "Gacha !";
     btn.onclick = goGacha;
     noneAll();
 }
