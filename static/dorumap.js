@@ -11,6 +11,7 @@ var dorumap = new Vue ({
             "https://www.google.com/maps/d/embed?mid=18mZEhPVCaSgM8EZCqbCBXQOzGcFMym0C",
             "https://www.google.com/maps/d/embed?mid=158MLhntpH-KdlpcR4w5DsWPfog49Ckjs",
             "https://www.google.com/maps/d/embed?mid=1eGIMvMeHd3Qmt4lPDgMq54if2os9_A23",
+            "https://www.google.com/maps/d/embed?mid=18jsT1tohv0Rpg9_UWA59chMN_2KxM01t",
         ],
         mapsrc: "",
     },
