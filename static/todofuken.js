@@ -291,7 +291,7 @@ prob_tag.addEventListener('change', (event) => {
     if ( ( isNaN(ur_prob) ) || (ur_prob > 100) ) {
         ur_prob = 0;
     } else {
-        ur_prob = Number.ur_prob.toFixed(2);
+        ur_prob = ur_prob.toFixed(2);
     }
     document.getElementById('ur_action').innerHTML = ur_prob;
     rarity = [];
