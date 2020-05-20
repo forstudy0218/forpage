@@ -283,16 +283,28 @@ const todofukenColor = [
     },
 ];
 
-const rarity =[];
-for (let i = 0; i < 100; i++) {
-    if (i < 70) {
-        rarity.push(0);
-    } else if (i < 93) {
-        rarity.push(1);
+let ur_prob = 0;
+let rarity = [];
+const prob_tag = document.querySelector('#ur_input');
+prob_tag.addEventListener('change', (event) => {
+    ur_prob = parseFloat(event.target.value);
+    if ( ( isNaN(ur_prob) ) || (ur_prob > 100) ) {
+        ur_prob = 0;
     } else {
-        rarity.push(2);
+        ur_prob = Number.ur_prob.toFixed(2);
+    }
+    document.getElementById('ur_action').innerHTML = ur_prob;
+    rarity = [];
+    for (let i = 0; i < 10000; i++) {
+        if (i < 10000 - ur_prob * 100 - 10*100) {
+            rarity.push(0);
+        } else if (i < 10000 - ur_prob * 100) {
+            rarity.push(1);
+        } else {
+            rarity.push(2);
     }
 }
+});
 
 const rarityStr = ["N", "R", "UR"];
 
@@ -351,7 +363,7 @@ function goGacha() {
     for (let i = 0; i < 10; i++) {
         const resDict = {
             name: todofukenColor[ Math.floor( Math.random() * 47) ].name,
-            rarity: rarity[ Math.floor( Math.random() * 100) ],
+            rarity: rarity[ Math.floor( Math.random() * rarity.length) ],
         };
         result.push(resDict);
     }
