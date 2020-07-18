@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block main %}
-    <div id="drmap">
+    <div id="drmap" style='background-image: url("/static/img/gm.png")'>
         <template v-for="(link, index) in mapLinks">
             <button class="btn btn-primary" @click="showMap(index)" style="margin: 5px">{% raw -%}Map ({{ index + 1 }}){%- endraw %}</button>
         </template>
