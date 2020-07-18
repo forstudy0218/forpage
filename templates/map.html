@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block main %}
-    <div id="drmap" style='background-image: url("/static/img/gm.png")'>
+    <div id="drmap">
         <template v-for="(link, index) in mapLinks">
             <button class="btn btn-primary" @click="showMap(index)" style="margin: 5px">{% raw -%}Map ({{ index + 1 }}){%- endraw %}</button>
         </template>
@@ -21,6 +21,14 @@
             <iframe :src="mapsrc" width="640" height="480"></iframe>
         </template>
     </div>
+    <!-- style -->
+    <style type="text/css">
+        #drmap {
+          background-image: url("/static/img/gm.png");
+          background-repeat: no-repeat;
+          height: 100vh;
+        }
+    </style>
     <!-- javascript -->
     <script src="/static/dorumap.js"></script>
 {% endblock %}
