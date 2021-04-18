@@ -11,13 +11,13 @@
 {% endblock %}
 
 {% block main %}
-    <div id="btnli">
-        <template v-for="(link, index) in mapLinks">
-            <button class="btn btn-primary" @click="showMap(index)" style="margin: 5px">{% raw -%}Map ({{ index }}){%- endraw %}</button>
-        </template>
-        <button class="btn btn-dark" @click="toggleMap()">HIDE</button>
-    </div>
     <div id="drmap" v-bind:style="mapstyle">
+        <div id="btnli">
+            <template v-for="(link, index) in mapLinks">
+                <button class="btn btn-primary" @click="showMap(index)" style="margin: 5px">{% raw -%}Map ({{ index }}){%- endraw %}</button>
+            </template>
+            <button class="btn btn-dark" @click="toggleMap()">HIDE</button>
+        </div>
         <template v-if="toggle">
             <iframe :src="mapsrc" width="640" height="480"></iframe>
         </template>
@@ -25,7 +25,7 @@
     <!-- style -->
     <style type="text/css">
         #btnli {
-          height: 10vh;
+            height: 10vh;
         }
     </style>
     <!-- javascript -->

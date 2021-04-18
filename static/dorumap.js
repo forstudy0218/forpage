@@ -39,7 +39,7 @@ var dorumap = new Vue ({
             'background-image': 'url(/static/img/gm.png)',
             'background-repeat': 'no-repeat',
             'background-position': 'center',
-            'height': '90vh',
+            'height': '100vh',
         },
     },
     methods: {
