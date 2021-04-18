@@ -36,12 +36,11 @@ var dorumap = new Vue ({
         ],
         mapsrc: "",
         mapstyle: {
-            'background-image': this.mapimg,
+            'background-image': 'url(/static/img/gm.png)',
             'background-repeat': 'no-repeat',
             'background-position': 'center',
             'height': '90vh',
         },
-        mapimg: "url(/static/img/gm.png)",
     },
     methods: {
         toggleMap: function() {
@@ -56,7 +55,7 @@ var dorumap = new Vue ({
     mounted() {
         let picdate = new Date();
         if (picdate.getHours() % 2 == 0) {
-            this.mapimg = 'url(/static/img/chichibu.png)';
+            this.mapstyle['background-image'] = 'url(/static/img/chichibu.png)';
         }
     }
 })
