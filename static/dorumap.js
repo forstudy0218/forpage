@@ -1,7 +1,6 @@
 var dorumap = new Vue ({
     el: "#drmap",
     data: {
-        bgimg: "/static/img/gm.png",
         toggle: false,
         mapLinks: [
             "https://www.google.com/maps/d/embed?mid=1mteCHkijze8j2aRWv5Q0WmG0TdArqHJV",
@@ -36,6 +35,13 @@ var dorumap = new Vue ({
             "https://www.google.com/maps/d/embed?mid=1U1QIuuNePP00F6B7y9HqSwPc-6R0A_Yj",
         ],
         mapsrc: "",
+        mapstyle: {
+            'background-image': this.mapimg,
+            'background-repeat': 'no-repeat',
+            'background-position': 'center',
+            'height': '90vh',
+        },
+        mapimg: "url(/static/img/gm.png)",
     },
     methods: {
         toggleMap: function() {
@@ -50,7 +56,7 @@ var dorumap = new Vue ({
     mounted() {
         let picdate = new Date();
         if (picdate.getHours() % 2 == 0) {
-            this.bgimg = "/static/img/chichibu.png";
+            this.mapimg = 'url(/static/img/chichibu.png)';
         }
     }
 })
