@@ -11,12 +11,13 @@
 {% endblock %}
 
 {% block main %}
-    <div id="drmap">
+    <div id="btnli">
         <template v-for="(link, index) in mapLinks">
-            <button class="btn btn-primary" @click="showMap(index)" style="margin: 5px">{% raw -%}Map ({{ index + 1 }}){%- endraw %}</button>
+            <button class="btn btn-primary" @click="showMap(index)" style="margin: 5px">{% raw -%}Map ({{ index }}){%- endraw %}</button>
         </template>
         <button class="btn btn-dark" @click="toggleMap()">HIDE</button>
-        <br>
+    </div>
+    <div id="drmap" v-bind:style=" { background-image: 'url(' + bgimg + ')' } ">
         <template v-if="toggle">
             <iframe :src="mapsrc" width="640" height="480"></iframe>
         </template>
@@ -24,7 +25,6 @@
     <!-- style -->
     <style type="text/css">
         #drmap {
-          background-image: url("/static/img/gm.png");
           background-repeat: no-repeat;
           background-position: center;
           height: 100vh;
