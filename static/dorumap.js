@@ -53,9 +53,9 @@ var dorumap = new Vue ({
         }
     },
     mounted() {
-        let picdate = new Date();
-        if (picdate.getHours() % 2 == 0) {
-            this.mapstyle['background-image'] = 'url(/static/img/chichibu.png)';
-        }
+        let pict = new Date(minutes);
+        let piclist = ['gm','chichibu', 'nik'];
+        let depend = pict % piclist.length;
+        this.mapstyle['background-image'] = 'url(/static/img/' + piclist[depend] + '.png)';
     }
 })
