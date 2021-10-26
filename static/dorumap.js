@@ -53,7 +53,7 @@ var dorumap = new Vue ({
         }
     },
     mounted() {
-        let pict = new Date(minutes);
+        let pict = new Date().getMinutes();
         let piclist = ['gm','chichibu', 'nik'];
         let depend = pict % piclist.length;
         this.mapstyle['background-image'] = 'url(/static/img/' + piclist[depend] + '.png)';
